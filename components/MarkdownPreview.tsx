@@ -38,7 +38,13 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(
     const rehypePlugins = useMemo(() => (hlPlugin ? [hlPlugin] : []), [hlPlugin]);
 
     return (
-      <div className="h-full overflow-auto p-4 bg-white border border-gray-200 rounded-lg">
+      <div 
+        className="h-full overflow-auto p-4 bg-white border border-gray-200 rounded-lg"
+        role="region"
+        aria-label="Markdown preview area"
+        aria-live="polite"
+        aria-describedby="preview-description"
+      >
         <div ref={ref} className="prose prose-slate max-w-none">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
