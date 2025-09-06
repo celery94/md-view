@@ -21,6 +21,24 @@ const components: Components = {
       <code className={className} {...props}>{children}</code>
     );
   },
+  img({ node, ...props }) {
+    const merged = [
+      'mx-auto my-4 max-w-[480px] w-full h-auto rounded-lg border border-gray-200 shadow-sm',
+      (props as any).className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        {...(props as any)}
+        className={merged}
+        loading="lazy"
+        decoding="async"
+        alt={(props as any).alt ?? ''}
+      />
+    );
+  },
 };
 
 const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(

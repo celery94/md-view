@@ -70,6 +70,12 @@ mdEditor.write('# Hello World!');
 3. **Import existing files** using the "Import .md" button
 4. **Export your work** as markdown or HTML; use your browser's Print to PDF for a PDF copy
 
+## 🖼️ Image Example
+
+You can embed images easily:
+
+![Demo image](/image.png)
+
 ## 📋 Task Lists and Formatting
 
 ### Development Roadmap
@@ -344,4 +350,5 @@ const inlineStyles = `
   table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
   th,td { border: 1px solid #d1d5db; padding: .5rem .75rem; }
   th { background: #f9fafb; }
+  img { display:block; max-width: 480px; width: 100%; height: auto; margin: 1rem auto; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
 `;

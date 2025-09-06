@@ -114,7 +114,7 @@ export default function Guide() {
               </h2>
               <div className="prose prose-slate max-w-none">
                 <p>Common syntax you can use right away:</p>
-                <pre><code>{`# Heading 1\n## Heading 2\n\n**Bold** and *italic* and \`inline code\`\n\n> Blockquote with a tip or note\n\n- Bullet item\n- Another item\n  - Nested item\n\n1. Ordered item\n2. Second item\n\n[Link text](https://example.com) and images: ![alt](https://placehold.co/100x60)`}</code></pre>
+                <pre><code>{`# Heading 1\n## Heading 2\n\n**Bold** and *italic* and \`inline code\`\n\n> Blockquote with a tip or note\n\n- Bullet item\n- Another item\n  - Nested item\n\n1. Ordered item\n2. Second item\n\n[Link text](https://example.com) and images: ![Demo image](/image.png)`}</code></pre>
               </div>
             </section>
 
