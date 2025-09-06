@@ -1,13 +1,27 @@
 'use client';
 
 import ReactMarkdown from 'react-markdown';
+import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
-import rehypeRaw from 'rehype-raw';
 
 interface MarkdownPreviewProps {
   content: string;
 }
+
+const components: Components = {
+  code({ className, children, ...props }) {
+    const match = /language-(\w+)/.exec(className || '');
+    const isInline = !match;
+    return !isInline ? (
+      <pre className={className}>
+        <code {...props}>{children}</code>
+      </pre>
+    ) : (
+      <code className={className} {...props}>{children}</code>
+    );
+  },
+};
 
 export default function MarkdownPreview({ content }: MarkdownPreviewProps) {
   return (
@@ -15,24 +29,9 @@ export default function MarkdownPreview({ content }: MarkdownPreviewProps) {
       <div className="prose prose-slate dark:prose-invert max-w-none">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
-          rehypePlugins={[rehypeHighlight, rehypeRaw]}
-          components={{
-            code({ className, children, ...props }: any) {
-              const match = /language-(\w+)/.exec(className || '');
-              const isInline = !match;
-              return !isInline ? (
-                <pre className={className}>
-                  <code {...props}>
-                    {children}
-                  </code>
-                </pre>
-              ) : (
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              );
-            },
-          }}
+          rehypePlugins={[rehypeHighlight]}
+          skipHtml
+          components={components}
         >
           {content}
         </ReactMarkdown>
