@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Check, Copy as CopyIcon, Link2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
@@ -11,6 +11,8 @@ import { getTheme, type Theme } from '../lib/themes';
 interface MarkdownPreviewProps {
   content: string;
   theme?: string;
+  onScroll?: (scrollPercentage: number) => void;
+  scrollToPercentage?: number;
 }
 
 function CodeBlock({ className, children, ...props }: React.ComponentProps<'code'>) {
@@ -198,9 +200,56 @@ const components: Components = {
 };
 
 const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(
-  function MarkdownPreview({ content, theme = 'default' }, ref) {
+  function MarkdownPreview({ content, theme = 'default', onScroll, scrollToPercentage }, ref) {
     const [hlPlugin, setHlPlugin] = useState<any>(null);
     const currentTheme = getTheme(theme);
+    const internalRef = useRef<HTMLDivElement>(null);
+    const isScrollingSelfRef = useRef(false);
+
+    // Use the forwarded ref or the internal ref
+    const previewRef = (ref as React.RefObject<HTMLDivElement>) || internalRef;
+
+    const handleScroll = useCallback((e: Event) => {
+      if (isScrollingSelfRef.current) return;
+      
+      const target = e.target as HTMLDivElement;
+      const scrollTop = target.scrollTop;
+      const scrollHeight = target.scrollHeight;
+      const clientHeight = target.clientHeight;
+      
+      if (scrollHeight <= clientHeight) return;
+      
+      const scrollPercentage = scrollTop / (scrollHeight - clientHeight);
+      onScroll?.(scrollPercentage);
+    }, [onScroll]);
+
+    // Handle external scroll commands
+    useEffect(() => {
+      if (scrollToPercentage === undefined || !previewRef.current) return;
+      
+      const preview = previewRef.current;
+      const scrollHeight = preview.scrollHeight;
+      const clientHeight = preview.clientHeight;
+      
+      if (scrollHeight <= clientHeight) return;
+      
+      isScrollingSelfRef.current = true;
+      preview.scrollTop = scrollToPercentage * (scrollHeight - clientHeight);
+      
+      // Reset flag after a short delay
+      setTimeout(() => {
+        isScrollingSelfRef.current = false;
+      }, 100);
+    }, [scrollToPercentage, previewRef]);
+
+    // Add scroll event listener
+    useEffect(() => {
+      const preview = previewRef.current;
+      if (!preview || !onScroll) return;
+      
+      preview.addEventListener('scroll', handleScroll);
+      return () => preview.removeEventListener('scroll', handleScroll);
+    }, [handleScroll, onScroll, previewRef]);
 
     useEffect(() => {
       let active = true;
@@ -246,14 +295,15 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(
 
     return (
       <div 
-        className={currentTheme.classes.container}
+        ref={previewRef}
+        className={`${currentTheme.classes.container} h-full overflow-auto`}
         role="region"
         aria-label="Markdown preview area"
         aria-live="polite"
         aria-describedby="preview-description"
         data-theme={theme}
       >
-        <div ref={ref} className={currentTheme.classes.prose}>
+        <div className={currentTheme.classes.prose}>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             rehypePlugins={rehypePlugins}

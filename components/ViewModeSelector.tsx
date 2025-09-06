@@ -18,7 +18,7 @@ export default function ViewModeSelector({ currentMode, onModeChange }: ViewMode
   ];
 
   return (
-    <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1" role="group" aria-label="View mode selector">
+    <div className="flex items-center gap-0.5 md:gap-1 bg-gray-100 rounded-lg p-0.5 md:p-1" role="group" aria-label="View mode selector">
       {modes.map((mode) => {
         const Icon = mode.icon;
         return (
@@ -26,7 +26,7 @@ export default function ViewModeSelector({ currentMode, onModeChange }: ViewMode
             key={mode.id}
             onClick={() => onModeChange(mode.id)}
             className={`
-              px-3 py-1.5 text-xs rounded-md transition-all duration-200 inline-flex items-center gap-1.5 relative
+              px-2 md:px-3 py-1 md:py-1.5 text-xs rounded-md transition-all duration-200 inline-flex items-center gap-1 md:gap-1.5 relative
               ${currentMode === mode.id 
                 ? 'bg-white text-gray-900 shadow-sm border border-gray-200' 
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'

@@ -7,7 +7,9 @@
 - [x] Export rendered preview as standalone `.html` (inline CSS). (files: `app/page.tsx`)
 - [x] Resizable split panes with a draggable divider; persist ratio in `localStorage`. (files: `app/page.tsx`)
 - [x] Multiple view modes: Editor-only, Preview-only, and Split view with keyboard shortcuts (Ctrl/Cmd+1/2/3). (files: `app/page.tsx`, `components/ViewModeSelector.tsx`)
-- [x] Enhanced navigation bar with grouped actions, responsive design, document stats, and mobile quick actions menu. (files: `app/page.tsx`, `components/CompactThemeSelector.tsx`, `components/QuickActionsMenu.tsx`)us: tracking backlog for the markdown editor/preview app. Check items as they land; keep sections in roughly priority order.
+- [x] Enhanced navigation bar with grouped actions, responsive design, document stats, and mobile quick actions menu. (files: `app/page.tsx`, `components/CompactThemeSelector.tsx`, `components/QuickActionsMenu.tsx`)
+- [x] **Scroll synchronization**: Editor and preview panes sync scroll position in split view mode. (files: `components/MarkdownEditor.tsx`, `components/MarkdownPreview.tsx`, `app/page.tsx`)
+- [x] **Improved responsive header**: Hide text labels on small screens, more compact mobile layout, better button spacing. (files: `app/page.tsx`, `components/ViewModeSelector.tsx`)us: tracking backlog for the markdown editor/preview app. Check items as they land; keep sections in roughly priority order.
 
 ## Phase 1 — Security & Essentials
 

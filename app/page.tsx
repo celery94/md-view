@@ -139,10 +139,13 @@ export default function Home() {
   const [currentTheme, setCurrentTheme] = useState('default');
   const [viewMode, setViewMode] = useState<ViewMode>('split');
   const [ratio, setRatio] = useState<number>(0.5);
+  const [editorScrollPercentage, setEditorScrollPercentage] = useState<number | undefined>(undefined);
+  const [previewScrollPercentage, setPreviewScrollPercentage] = useState<number | undefined>(undefined);
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const previewRef = useRef<HTMLDivElement | null>(null);
+  const editorRef = useRef<HTMLTextAreaElement | null>(null);
 
   // Load from localStorage
   useEffect(() => {
@@ -320,28 +323,47 @@ export default function Home() {
     download("document.html", doc, "text/html;charset=utf-8");
   }, [download, currentTheme]);
 
+  // Scroll synchronization handlers
+  const handleEditorScroll = useCallback((scrollPercentage: number) => {
+    if (viewMode === 'split') {
+      setPreviewScrollPercentage(scrollPercentage);
+    }
+  }, [viewMode]);
+
+  const handlePreviewScroll = useCallback((scrollPercentage: number) => {
+    if (viewMode === 'split') {
+      setEditorScrollPercentage(scrollPercentage);
+    }
+  }, [viewMode]);
+
+  // Reset scroll sync when switching view modes
+  useEffect(() => {
+    setEditorScrollPercentage(undefined);
+    setPreviewScrollPercentage(undefined);
+  }, [viewMode]);
+
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-full mx-auto px-4 sm:px-6">
+        <div className="max-w-full mx-auto px-3 sm:px-4 md:px-6">
           {/* Main navigation bar */}
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-14 md:h-16">
             {/* Left section - Logo and title */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               <Link
                 href="/"
-                className="flex items-center gap-3 group rounded-lg p-2 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex items-center gap-2 md:gap-3 group rounded-lg p-1.5 md:p-2 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
                 aria-label="MD-View Home"
                 title="MD-View Home"
               >
                 <img
                   src="/md-view-icon.svg"
                   alt="MD-View logo"
-                  className="h-8 w-8 rounded group-hover:scale-105 transition-transform"
+                  className="h-7 w-7 md:h-8 md:w-8 rounded group-hover:scale-105 transition-transform"
                 />
                 <div className="hidden sm:block">
-                  <h1 className="text-xl font-bold text-gray-900">MD-View</h1>
+                  <h1 className="text-lg md:text-xl font-bold text-gray-900">MD-View</h1>
                   <p className="text-xs text-gray-500 leading-tight">Markdown Editor</p>
                 </div>
               </Link>
@@ -368,42 +390,42 @@ export default function Home() {
             </div>
 
             {/* Right section - Actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3">
               {/* Mobile view mode selector */}
               <div className="md:hidden">
                 <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
               </div>
               
               {/* Action buttons grouped */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 md:gap-2">
                 {/* File operations group */}
-                <div className="flex items-center gap-1 bg-gray-50 rounded-lg p-1">
+                <div className="flex items-center gap-0.5 md:gap-1 bg-gray-50 rounded-lg p-1">
                   <button 
                     onClick={onPickFile} 
-                    className="px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
                     aria-label="Import markdown file"
                     title="Import .md file"
                   >
                     <Upload className="h-4 w-4" aria-hidden="true" />
-                    <span className="hidden sm:inline">Import</span>
+                    <span className="hidden md:inline">Import</span>
                   </button>
                   <button 
                     onClick={exportMarkdown} 
-                    className="px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
                     aria-label="Export as markdown file"
                     title="Export as .md file"
                   >
                     <FileText className="h-4 w-4" aria-hidden="true" />
-                    <span className="hidden sm:inline">Export MD</span>
+                    <span className="hidden md:inline">Export MD</span>
                   </button>
                   <button 
                     onClick={exportHtml} 
-                    className="px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
                     aria-label="Export as HTML file"
                     title="Export as .html file"
                   >
                     <FileCode className="h-4 w-4" aria-hidden="true" />
-                    <span className="hidden sm:inline">Export HTML</span>
+                    <span className="hidden md:inline">Export HTML</span>
                   </button>
                 </div>
 
@@ -416,7 +438,7 @@ export default function Home() {
                 <div className="hidden md:flex items-center gap-1">
                   <Link 
                     href="/guide"
-                    className="px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
+                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
                     title="Markdown guide and tips"
                   >
                     <BookOpen className="h-4 w-4" aria-hidden="true" />
@@ -424,7 +446,7 @@ export default function Home() {
                   </Link>
                   <button 
                     onClick={resetSample} 
-                    className="px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
+                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
                     aria-label="Reset to sample content"
                     title="Reset to sample markdown"
                   >
@@ -448,14 +470,14 @@ export default function Home() {
           </div>
 
           {/* Secondary bar for mobile description and stats */}
-          <div className="border-t border-gray-100 py-2">
+          <div className="border-t border-gray-100 py-1.5 md:py-2">
             <div className="sm:hidden">
               <p className="text-xs text-gray-500 text-center">
                 Real-time markdown editor with live preview
               </p>
             </div>
             <div className="hidden sm:block xl:hidden">
-              <div className="flex justify-center items-center gap-3 text-xs text-gray-500">
+              <div className="flex justify-center items-center gap-2 md:gap-3 text-xs text-gray-500">
                 <span>{markdown.split(/\s+/).filter(word => word.length > 0).length} words</span>
                 <span>•</span>
                 <span>{markdown.split('\n').length} lines</span>
@@ -496,7 +518,13 @@ export default function Home() {
               <p className="text-xs text-gray-500">Type your markdown here or drop a .md file to load it</p>
             </div>
             <div className="flex-1 min-h-0 h-64 md:h-auto">
-              <MarkdownEditor value={markdown} onChange={setMarkdown} />
+              <MarkdownEditor 
+                ref={editorRef}
+                value={markdown} 
+                onChange={setMarkdown}
+                onScroll={handleEditorScroll}
+                scrollToPercentage={editorScrollPercentage}
+              />
             </div>
           </section>
         )}
@@ -536,7 +564,13 @@ export default function Home() {
               </div>
             </div>
             <div className="flex-1 min-h-0 h-64 md:h-auto">
-              <MarkdownPreview ref={previewRef} content={debouncedMarkdown} theme={currentTheme} />
+              <MarkdownPreview 
+                ref={previewRef} 
+                content={debouncedMarkdown} 
+                theme={currentTheme}
+                onScroll={handlePreviewScroll}
+                scrollToPercentage={previewScrollPercentage}
+              />
             </div>
           </section>
         )}
