@@ -1,15 +1,9 @@
 @import "tailwindcss";
+@import "highlight.js/styles/github.css";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +16,79 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Custom styles for markdown preview */
+.prose pre {
+  background-color: #f5f5f5;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose pre {
+    background-color: #1f2937;
+  }
+}
+
+.prose code {
+  font-size: 0.875rem;
+  background-color: #f5f5f5;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose code {
+    background-color: #374151;
+  }
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose blockquote {
+  border-left: 4px solid #d1d5db;
+  padding-left: 1rem;
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose blockquote {
+    border-left-color: #4b5563;
+  }
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.prose th, .prose td {
+  border: 1px solid #d1d5db;
+  padding: 0.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose th, .prose td {
+    border-color: #4b5563;
+  }
+}
+
+.prose th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose th {
+    background-color: #1f2937;
+  }
 }
