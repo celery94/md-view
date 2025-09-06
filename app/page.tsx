@@ -226,7 +226,13 @@ export default function Home() {
   }, [download, markdown]);
 
   const exportHtml = useCallback(() => {
-    const htmlContent = previewRef.current?.innerHTML ?? "";
+    // Clone preview DOM and strip non-exportable UI (e.g., copy buttons)
+    let htmlContent = "";
+    if (previewRef.current) {
+      const clone = previewRef.current.cloneNode(true) as HTMLElement;
+      clone.querySelectorAll('[data-no-export]')?.forEach((el) => el.remove());
+      htmlContent = clone.innerHTML;
+    }
     const doc = `<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>Markdown Export</title><style>${inlineStyles}</style></head><body><main class=\"prose prose-slate\">${htmlContent}</main></body></html>`;
     download("document.html", doc, "text/html;charset=utf-8");
   }, [download]);
@@ -237,7 +243,21 @@ export default function Home() {
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">MD-View - Markdown Editor</h1>
+            <div className="flex items-center gap-3">
+              <Link
+                href="/"
+                className="inline-flex items-center rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="MD-View Home"
+                title="MD-View Home"
+              >
+                <img
+                  src="/md-view-icon.svg"
+                  alt="MD-View logo"
+                  className="h-8 w-8 rounded"
+                />
+              </Link>
+              <h1 className="text-2xl font-bold text-gray-900">MD-View - Markdown Editor</h1>
+            </div>
             <p className="text-gray-600 text-sm">Real-time markdown editor with live preview. Edit markdown, export HTML, and print to PDF with syntax highlighting and GFM support.</p>
           </div>
           <nav className="flex flex-wrap items-center gap-2" role="navigation" aria-label="File operations">
