@@ -19,6 +19,25 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
+/* Code theme overrides (scoped). Default remains GitHub. */
+.code-theme-github-dark .hljs { background-color: #0d1117; color: #c9d1d9; }
+.code-theme-github-dark .hljs-keyword { color: #ff7b72; }
+.code-theme-github-dark .hljs-string { color: #a5d6ff; }
+.code-theme-github-dark .hljs-title, 
+.code-theme-github-dark .hljs-section { color: #d2a8ff; }
+.code-theme-github-dark .hljs-literal, 
+.code-theme-github-dark .hljs-number { color: #79c0ff; }
+.code-theme-github-dark .hljs-comment { color: #8b949e; }
+
+.code-theme-night-owl .hljs { background-color: #011627; color: #d6deeb; }
+.code-theme-night-owl .hljs-keyword { color: #c792ea; }
+.code-theme-night-owl .hljs-string { color: #ecc48d; }
+.code-theme-night-owl .hljs-title, 
+.code-theme-night-owl .hljs-section { color: #82aaff; }
+.code-theme-night-owl .hljs-literal, 
+.code-theme-night-owl .hljs-number { color: #f78c6c; }
+.code-theme-night-owl .hljs-comment { color: #637777; }
+
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
   width: 8px;

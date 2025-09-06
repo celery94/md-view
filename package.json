@@ -5,7 +5,11 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start"
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",
@@ -21,6 +25,9 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-next": "15.5.2",
+    "prettier": "^3.3.3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

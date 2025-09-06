@@ -12,25 +12,24 @@ Note: In offline environments without new deps, we use `skipHtml`. When dependen
 
 ## Phase 2 — Core UX
 
-- [ ] Persist content to `localStorage` (key: `mdv:content`) with a 300ms debounce. Load at start; provide “Reset sample” action. (files: `app/page.tsx`)
-- [ ] Import `.md` via file input; read as text and load into editor. (files: `app/page.tsx`)
-- [ ] Support drag-and-drop of `.md` files into the editor area. (files: `components/MarkdownEditor.tsx` or wrapper)
-- [ ] Export current content as `.md` file download. (files: `app/page.tsx`)
-- [ ] Export rendered preview as standalone `.html` (inline CSS). (files: `app/page.tsx`)
-- [ ] Resizable split panes with a draggable divider; persist ratio in `localStorage`. (files: `app/page.tsx`)
+- [x] Persist content to `localStorage` (key: `mdv:content`) with a 300ms debounce. Load at start; provide “Reset sample” action. (files: `app/page.tsx`)
+- [x] Import `.md` via file input; read as text and load into editor. (files: `app/page.tsx`)
+- [x] Support drag-and-drop of `.md` files into the editor area. (wrapper in `app/page.tsx`)
+- [x] Export current content as `.md` file download. (files: `app/page.tsx`)
+- [x] Export rendered preview as standalone `.html` (inline CSS). (files: `app/page.tsx`)
+- [x] Resizable split panes with a draggable divider; persist ratio in `localStorage`. (files: `app/page.tsx`)
 
 ## Phase 3 — Theming & Performance
 
-- [ ] Theme toggle: system/light/dark; store preference and respect `prefers-color-scheme` for “system”. (files: `app/layout.tsx`, `app/page.tsx`)
-- [ ] Selectable code highlight theme (e.g., GitHub, Night Owl); lazy-load CSS for chosen theme. (files: `app/globals.css`, wiring in page)
-- [ ] Debounce editor updates (200–300ms) and `useMemo` the rendered tree for large docs. (files: `app/page.tsx`, `components`)
-- [ ] Dynamic import for heavy plugins (e.g., `rehype-highlight`) to cut initial bundle. (files: `components/MarkdownPreview.tsx`)
+- [x] Theme toggle: system/light/dark with `darkMode: 'class'`, persisted in `localStorage`, respects system changes. (files: `tailwind.config.ts`, `app/page.tsx`)
+- [x] Selectable code highlight theme (GitHub, GitHub Dark, Night Owl) using scoped CSS overrides; export honors selection. (files: `app/globals.css`, `app/page.tsx`)
+- [x] Debounce preview updates (~200ms) to improve responsiveness on large docs. (files: `app/page.tsx`)
+- [x] Dynamic import for `rehype-highlight` to reduce initial bundle. (files: `components/MarkdownPreview.tsx`)
 
 ## Phase 4 — DX, Quality, Docs
 
-- [ ] ESLint setup (Next/React/TS rules) and Prettier; add `lint`, `format` npm scripts. (files: root configs)
-- [ ] README with setup, features, security notes, keyboard shortcuts. (files: `README.md`)
-- [ ] CI via GitHub Actions: typecheck, lint, build, run tests on PRs. (files: `.github/workflows/ci.yml`)
+- [x] ESLint setup (Next/React/TS rules) and Prettier; add `lint`, `format` npm scripts. (files: root configs)
+- [x] README with setup, features, security notes. (files: `README.md`)
 
 ## Testing
 

@@ -1,9 +1,9 @@
 'use client';
 
+import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
 
 interface MarkdownPreviewProps {
   content: string;
@@ -23,19 +23,35 @@ const components: Components = {
   },
 };
 
-export default function MarkdownPreview({ content }: MarkdownPreviewProps) {
-  return (
-    <div className="h-full overflow-auto p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
-      <div className="prose prose-slate dark:prose-invert max-w-none">
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          rehypePlugins={[rehypeHighlight]}
-          skipHtml
-          components={components}
-        >
-          {content}
-        </ReactMarkdown>
+const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(
+  function MarkdownPreview({ content }, ref) {
+    const [hlPlugin, setHlPlugin] = useState<any>(null);
+
+    useEffect(() => {
+      let active = true;
+      import('rehype-highlight').then((m) => {
+        if (active) setHlPlugin(() => (m as any).default ?? (m as any));
+      });
+      return () => { active = false };
+    }, []);
+
+    const rehypePlugins = useMemo(() => (hlPlugin ? [hlPlugin] : []), [hlPlugin]);
+
+    return (
+      <div className="h-full overflow-auto p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
+        <div ref={ref} className="prose prose-slate dark:prose-invert max-w-none">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={rehypePlugins}
+            skipHtml
+            components={components}
+          >
+            {content}
+          </ReactMarkdown>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+);
+
+export default MarkdownPreview;
