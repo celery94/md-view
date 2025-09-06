@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Script from "next/script";
 import Analytics from "../components/Analytics";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -160,7 +161,9 @@ export default function RootLayout({
         </Script>
 
         {/* Route change pageview tracking */}
-        <Analytics />
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
         {children}
       </body>
     </html>
