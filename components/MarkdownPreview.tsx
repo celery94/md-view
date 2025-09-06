@@ -1,10 +1,11 @@
 'use client';
 
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
-import { Check, Copy as CopyIcon } from 'lucide-react';
+import { Check, Copy as CopyIcon, Link2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { getNodeText, slugify } from '../lib/slugify';
 
 interface MarkdownPreviewProps {
   content: string;
@@ -77,6 +78,102 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
 }
 
 const components: Components = {
+  h1({ children, ...props }) {
+    const text = getNodeText(children);
+    const id = slugify(text);
+    return (
+      <h1 id={id} className="group" {...(props as any)}>
+        {children}
+        <a
+          href={`#${id}`}
+          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="Link to this section"
+        >
+          <Link2 className="h-4 w-4" aria-hidden="true" />
+        </a>
+      </h1>
+    );
+  },
+  h2({ children, ...props }) {
+    const text = getNodeText(children);
+    const id = slugify(text);
+    return (
+      <h2 id={id} className="group" {...(props as any)}>
+        {children}
+        <a
+          href={`#${id}`}
+          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="Link to this section"
+        >
+          <Link2 className="h-4 w-4" aria-hidden="true" />
+        </a>
+      </h2>
+    );
+  },
+  h3({ children, ...props }) {
+    const text = getNodeText(children);
+    const id = slugify(text);
+    return (
+      <h3 id={id} className="group" {...(props as any)}>
+        {children}
+        <a
+          href={`#${id}`}
+          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="Link to this section"
+        >
+          <Link2 className="h-4 w-4" aria-hidden="true" />
+        </a>
+      </h3>
+    );
+  },
+  h4({ children, ...props }) {
+    const text = getNodeText(children);
+    const id = slugify(text);
+    return (
+      <h4 id={id} className="group" {...(props as any)}>
+        {children}
+        <a
+          href={`#${id}`}
+          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="Link to this section"
+        >
+          <Link2 className="h-4 w-4" aria-hidden="true" />
+        </a>
+      </h4>
+    );
+  },
+  h5({ children, ...props }) {
+    const text = getNodeText(children);
+    const id = slugify(text);
+    return (
+      <h5 id={id} className="group" {...(props as any)}>
+        {children}
+        <a
+          href={`#${id}`}
+          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="Link to this section"
+        >
+          <Link2 className="h-4 w-4" aria-hidden="true" />
+        </a>
+      </h5>
+    );
+  },
+  h6({ children, ...props }) {
+    const text = getNodeText(children);
+    const id = slugify(text);
+    return (
+      <h6 id={id} className="group" {...(props as any)}>
+        {children}
+        <a
+          href={`#${id}`}
+          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="Link to this section"
+        >
+          <Link2 className="h-4 w-4" aria-hidden="true" />
+        </a>
+      </h6>
+    );
+  },
   code: CodeBlock,
   img({ node, ...props }) {
     const merged = [
