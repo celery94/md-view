@@ -429,10 +429,7 @@ export default function Home() {
                   </button>
                 </div>
 
-                {/* Theme selector (desktop only) */}
-                <div className="hidden lg:block">
-                  <CompactThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
-                </div>
+                {/* Theme selector moved to Live Preview header (desktop) */}
 
                 {/* Additional actions */}
                 <div className="hidden md:flex items-center gap-1">
@@ -558,9 +555,14 @@ export default function Home() {
                 <h2 className="text-lg font-semibold text-gray-700">Live Preview</h2>
                 <p className="text-xs text-gray-500">Real-time rendered markdown with syntax highlighting</p>
               </div>
-              {/* Mobile theme selector */}
-              <div className="lg:hidden">
-                <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+              {/* Theme selector on the right side of Live Preview header */}
+              <div className="flex items-center gap-2">
+                <div className="hidden lg:block">
+                  <CompactThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+                </div>
+                <div className="lg:hidden">
+                  <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+                </div>
               </div>
             </div>
             <div className="flex-1 min-h-0 h-64 md:h-auto">
