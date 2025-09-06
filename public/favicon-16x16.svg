@@ -1,0 +1,16 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="16" height="16" rx="2" fill="#1e293b"/>
+  
+  <!-- Simplified 'M' for small size -->
+  <path d="M2 4h1.5l1 2.5 1-2.5H7v6H6V6.5L5.5 8h-1L4 6.5V10H2V4z" fill="#60a5fa"/>
+  
+  <!-- Eye icon -->
+  <circle cx="12" cy="6" r="1.5" fill="none" stroke="#60a5fa" stroke-width="0.75"/>
+  <circle cx="12" cy="6" r="0.75" fill="#60a5fa"/>
+  
+  <!-- Lines -->
+  <rect x="10" y="9" width="4" height="0.5" fill="#60a5fa" opacity="0.7"/>
+  <rect x="10" y="10" width="3" height="0.5" fill="#60a5fa" opacity="0.7"/>
+  <rect x="10" y="11" width="3.5" height="0.5" fill="#60a5fa" opacity="0.7"/>
+</svg>

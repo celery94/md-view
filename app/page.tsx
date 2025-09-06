@@ -5,7 +5,7 @@ import type React from "react";
 import MarkdownEditor from "../components/MarkdownEditor";
 import MarkdownPreview from "../components/MarkdownPreview";
 
-const initialMarkdown = `# Welcome to Markdown Preview
+const initialMarkdown = `# Welcome to md-view
 
 This is a **real-time markdown editor and preview** application built with Next.js.
 
@@ -22,7 +22,7 @@ This is a **real-time markdown editor and preview** application built with Next.
 \`\`\`javascript
 function greetUser(name) {
   console.log(\`Hello, \${name}!\`);
-  return \`Welcome to Markdown Preview!\`;
+  return \`Welcome to md-view!\`;
 }
 
 greetUser('Developer');

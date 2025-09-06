@@ -1,11 +1,11 @@
-# Markdown Preview (md.view)
+# md-view
 
 A real-time Markdown editor and previewer built with Next.js 15, React 19, TypeScript, and Tailwind CSS.
 
 ## Quick Start
 
 - Install: `npm install`
-- Dev: `npm run dev` → http://localhost:3000
+- Dev: `npm run dev` → <http://localhost:3000>
 - Build: `npm run build` then `npm run start`
 
 ## Features
