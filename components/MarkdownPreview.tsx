@@ -1,6 +1,7 @@
 'use client';
 
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+import { Check, Copy as CopyIcon } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -11,18 +12,8 @@ interface MarkdownPreviewProps {
 
 function CodeBlock({ className, children, ...props }: React.ComponentProps<'code'>) {
   const match = /language-(\w+)/.exec(className || '');
-  const isInline = !match;
-
-  // Inline code — keep default minimal rendering
-  if (isInline) {
-    return (
-      <code className={className} {...props}>
-        {children}
-      </code>
-    );
-  }
-
   const language = match?.[1]?.toLowerCase();
+  const isInline = !language;
   const preRef = useRef<HTMLPreElement | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -37,6 +28,15 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
       // noop
     }
   };
+
+  // Inline code — keep default minimal rendering
+  if (isInline) {
+    return (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    );
+  }
 
   return (
     <div className="relative group mdv-code">
@@ -53,10 +53,20 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
         <button
           type="button"
           onClick={onCopy}
-          className="px-2 py-1 text-xs rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-2 py-1 text-xs rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 inline-flex items-center gap-1.5"
           aria-label="Copy code"
         >
-          {copied ? 'Copied' : 'Copy'}
+          {copied ? (
+            <>
+              <Check className="h-3.5 w-3.5 text-green-600" aria-hidden="true" />
+              <span>Copied</span>
+            </>
+          ) : (
+            <>
+              <CopyIcon className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>Copy</span>
+            </>
+          )}
         </button>
       </div>
       <pre ref={preRef}>

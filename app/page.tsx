@@ -5,6 +5,7 @@ import type React from "react";
 import Link from "next/link";
 import MarkdownEditor from "../components/MarkdownEditor";
 import MarkdownPreview from "../components/MarkdownPreview";
+import { Upload, FileText, FileCode, RotateCw, BookOpen } from "lucide-react";
 
 const initialMarkdown = `# MD-View: Free Online Markdown Editor with Live Preview
 
@@ -263,42 +264,47 @@ export default function Home() {
           <nav className="flex flex-wrap items-center gap-2" role="navigation" aria-label="File operations">
             <Link 
               href="/guide"
-              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50"
+              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50 inline-flex items-center gap-1.5"
               title="Markdown guide and tips"
             >
-              Guide
+              <BookOpen className="h-4 w-4" aria-hidden="true" />
+              <span>Guide</span>
             </Link>
             <button 
               onClick={onPickFile} 
-              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50"
+              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50 inline-flex items-center gap-1.5"
               aria-label="Import markdown file"
               title="Import .md file"
             >
-              Import .md
+              <Upload className="h-4 w-4" aria-hidden="true" />
+              <span>Import .md</span>
             </button>
             <button 
               onClick={exportMarkdown} 
-              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50"
+              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50 inline-flex items-center gap-1.5"
               aria-label="Export as markdown file"
               title="Export as .md file"
             >
-              Export .md
+              <FileText className="h-4 w-4" aria-hidden="true" />
+              <span>Export .md</span>
             </button>
             <button 
               onClick={exportHtml} 
-              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50"
+              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50 inline-flex items-center gap-1.5"
               aria-label="Export as HTML file"
               title="Export as .html file"
             >
-              Export .html
+              <FileCode className="h-4 w-4" aria-hidden="true" />
+              <span>Export .html</span>
             </button>
             <button 
               onClick={resetSample} 
-              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50"
+              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50 inline-flex items-center gap-1.5"
               aria-label="Reset to sample content"
               title="Reset to sample markdown"
             >
-              Reset sample
+              <RotateCw className="h-4 w-4" aria-hidden="true" />
+              <span>Reset sample</span>
             </button>
             <input
               ref={fileInputRef}

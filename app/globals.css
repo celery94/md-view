@@ -9,6 +9,9 @@
   --border: #e5e7eb;
   --accent: #f9fafb;
   --accent-foreground: #111827;
+  /* Fallbacks when next/font is unavailable (e.g., offline builds) */
+  --font-geist-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, Noto Sans, "Liberation Sans", sans-serif;
+  --font-geist-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 body {
