@@ -1,6 +1,13 @@
-# md-view TODO
+# md-view TO## Phase 2 — Core UX
 
-Status: tracking backlog for the markdown editor/preview app. Check items as they land; keep sections in roughly priority order.
+- [x] Persist content to `localStorage` (key: `mdv:content`) with a 300ms debounce. Load at start; provide "Reset sample" action. (files: `app/page.tsx`)
+- [x] Import `.md` via file input; read as text and load into editor. (files: `app/page.tsx`)
+- [x] Support drag-and-drop of `.md` files into the editor area. (wrapper in `app/page.tsx`)
+- [x] Export current content as `.md` file download. (files: `app/page.tsx`)
+- [x] Export rendered preview as standalone `.html` (inline CSS). (files: `app/page.tsx`)
+- [x] Resizable split panes with a draggable divider; persist ratio in `localStorage`. (files: `app/page.tsx`)
+- [x] Multiple view modes: Editor-only, Preview-only, and Split view with keyboard shortcuts (Ctrl/Cmd+1/2/3). (files: `app/page.tsx`, `components/ViewModeSelector.tsx`)
+- [x] Enhanced navigation bar with grouped actions, responsive design, document stats, and mobile quick actions menu. (files: `app/page.tsx`, `components/CompactThemeSelector.tsx`, `components/QuickActionsMenu.tsx`)us: tracking backlog for the markdown editor/preview app. Check items as they land; keep sections in roughly priority order.
 
 ## Phase 1 — Security & Essentials
 
@@ -21,6 +28,7 @@ Note: In offline environments without new deps, we use `skipHtml`. When dependen
 
 ## Phase 3 — Theming & Performance
 
+- [x] Multiple preview themes: GitHub, Notion, Medium, Paper, Minimal, Terminal, Dark with theme selector. (files: `lib/themes.ts`, `components/ThemeSelector.tsx`, `components/MarkdownPreview.tsx`, `app/page.tsx`)
 - [ ] Theme toggle: system/light/dark with `darkMode: 'class'`, persisted in `localStorage`, respects system changes. (files: `tailwind.config.ts`, `app/layout.tsx`, `app/page.tsx`)
 - [ ] Selectable code highlight theme (GitHub, GitHub Dark, Night Owl) using scoped CSS overrides; export honors selection. (files: `app/globals.css`, `app/page.tsx`)
 - [x] Debounce preview updates (~200ms) to improve responsiveness on large docs. (files: `app/page.tsx`)

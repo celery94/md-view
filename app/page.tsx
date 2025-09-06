@@ -5,7 +5,14 @@ import type React from "react";
 import Link from "next/link";
 import MarkdownEditor from "../components/MarkdownEditor";
 import MarkdownPreview from "../components/MarkdownPreview";
-import { Upload, FileText, FileCode, RotateCw, BookOpen } from "lucide-react";
+import ThemeSelector from "../components/ThemeSelector";
+import CompactThemeSelector from "../components/CompactThemeSelector";
+import ViewModeSelector from "../components/ViewModeSelector";
+import QuickActionsMenu from "../components/QuickActionsMenu";
+import { themes, getTheme } from "../lib/themes";
+import { Upload, FileText, FileCode, RotateCw, BookOpen, Edit3, Eye, Columns, Settings, MoreHorizontal } from "lucide-react";
+
+type ViewMode = 'split' | 'editor' | 'preview';
 
 const initialMarkdown = `# MD-View: Free Online Markdown Editor with Live Preview
 
@@ -14,12 +21,26 @@ Welcome to **MD-View**, the best free online markdown editor with real-time prev
 ## 🚀 Key Features
 
 - ✅ **Real-time Live Preview** - See your markdown rendered instantly as you type
+- ✅ **Multiple View Modes** - Switch between editor-only, preview-only, or split view
+- ✅ **8 Beautiful Themes** - Choose from GitHub, Dark, Notion, Medium, Paper, Terminal, and more
 - ✅ **GitHub Flavored Markdown** - Full support for GFM including tables, task lists, and more
 - ✅ **Syntax Highlighting** - Beautiful code syntax highlighting for 100+ programming languages
-- ✅ **Dark Mode Support** - Comfortable editing in both light and dark themes
 - ✅ **Responsive Design** - Works perfectly on desktop, tablet, and mobile devices
 - ✅ **Import/Export** - Load markdown files and export to .md or .html formats
 - ✅ **Free & Open Source** - No registration required, completely free to use
+
+## 📱 View Modes
+
+MD-View offers three flexible viewing modes:
+
+### 📝 Editor Only Mode
+Perfect for focused writing without distractions. Use this mode when you want to concentrate purely on writing markdown content.
+
+### 👁️ Preview Only Mode  
+Ideal for reviewing and reading your rendered markdown. Great for presentations or when you want to see the final output in full width.
+
+### 🔄 Split View Mode (Default)
+The classic side-by-side experience with editor on the left and live preview on the right. Perfect for real-time editing with immediate visual feedback.
 
 ## 📝 Perfect for Documentation
 
@@ -115,6 +136,8 @@ Start editing this text to see the magic happen! Your markdown will be rendered 
 export default function Home() {
   const [markdown, setMarkdown] = useState(initialMarkdown);
   const [debouncedMarkdown, setDebouncedMarkdown] = useState(initialMarkdown);
+  const [currentTheme, setCurrentTheme] = useState('default');
+  const [viewMode, setViewMode] = useState<ViewMode>('split');
   const [ratio, setRatio] = useState<number>(0.5);
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -128,6 +151,12 @@ export default function Home() {
       if (saved) setMarkdown(saved);
       const savedRatio = localStorage.getItem("mdv:ratio");
       if (savedRatio) setRatio(Math.min(0.8, Math.max(0.2, Number(savedRatio))));
+      const savedTheme = localStorage.getItem("mdv:theme");
+      if (savedTheme) setCurrentTheme(savedTheme);
+      const savedViewMode = localStorage.getItem("mdv:viewMode") as ViewMode;
+      if (savedViewMode && ['split', 'editor', 'preview'].includes(savedViewMode)) {
+        setViewMode(savedViewMode);
+      }
     } catch {}
   }, []);
 
@@ -153,6 +182,54 @@ export default function Home() {
       localStorage.setItem("mdv:ratio", String(ratio));
     } catch {}
   }, [ratio]);
+
+  // Persist theme selection
+  useEffect(() => {
+    try {
+      localStorage.setItem("mdv:theme", currentTheme);
+    } catch {}
+  }, [currentTheme]);
+
+  // Persist view mode selection
+  useEffect(() => {
+    try {
+      localStorage.setItem("mdv:viewMode", viewMode);
+    } catch {}
+  }, [viewMode]);
+
+  // Keyboard shortcuts for view modes
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only handle shortcuts when not typing in inputs
+      if (e.target instanceof HTMLElement && (
+        e.target.tagName === 'TEXTAREA' || 
+        e.target.tagName === 'INPUT' || 
+        e.target.contentEditable === 'true'
+      )) {
+        return;
+      }
+
+      if (e.ctrlKey || e.metaKey) {
+        switch (e.key) {
+          case '1':
+            e.preventDefault();
+            setViewMode('editor');
+            break;
+          case '2':
+            e.preventDefault();
+            setViewMode('split');
+            break;
+          case '3':
+            e.preventDefault();
+            setViewMode('preview');
+            break;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const startDrag = useCallback(() => {
     isDraggingRef.current = true;
@@ -234,131 +311,235 @@ export default function Home() {
       clone.querySelectorAll('[data-no-export]')?.forEach((el) => el.remove());
       htmlContent = clone.innerHTML;
     }
-    const doc = `<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>Markdown Export</title><style>${inlineStyles}</style></head><body><main class=\"prose prose-slate\">${htmlContent}</main></body></html>`;
+    
+    // Get current theme for export
+    const theme = getTheme(currentTheme);
+    const themeStyles = theme.customStyles || '';
+    
+    const doc = `<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>Markdown Export</title><style>${inlineStyles}${themeStyles}</style></head><body><main class=\"${theme.classes.prose}\">${htmlContent}</main></body></html>`;
     download("document.html", doc, "text/html;charset=utf-8");
-  }, [download]);
+  }, [download, currentTheme]);
 
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-3">
+      <header className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-full mx-auto px-4 sm:px-6">
+          {/* Main navigation bar */}
+          <div className="flex items-center justify-between h-16">
+            {/* Left section - Logo and title */}
+            <div className="flex items-center gap-4">
               <Link
                 href="/"
-                className="inline-flex items-center rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex items-center gap-3 group rounded-lg p-2 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
                 aria-label="MD-View Home"
                 title="MD-View Home"
               >
                 <img
                   src="/md-view-icon.svg"
                   alt="MD-View logo"
-                  className="h-8 w-8 rounded"
+                  className="h-8 w-8 rounded group-hover:scale-105 transition-transform"
                 />
+                <div className="hidden sm:block">
+                  <h1 className="text-xl font-bold text-gray-900">MD-View</h1>
+                  <p className="text-xs text-gray-500 leading-tight">Markdown Editor</p>
+                </div>
               </Link>
-              <h1 className="text-2xl font-bold text-gray-900">MD-View - Markdown Editor</h1>
+              
+              {/* View mode selector */}
+              <div className="hidden md:block">
+                <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
+              </div>
+
+              {/* Document stats */}
+              <div className="hidden xl:flex items-center gap-3 text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg">
+                <span>
+                  {markdown.split(/\s+/).filter(word => word.length > 0).length} words
+                </span>
+                <span>•</span>
+                <span>
+                  {markdown.split('\n').length} lines
+                </span>
+                <span>•</span>
+                <span>
+                  {Math.round(new Blob([markdown]).size / 1024)}KB
+                </span>
+              </div>
             </div>
-            <p className="text-gray-600 text-sm">Real-time markdown editor with live preview. Edit markdown, export HTML, and print to PDF with syntax highlighting and GFM support.</p>
+
+            {/* Right section - Actions */}
+            <div className="flex items-center gap-3">
+              {/* Mobile view mode selector */}
+              <div className="md:hidden">
+                <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
+              </div>
+              
+              {/* Action buttons grouped */}
+              <div className="flex items-center gap-2">
+                {/* File operations group */}
+                <div className="flex items-center gap-1 bg-gray-50 rounded-lg p-1">
+                  <button 
+                    onClick={onPickFile} 
+                    className="px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+                    aria-label="Import markdown file"
+                    title="Import .md file"
+                  >
+                    <Upload className="h-4 w-4" aria-hidden="true" />
+                    <span className="hidden sm:inline">Import</span>
+                  </button>
+                  <button 
+                    onClick={exportMarkdown} 
+                    className="px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+                    aria-label="Export as markdown file"
+                    title="Export as .md file"
+                  >
+                    <FileText className="h-4 w-4" aria-hidden="true" />
+                    <span className="hidden sm:inline">Export MD</span>
+                  </button>
+                  <button 
+                    onClick={exportHtml} 
+                    className="px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+                    aria-label="Export as HTML file"
+                    title="Export as .html file"
+                  >
+                    <FileCode className="h-4 w-4" aria-hidden="true" />
+                    <span className="hidden sm:inline">Export HTML</span>
+                  </button>
+                </div>
+
+                {/* Theme selector (desktop only) */}
+                <div className="hidden lg:block">
+                  <CompactThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+                </div>
+
+                {/* Additional actions */}
+                <div className="hidden md:flex items-center gap-1">
+                  <Link 
+                    href="/guide"
+                    className="px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
+                    title="Markdown guide and tips"
+                  >
+                    <BookOpen className="h-4 w-4" aria-hidden="true" />
+                    <span className="hidden lg:inline">Guide</span>
+                  </Link>
+                  <button 
+                    onClick={resetSample} 
+                    className="px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
+                    aria-label="Reset to sample content"
+                    title="Reset to sample markdown"
+                  >
+                    <RotateCw className="h-4 w-4" aria-hidden="true" />
+                    <span className="hidden lg:inline">Reset</span>
+                  </button>
+                </div>
+
+                {/* Mobile actions menu */}
+                <div className="md:hidden">
+                  <QuickActionsMenu
+                    onImport={onPickFile}
+                    onExportMarkdown={exportMarkdown}
+                    onExportHtml={exportHtml}
+                    onReset={resetSample}
+                    onGuide={() => window.open('/guide', '_blank')}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-          <nav className="flex flex-wrap items-center gap-2" role="navigation" aria-label="File operations">
-            <Link 
-              href="/guide"
-              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50 inline-flex items-center gap-1.5"
-              title="Markdown guide and tips"
-            >
-              <BookOpen className="h-4 w-4" aria-hidden="true" />
-              <span>Guide</span>
-            </Link>
-            <button 
-              onClick={onPickFile} 
-              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50 inline-flex items-center gap-1.5"
-              aria-label="Import markdown file"
-              title="Import .md file"
-            >
-              <Upload className="h-4 w-4" aria-hidden="true" />
-              <span>Import .md</span>
-            </button>
-            <button 
-              onClick={exportMarkdown} 
-              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50 inline-flex items-center gap-1.5"
-              aria-label="Export as markdown file"
-              title="Export as .md file"
-            >
-              <FileText className="h-4 w-4" aria-hidden="true" />
-              <span>Export .md</span>
-            </button>
-            <button 
-              onClick={exportHtml} 
-              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50 inline-flex items-center gap-1.5"
-              aria-label="Export as HTML file"
-              title="Export as .html file"
-            >
-              <FileCode className="h-4 w-4" aria-hidden="true" />
-              <span>Export .html</span>
-            </button>
-            <button 
-              onClick={resetSample} 
-              className="px-3 py-1.5 border rounded-md text-sm bg-white border-gray-300 hover:bg-gray-50 inline-flex items-center gap-1.5"
-              aria-label="Reset to sample content"
-              title="Reset to sample markdown"
-            >
-              <RotateCw className="h-4 w-4" aria-hidden="true" />
-              <span>Reset sample</span>
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".md,.markdown,text/markdown,text/plain"
-              className="hidden"
-              onChange={(e) => onFileChosen(e.target.files?.[0] ?? null)}
-              aria-label="File input for markdown files"
-            />
-          </nav>
+
+          {/* Secondary bar for mobile description and stats */}
+          <div className="border-t border-gray-100 py-2">
+            <div className="sm:hidden">
+              <p className="text-xs text-gray-500 text-center">
+                Real-time markdown editor with live preview
+              </p>
+            </div>
+            <div className="hidden sm:block xl:hidden">
+              <div className="flex justify-center items-center gap-3 text-xs text-gray-500">
+                <span>{markdown.split(/\s+/).filter(word => word.length > 0).length} words</span>
+                <span>•</span>
+                <span>{markdown.split('\n').length} lines</span>
+                <span>•</span>
+                <span>{Math.round(new Blob([markdown]).size / 1024)}KB</span>
+              </div>
+            </div>
+          </div>
         </div>
+
+        {/* Hidden file input */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".md,.markdown,text/markdown,text/plain"
+          className="hidden"
+          onChange={(e) => onFileChosen(e.target.files?.[0] ?? null)}
+          aria-label="File input for markdown files"
+        />
       </header>
 
       {/* Main content */}
       <main ref={containerRef} className="flex-1 flex flex-col md:flex-row overflow-hidden" role="main">
         {/* Editor panel */}
-        <section
-          className="w-full md:h-auto p-4 border-b md:border-b-0 md:border-r border-gray-200 flex flex-col"
-          style={{ width: "100%", flexBasis: `${ratio * 100}%` }}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          aria-label="Markdown editor section"
-        >
-          <div className="mb-3 flex-shrink-0">
-            <h2 className="text-lg font-semibold text-gray-700">Markdown Editor</h2>
-            <p className="text-xs text-gray-500">Type your markdown here or drop a .md file to load it</p>
-          </div>
-          <div className="flex-1 min-h-0 h-64 md:h-auto">
-            <MarkdownEditor value={markdown} onChange={setMarkdown} />
-          </div>
-        </section>
+        {(viewMode === 'editor' || viewMode === 'split') && (
+          <section
+            className={`
+              w-full p-4 flex flex-col
+              ${viewMode === 'split' ? 'md:h-auto border-b md:border-b-0 md:border-r border-gray-200' : 'h-full'}
+            `}
+            style={viewMode === 'split' ? { width: "100%", flexBasis: `${ratio * 100}%` } : undefined}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            aria-label="Markdown editor section"
+          >
+            <div className="mb-3 flex-shrink-0">
+              <h2 className="text-lg font-semibold text-gray-700">Markdown Editor</h2>
+              <p className="text-xs text-gray-500">Type your markdown here or drop a .md file to load it</p>
+            </div>
+            <div className="flex-1 min-h-0 h-64 md:h-auto">
+              <MarkdownEditor value={markdown} onChange={setMarkdown} />
+            </div>
+          </section>
+        )}
 
-        {/* Divider (desktop only) */}
-        <div
-          onMouseDown={startDrag}
-          className="hidden md:block w-1 bg-gray-200 hover:bg-blue-400 cursor-col-resize"
-          style={{ userSelect: "none" }}
-          aria-label="Resize editor and preview panels"
-          role="separator"
-          aria-orientation="vertical"
-          tabIndex={0}
-          title="Drag to resize panels"
-        />
+        {/* Divider (split mode only) */}
+        {viewMode === 'split' && (
+          <div
+            onMouseDown={startDrag}
+            className="hidden md:block w-1 bg-gray-200 hover:bg-blue-400 cursor-col-resize"
+            style={{ userSelect: "none" }}
+            aria-label="Resize editor and preview panels"
+            role="separator"
+            aria-orientation="vertical"
+            tabIndex={0}
+            title="Drag to resize panels"
+          />
+        )}
 
         {/* Preview panel */}
-        <section className="w-full p-4 flex flex-col" style={{ width: "100%", flexBasis: `${(1 - ratio) * 100}%` }} aria-label="Markdown preview section">
-          <div className="mb-3 flex-shrink-0">
-            <h2 className="text-lg font-semibold text-gray-700">Live Preview</h2>
-            <p className="text-xs text-gray-500">Real-time rendered markdown with syntax highlighting</p>
-          </div>
-          <div className="flex-1 min-h-0 h-64 md:h-auto">
-            <MarkdownPreview ref={previewRef} content={debouncedMarkdown} />
-          </div>
-        </section>
+        {(viewMode === 'preview' || viewMode === 'split') && (
+          <section 
+            className={`
+              w-full p-4 flex flex-col
+              ${viewMode === 'split' ? '' : 'h-full'}
+            `}
+            style={viewMode === 'split' ? { width: "100%", flexBasis: `${(1 - ratio) * 100}%` } : undefined} 
+            aria-label="Markdown preview section"
+          >
+            <div className="mb-3 flex-shrink-0 flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-700">Live Preview</h2>
+                <p className="text-xs text-gray-500">Real-time rendered markdown with syntax highlighting</p>
+              </div>
+              {/* Mobile theme selector */}
+              <div className="lg:hidden">
+                <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+              </div>
+            </div>
+            <div className="flex-1 min-h-0 h-64 md:h-auto">
+              <MarkdownPreview ref={previewRef} content={debouncedMarkdown} theme={currentTheme} />
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );

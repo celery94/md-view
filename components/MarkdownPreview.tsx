@@ -6,9 +6,11 @@ import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getNodeText, slugify } from '../lib/slugify';
+import { getTheme, type Theme } from '../lib/themes';
 
 interface MarkdownPreviewProps {
   content: string;
+  theme?: string;
 }
 
 function CodeBlock({ className, children, ...props }: React.ComponentProps<'code'>) {
@@ -47,14 +49,14 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
         data-no-export="true"
       >
         {language ? (
-          <span className="px-2 py-0.5 text-[10px] leading-4 rounded bg-gray-800 text-gray-100 border border-gray-700 select-none">
+          <span className="language-badge px-2 py-0.5 text-[10px] leading-4 rounded bg-gray-800 text-gray-100 border border-gray-700 select-none">
             {language}
           </span>
         ) : null}
         <button
           type="button"
           onClick={onCopy}
-          className="px-2 py-1 text-xs rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 inline-flex items-center gap-1.5"
+          className="copy-button px-2 py-1 text-xs rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 inline-flex items-center gap-1.5"
           aria-label="Copy code"
         >
           {copied ? (
@@ -196,8 +198,9 @@ const components: Components = {
 };
 
 const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(
-  function MarkdownPreview({ content }, ref) {
+  function MarkdownPreview({ content, theme = 'default' }, ref) {
     const [hlPlugin, setHlPlugin] = useState<any>(null);
+    const currentTheme = getTheme(theme);
 
     useEffect(() => {
       let active = true;
@@ -209,15 +212,48 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(
 
     const rehypePlugins = useMemo(() => (hlPlugin ? [hlPlugin] : []), [hlPlugin]);
 
+    // Inject custom theme styles and syntax highlighting
+    useEffect(() => {
+      const styleId = 'theme-custom-styles';
+      let styleElement = document.getElementById(styleId) as HTMLStyleElement;
+      
+      if (!styleElement) {
+        styleElement = document.createElement('style');
+        styleElement.id = styleId;
+        document.head.appendChild(styleElement);
+      }
+      
+      // Load appropriate syntax highlighting theme
+      let syntaxTheme = '';
+      if (theme === 'dark' || theme === 'terminal') {
+        // Use dark syntax highlighting
+        syntaxTheme = `
+          @import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css');
+        `;
+      } else {
+        // Use light syntax highlighting (default)
+        syntaxTheme = `
+          @import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css');
+        `;
+      }
+      
+      styleElement.textContent = syntaxTheme + (currentTheme.customStyles || '');
+      
+      return () => {
+        // Keep the style element for theme switching, just update content
+      };
+    }, [currentTheme, theme]);
+
     return (
       <div 
-        className="h-full overflow-auto p-4 bg-white border border-gray-200 rounded-lg"
+        className={currentTheme.classes.container}
         role="region"
         aria-label="Markdown preview area"
         aria-live="polite"
         aria-describedby="preview-description"
+        data-theme={theme}
       >
-        <div ref={ref} className="prose prose-slate max-w-none">
+        <div ref={ref} className={currentTheme.classes.prose}>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             rehypePlugins={rehypePlugins}

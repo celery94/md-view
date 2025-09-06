@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "highlight.js/styles/github.css";
 
 :root {
   --background: #ffffff;
