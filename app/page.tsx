@@ -1,16 +1,27 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import type React from "react";
-import Link from "next/link";
-import MarkdownEditor from "../components/MarkdownEditor";
-import MarkdownPreview from "../components/MarkdownPreview";
-import ThemeSelector from "../components/ThemeSelector";
-import CompactThemeSelector from "../components/CompactThemeSelector";
-import ViewModeSelector from "../components/ViewModeSelector";
-import QuickActionsMenu from "../components/QuickActionsMenu";
-import { themes, getTheme } from "../lib/themes";
-import { Upload, FileText, FileCode, RotateCw, BookOpen, Edit3, Eye, Columns, Settings, MoreHorizontal } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import Link from 'next/link';
+import MarkdownEditor from '../components/MarkdownEditor';
+import MarkdownPreview from '../components/MarkdownPreview';
+import ThemeSelector from '../components/ThemeSelector';
+import CompactThemeSelector from '../components/CompactThemeSelector';
+import ViewModeSelector from '../components/ViewModeSelector';
+import QuickActionsMenu from '../components/QuickActionsMenu';
+import { themes, getTheme } from '../lib/themes';
+import {
+  Upload,
+  FileText,
+  FileCode,
+  RotateCw,
+  BookOpen,
+  Edit3,
+  Eye,
+  Columns,
+  Settings,
+  MoreHorizontal,
+} from 'lucide-react';
 
 type ViewMode = 'split' | 'editor' | 'preview';
 
@@ -139,8 +150,12 @@ export default function Home() {
   const [currentTheme, setCurrentTheme] = useState('default');
   const [viewMode, setViewMode] = useState<ViewMode>('split');
   const [ratio, setRatio] = useState<number>(0.5);
-  const [editorScrollPercentage, setEditorScrollPercentage] = useState<number | undefined>(undefined);
-  const [previewScrollPercentage, setPreviewScrollPercentage] = useState<number | undefined>(undefined);
+  const [editorScrollPercentage, setEditorScrollPercentage] = useState<number | undefined>(
+    undefined
+  );
+  const [previewScrollPercentage, setPreviewScrollPercentage] = useState<number | undefined>(
+    undefined
+  );
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -150,15 +165,17 @@ export default function Home() {
   // Load from localStorage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("mdv:content");
+      const saved = localStorage.getItem('mdv:content');
       if (saved) setMarkdown(saved);
-      const savedRatio = localStorage.getItem("mdv:ratio");
+      const savedRatio = localStorage.getItem('mdv:ratio');
       if (savedRatio) setRatio(Math.min(0.8, Math.max(0.2, Number(savedRatio))));
-      const savedTheme = localStorage.getItem("mdv:theme");
+      const savedTheme = localStorage.getItem('mdv:theme');
       if (savedTheme) setCurrentTheme(savedTheme);
-      const savedViewMode = localStorage.getItem("mdv:viewMode") as ViewMode;
+      const savedViewMode = localStorage.getItem('mdv:viewMode') as ViewMode;
       if (savedViewMode && ['split', 'editor', 'preview'].includes(savedViewMode)) {
         setViewMode(savedViewMode);
+      } else if (window.innerWidth < 768) {
+        setViewMode('editor');
       }
     } catch {}
   }, []);
@@ -167,7 +184,7 @@ export default function Home() {
   useEffect(() => {
     const t = setTimeout(() => {
       try {
-        localStorage.setItem("mdv:content", markdown);
+        localStorage.setItem('mdv:content', markdown);
       } catch {}
     }, 300);
     return () => clearTimeout(t);
@@ -182,21 +199,21 @@ export default function Home() {
   // Persist split ratio
   useEffect(() => {
     try {
-      localStorage.setItem("mdv:ratio", String(ratio));
+      localStorage.setItem('mdv:ratio', String(ratio));
     } catch {}
   }, [ratio]);
 
   // Persist theme selection
   useEffect(() => {
     try {
-      localStorage.setItem("mdv:theme", currentTheme);
+      localStorage.setItem('mdv:theme', currentTheme);
     } catch {}
   }, [currentTheme]);
 
   // Persist view mode selection
   useEffect(() => {
     try {
-      localStorage.setItem("mdv:viewMode", viewMode);
+      localStorage.setItem('mdv:viewMode', viewMode);
     } catch {}
   }, [viewMode]);
 
@@ -204,11 +221,12 @@ export default function Home() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Only handle shortcuts when not typing in inputs
-      if (e.target instanceof HTMLElement && (
-        e.target.tagName === 'TEXTAREA' || 
-        e.target.tagName === 'INPUT' || 
-        e.target.contentEditable === 'true'
-      )) {
+      if (
+        e.target instanceof HTMLElement &&
+        (e.target.tagName === 'TEXTAREA' ||
+          e.target.tagName === 'INPUT' ||
+          e.target.contentEditable === 'true')
+      ) {
         return;
       }
 
@@ -236,14 +254,14 @@ export default function Home() {
 
   const startDrag = useCallback(() => {
     isDraggingRef.current = true;
-    document.body.style.cursor = "col-resize";
-    document.body.style.userSelect = "none";
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
   }, []);
 
   const stopDrag = useCallback(() => {
     isDraggingRef.current = false;
-    document.body.style.cursor = "";
-    document.body.style.userSelect = "";
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
   }, []);
 
   useEffect(() => {
@@ -257,11 +275,11 @@ export default function Home() {
     function onUp() {
       if (isDraggingRef.current) stopDrag();
     }
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
     return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
     };
   }, [stopDrag]);
 
@@ -273,16 +291,19 @@ export default function Home() {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      if (typeof reader.result === "string") setMarkdown(reader.result);
+      if (typeof reader.result === 'string') setMarkdown(reader.result);
     };
     reader.readAsText(file);
   }, []);
 
-  const onDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    const f = e.dataTransfer.files?.[0];
-    onFileChosen(f);
-  }, [onFileChosen]);
+  const onDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      const f = e.dataTransfer.files?.[0];
+      onFileChosen(f);
+    },
+    [onFileChosen]
+  );
 
   const onDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -293,7 +314,7 @@ export default function Home() {
   const download = useCallback((name: string, content: string, type: string) => {
     const blob = new Blob([content], { type });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     a.download = name;
     document.body.appendChild(a);
@@ -303,38 +324,44 @@ export default function Home() {
   }, []);
 
   const exportMarkdown = useCallback(() => {
-    download("document.md", markdown, "text/markdown;charset=utf-8");
+    download('document.md', markdown, 'text/markdown;charset=utf-8');
   }, [download, markdown]);
 
   const exportHtml = useCallback(() => {
     // Clone preview DOM and strip non-exportable UI (e.g., copy buttons)
-    let htmlContent = "";
+    let htmlContent = '';
     if (previewRef.current) {
       const clone = previewRef.current.cloneNode(true) as HTMLElement;
       clone.querySelectorAll('[data-no-export]')?.forEach((el) => el.remove());
       htmlContent = clone.innerHTML;
     }
-    
+
     // Get current theme for export
     const theme = getTheme(currentTheme);
     const themeStyles = theme.customStyles || '';
-    
+
     const doc = `<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>Markdown Export</title><style>${inlineStyles}${themeStyles}</style></head><body><main class=\"${theme.classes.prose}\">${htmlContent}</main></body></html>`;
-    download("document.html", doc, "text/html;charset=utf-8");
+    download('document.html', doc, 'text/html;charset=utf-8');
   }, [download, currentTheme]);
 
   // Scroll synchronization handlers
-  const handleEditorScroll = useCallback((scrollPercentage: number) => {
-    if (viewMode === 'split') {
-      setPreviewScrollPercentage(scrollPercentage);
-    }
-  }, [viewMode]);
+  const handleEditorScroll = useCallback(
+    (scrollPercentage: number) => {
+      if (viewMode === 'split') {
+        setPreviewScrollPercentage(scrollPercentage);
+      }
+    },
+    [viewMode]
+  );
 
-  const handlePreviewScroll = useCallback((scrollPercentage: number) => {
-    if (viewMode === 'split') {
-      setEditorScrollPercentage(scrollPercentage);
-    }
-  }, [viewMode]);
+  const handlePreviewScroll = useCallback(
+    (scrollPercentage: number) => {
+      if (viewMode === 'split') {
+        setEditorScrollPercentage(scrollPercentage);
+      }
+    },
+    [viewMode]
+  );
 
   // Reset scroll sync when switching view modes
   useEffect(() => {
@@ -367,7 +394,7 @@ export default function Home() {
                   <p className="text-xs text-gray-500 leading-tight">Markdown Editor</p>
                 </div>
               </Link>
-              
+
               {/* View mode selector */}
               <div className="hidden md:block">
                 <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
@@ -375,33 +402,22 @@ export default function Home() {
 
               {/* Document stats */}
               <div className="hidden xl:flex items-center gap-3 text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg">
-                <span>
-                  {markdown.split(/\s+/).filter(word => word.length > 0).length} words
-                </span>
+                <span>{markdown.split(/\s+/).filter((word) => word.length > 0).length} words</span>
                 <span>•</span>
-                <span>
-                  {markdown.split('\n').length} lines
-                </span>
+                <span>{markdown.split('\n').length} lines</span>
                 <span>•</span>
-                <span>
-                  {Math.round(new Blob([markdown]).size / 1024)}KB
-                </span>
+                <span>{Math.round(new Blob([markdown]).size / 1024)}KB</span>
               </div>
             </div>
 
             {/* Right section - Actions */}
             <div className="flex items-center gap-2 md:gap-3">
-              {/* Mobile view mode selector */}
-              <div className="md:hidden">
-                <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
-              </div>
-              
               {/* Action buttons grouped */}
               <div className="flex items-center gap-1 md:gap-2">
                 {/* File operations group */}
                 <div className="flex items-center gap-0.5 md:gap-1 bg-gray-50 rounded-lg p-1">
-                  <button 
-                    onClick={onPickFile} 
+                  <button
+                    onClick={onPickFile}
                     className="px-2 md:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
                     aria-label="Import markdown file"
                     title="Import .md file"
@@ -409,8 +425,8 @@ export default function Home() {
                     <Upload className="h-4 w-4" aria-hidden="true" />
                     <span className="hidden md:inline">Import</span>
                   </button>
-                  <button 
-                    onClick={exportMarkdown} 
+                  <button
+                    onClick={exportMarkdown}
                     className="px-2 md:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
                     aria-label="Export as markdown file"
                     title="Export as .md file"
@@ -418,8 +434,8 @@ export default function Home() {
                     <FileText className="h-4 w-4" aria-hidden="true" />
                     <span className="hidden md:inline">Export MD</span>
                   </button>
-                  <button 
-                    onClick={exportHtml} 
+                  <button
+                    onClick={exportHtml}
                     className="px-2 md:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
                     aria-label="Export as HTML file"
                     title="Export as .html file"
@@ -433,7 +449,7 @@ export default function Home() {
 
                 {/* Additional actions */}
                 <div className="hidden md:flex items-center gap-1">
-                  <Link 
+                  <Link
                     href="/guide"
                     className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
                     title="Markdown guide and tips"
@@ -441,8 +457,8 @@ export default function Home() {
                     <BookOpen className="h-4 w-4" aria-hidden="true" />
                     <span className="hidden lg:inline">Guide</span>
                   </Link>
-                  <button 
-                    onClick={resetSample} 
+                  <button
+                    onClick={resetSample}
                     className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
                     aria-label="Reset to sample content"
                     title="Reset to sample markdown"
@@ -475,7 +491,7 @@ export default function Home() {
             </div>
             <div className="hidden sm:block xl:hidden">
               <div className="flex justify-center items-center gap-2 md:gap-3 text-xs text-gray-500">
-                <span>{markdown.split(/\s+/).filter(word => word.length > 0).length} words</span>
+                <span>{markdown.split(/\s+/).filter((word) => word.length > 0).length} words</span>
                 <span>•</span>
                 <span>{markdown.split('\n').length} lines</span>
                 <span>•</span>
@@ -497,7 +513,11 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <main ref={containerRef} className="flex-1 flex flex-col md:flex-row overflow-hidden" role="main">
+      <main
+        ref={containerRef}
+        className="flex-1 flex flex-col md:flex-row overflow-hidden pb-16 md:pb-0"
+        role="main"
+      >
         {/* Editor panel */}
         {(viewMode === 'editor' || viewMode === 'split') && (
           <section
@@ -505,19 +525,23 @@ export default function Home() {
               w-full p-4 flex flex-col
               ${viewMode === 'split' ? 'md:h-auto border-b md:border-b-0 md:border-r border-gray-200' : 'h-full'}
             `}
-            style={viewMode === 'split' ? { width: "100%", flexBasis: `${ratio * 100}%` } : undefined}
+            style={
+              viewMode === 'split' ? { width: '100%', flexBasis: `${ratio * 100}%` } : undefined
+            }
             onDrop={onDrop}
             onDragOver={onDragOver}
             aria-label="Markdown editor section"
           >
             <div className="mb-3 flex-shrink-0">
               <h2 className="text-lg font-semibold text-gray-700">Markdown Editor</h2>
-              <p className="text-xs text-gray-500">Type your markdown here or drop a .md file to load it</p>
+              <p className="text-xs text-gray-500">
+                Type your markdown here or drop a .md file to load it
+              </p>
             </div>
             <div className="flex-1 min-h-0 h-64 md:h-auto">
-              <MarkdownEditor 
+              <MarkdownEditor
                 ref={editorRef}
-                value={markdown} 
+                value={markdown}
                 onChange={setMarkdown}
                 onScroll={handleEditorScroll}
                 scrollToPercentage={editorScrollPercentage}
@@ -531,7 +555,7 @@ export default function Home() {
           <div
             onMouseDown={startDrag}
             className="hidden md:block w-1 bg-gray-200 hover:bg-blue-400 cursor-col-resize"
-            style={{ userSelect: "none" }}
+            style={{ userSelect: 'none' }}
             aria-label="Resize editor and preview panels"
             role="separator"
             aria-orientation="vertical"
@@ -542,23 +566,32 @@ export default function Home() {
 
         {/* Preview panel */}
         {(viewMode === 'preview' || viewMode === 'split') && (
-          <section 
+          <section
             className={`
               w-full p-4 flex flex-col
               ${viewMode === 'split' ? '' : 'h-full'}
             `}
-            style={viewMode === 'split' ? { width: "100%", flexBasis: `${(1 - ratio) * 100}%` } : undefined} 
+            style={
+              viewMode === 'split'
+                ? { width: '100%', flexBasis: `${(1 - ratio) * 100}%` }
+                : undefined
+            }
             aria-label="Markdown preview section"
           >
             <div className="mb-3 flex-shrink-0 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-gray-700">Live Preview</h2>
-                <p className="text-xs text-gray-500">Real-time rendered markdown with syntax highlighting</p>
+                <p className="text-xs text-gray-500">
+                  Real-time rendered markdown with syntax highlighting
+                </p>
               </div>
               {/* Theme selector on the right side of Live Preview header */}
               <div className="flex items-center gap-2">
                 <div className="hidden lg:block">
-                  <CompactThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+                  <CompactThemeSelector
+                    currentTheme={currentTheme}
+                    onThemeChange={setCurrentTheme}
+                  />
                 </div>
                 <div className="lg:hidden">
                   <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
@@ -566,9 +599,9 @@ export default function Home() {
               </div>
             </div>
             <div className="flex-1 min-h-0 h-64 md:h-auto">
-              <MarkdownPreview 
-                ref={previewRef} 
-                content={debouncedMarkdown} 
+              <MarkdownPreview
+                ref={previewRef}
+                content={debouncedMarkdown}
                 theme={currentTheme}
                 onScroll={handlePreviewScroll}
                 scrollToPercentage={previewScrollPercentage}
@@ -577,6 +610,13 @@ export default function Home() {
           </section>
         )}
       </main>
+
+      {/* Mobile bottom view mode selector */}
+      <div className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 p-2 z-10">
+        <div className="flex justify-center">
+          <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
+        </div>
+      </div>
     </div>
   );
 }
