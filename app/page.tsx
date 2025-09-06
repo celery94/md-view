@@ -158,7 +158,14 @@ export default function Home() {
       if (savedTheme) setCurrentTheme(savedTheme);
       const savedViewMode = localStorage.getItem("mdv:viewMode") as ViewMode;
       if (savedViewMode && ['split', 'editor', 'preview'].includes(savedViewMode)) {
-        setViewMode(savedViewMode);
+        // Check if we're on mobile and the saved mode is split
+        const isMobile = window.innerWidth < 768;
+        if (isMobile && savedViewMode === 'split') {
+          // Default to editor mode on mobile instead of split
+          setViewMode('editor');
+        } else {
+          setViewMode(savedViewMode);
+        }
       }
     } catch {}
   }, []);
@@ -212,6 +219,9 @@ export default function Home() {
         return;
       }
 
+      // Check if we're on mobile (below md breakpoint)
+      const isMobile = window.innerWidth < 768;
+
       if (e.ctrlKey || e.metaKey) {
         switch (e.key) {
           case '1':
@@ -220,7 +230,10 @@ export default function Home() {
             break;
           case '2':
             e.preventDefault();
-            setViewMode('split');
+            // Don't allow split mode on mobile
+            if (!isMobile) {
+              setViewMode('split');
+            }
             break;
           case '3':
             e.preventDefault();

@@ -175,3 +175,10 @@ body {
 .prose tbody tr:hover {
   background-color: #f8fafc; /* slate-50 */
 }
+
+/* Mobile-specific: Hide split mode button as additional safety measure */
+@media (max-width: 767px) {
+  .view-mode-split {
+    display: none !important;
+  }
+}
