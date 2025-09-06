@@ -17,6 +17,7 @@ A powerful, free, and open-source real-time Markdown editor with live preview, b
 - 🎨 **Syntax Highlighting** - Beautiful code syntax highlighting for 100+ programming languages
 - 🌓 **Dark Mode Support** - Comfortable editing in both light and dark themes
 - 📱 **Responsive Design** - Works perfectly on desktop, tablet, and mobile devices
+- 📲 **Mobile Toolbar** - Sticky bottom view mode switch for quick access on small screens
 - 📂 **Import/Export** - Load `.md` files and export to `.md` or `.html` formats
 - 🔒 **Privacy-Focused** - Your content stays in your browser, no data sent to servers
 - ⚡ **Fast & Lightweight** - Built with Next.js 15 and React 19 for optimal performance
