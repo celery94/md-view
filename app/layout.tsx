@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Script from "next/script";
+import Analytics from "../components/Analytics";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -142,6 +144,23 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* Google tag (gtag.js) */}
+        <Script
+          id="gtag-src"
+          src={`https://www.googletagmanager.com/gtag/js?id=G-PQ0PJ2D7EN`}
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PQ0PJ2D7EN');
+          `}
+        </Script>
+
+        {/* Route change pageview tracking */}
+        <Analytics />
         {children}
       </body>
     </html>
