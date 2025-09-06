@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://md-view.vercel.app'),
   title: {
     default: "MD-View - Real-time Markdown Editor & Live Preview",
     template: "%s | MD-View"

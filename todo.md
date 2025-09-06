@@ -21,8 +21,8 @@ Note: In offline environments without new deps, we use `skipHtml`. When dependen
 
 ## Phase 3 — Theming & Performance
 
-- [x] Theme toggle: system/light/dark with `darkMode: 'class'`, persisted in `localStorage`, respects system changes. (files: `tailwind.config.ts`, `app/page.tsx`)
-- [x] Selectable code highlight theme (GitHub, GitHub Dark, Night Owl) using scoped CSS overrides; export honors selection. (files: `app/globals.css`, `app/page.tsx`)
+- [ ] Theme toggle: system/light/dark with `darkMode: 'class'`, persisted in `localStorage`, respects system changes. (files: `tailwind.config.ts`, `app/layout.tsx`, `app/page.tsx`)
+- [ ] Selectable code highlight theme (GitHub, GitHub Dark, Night Owl) using scoped CSS overrides; export honors selection. (files: `app/globals.css`, `app/page.tsx`)
 - [x] Debounce preview updates (~200ms) to improve responsiveness on large docs. (files: `app/page.tsx`)
 - [x] Dynamic import for `rehype-highlight` to reduce initial bundle. (files: `components/MarkdownPreview.tsx`)
 
@@ -30,6 +30,8 @@ Note: In offline environments without new deps, we use `skipHtml`. When dependen
 
 - [x] ESLint setup (Next/React/TS rules) and Prettier; add `lint`, `format` npm scripts. (files: root configs)
 - [x] README with setup, features, security notes. (files: `README.md`)
+- [x] Update Guide page to reflect features and include Markdown intro. (files: `app/guide/page.tsx`)
+- [x] Add Google Analytics (gtag) with route-change tracking. (files: `app/layout.tsx`, `components/Analytics.tsx`, `lib/gtag.ts`)
 
 ## Testing
 
@@ -48,8 +50,8 @@ Note: In offline environments without new deps, we use `skipHtml`. When dependen
 ## Notes / Observations
 
 - `rehype-raw` without sanitization is a security risk; Phase 1 addresses this.
-- `components/MarkdownPreview.tsx` uses `any` for the `code` component props; replace with typed props.
-- `lib/` is empty; consider removing or using for shared hooks/utils (e.g., storage, debounce).
+- `components/MarkdownPreview.tsx` is typed via `Components` from `react-markdown`; keep strict typings.
+- `lib/gtag.ts` added for GA helpers; consider adding shared storage/debounce utils under `lib/`.
 - Tailwind v4 setup looks good; keep `@tailwindcss/typography` plugin. Consider ESM import style later if desired.
 
 ## Done
