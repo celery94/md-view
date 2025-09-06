@@ -21,7 +21,8 @@ export const metadata: Metadata = {
     default: "MD-View - Real-time Markdown Editor & Live Preview",
     template: "%s | MD-View"
   },
-  description: "Free online markdown editor with live preview. Write, edit, and preview markdown in real-time with syntax highlighting, GitHub Flavored Markdown support, and responsive design. Perfect for developers, writers, and documentation.",
+  description:
+    "Free online markdown editor with live preview. Write, edit, and preview markdown in real-time with syntax highlighting and GFM. Import .md, export HTML, and print to PDF.",
   keywords: [
     "markdown editor",
     "live preview",
@@ -31,6 +32,12 @@ export const metadata: Metadata = {
     "GitHub flavored markdown",
     "syntax highlighting",
     "markdown converter",
+    "markdown edit",
+    "markdown preview editor",
+    "export html",
+    "export pdf",
+    "markdown to html",
+    "markdown to pdf",
     "markdown writer",
     "documentation editor",
     "free markdown editor",
@@ -57,7 +64,8 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   openGraph: {
     title: "MD-View - Real-time Markdown Editor & Live Preview",
-    description: "Free online markdown editor with live preview. Write, edit, and preview markdown in real-time with syntax highlighting and GitHub Flavored Markdown support.",
+    description:
+      "Online markdown editor with live preview. Edit markdown, export HTML, and print to PDF. Syntax highlighting and GitHub Flavored Markdown included.",
     type: "website",
     locale: "en_US",
     url: "https://md-view.vercel.app",
@@ -74,7 +82,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "MD-View - Real-time Markdown Editor & Live Preview",
-    description: "Free online markdown editor with live preview. Write, edit, and preview markdown in real-time with syntax highlighting.",
+    description:
+      "Edit markdown with live preview. Export HTML and print to PDF.",
     images: ["/og-image.png"],
     creator: "@mdview",
   },
@@ -116,7 +125,7 @@ export default function RootLayout({
               "@type": "WebApplication",
               "name": "MD-View",
               "alternateName": "Markdown Editor with Live Preview",
-              "description": "Free online markdown editor with live preview. Write, edit, and preview markdown in real-time with syntax highlighting and GitHub Flavored Markdown support.",
+              "description": "Free online markdown editor with live preview. Edit markdown, export HTML, and print to PDF. Syntax highlighting and GitHub Flavored Markdown included.",
               "url": "https://md-view.vercel.app",
               "applicationCategory": "DeveloperApplication",
               "operatingSystem": "All",
@@ -135,7 +144,9 @@ export default function RootLayout({
                 "Real-time markdown preview",
                 "GitHub Flavored Markdown support",
                 "Syntax highlighting",
-                "Dark mode support",
+                "Import .md files",
+                "Export HTML",
+                "Print to PDF",
                 "Responsive design",
                 "Free to use"
               ]

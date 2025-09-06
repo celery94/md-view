@@ -68,7 +68,7 @@ mdEditor.write('# Hello World!');
 1. **Start typing** in the editor panel on the left
 2. **See live preview** in the panel on the right  
 3. **Import existing files** using the "Import .md" button
-4. **Export your work** as markdown or HTML when done
+4. **Export your work** as markdown or HTML; use your browser's Print to PDF for a PDF copy
 
 ## 📋 Task Lists and Formatting
 
@@ -232,7 +232,7 @@ export default function Home() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">MD-View - Markdown Editor</h1>
-            <p className="text-gray-600 text-sm">Real-time markdown editor with live preview, syntax highlighting, and GitHub Flavored Markdown support</p>
+            <p className="text-gray-600 text-sm">Real-time markdown editor with live preview. Edit markdown, export HTML, and print to PDF with syntax highlighting and GFM support.</p>
           </div>
           <nav className="flex flex-wrap items-center gap-2" role="navigation" aria-label="File operations">
             <Link 

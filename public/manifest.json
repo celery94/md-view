@@ -1,7 +1,7 @@
 {
   "name": "MD-View - Markdown Editor with Live Preview",
   "short_name": "MD-View",
-  "description": "Free online markdown editor with live preview, syntax highlighting, and GitHub Flavored Markdown support.",
+  "description": "Online markdown editor with live preview. Import .md, export HTML, and print to PDF.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",

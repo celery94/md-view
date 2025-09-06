@@ -13,6 +13,8 @@ export const metadata: Metadata = {
     'markdown tables',
     'task lists',
     'import export markdown',
+    'export html',
+    'pdf',
   ],
 }
 
@@ -78,6 +80,19 @@ export default function Guide() {
                   <h3 className="font-semibold text-gray-900">Responsive UI</h3>
                   <p className="text-gray-600 text-sm">Works well on desktop and mobile.</p>
                 </div>
+              </div>
+            </section>
+
+            <section aria-labelledby="export" className="mb-10">
+              <h2 id="export" className="text-2xl font-semibold text-gray-900 mb-4">
+                Export to HTML & PDF
+              </h2>
+              <div className="prose prose-slate max-w-none">
+                <p>
+                  Use the toolbar to export your document as <strong>.html</strong> for sharing or hosting. To create a
+                  <strong> PDF</strong>, open the preview and use your browser&apos;s <em>Print</em> → <em>Save as PDF</em>.
+                  The exported HTML and the print layout preserve headings, code blocks, tables, and lists.
+                </p>
               </div>
             </section>
 
@@ -147,4 +162,3 @@ export default function Guide() {
     </div>
   )
 }
-
