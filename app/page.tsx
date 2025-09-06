@@ -523,7 +523,7 @@ export default function Home() {
           <section
             className={`
               w-full p-4 flex flex-col
-              ${viewMode === 'split' ? 'md:h-auto border-b md:border-b-0 md:border-r border-gray-200' : 'h-full'}
+              ${viewMode === 'split' ? 'md:h-auto border-b md:border-b-0 md:border-r border-gray-200' : 'md:h-full'}
             `}
             style={
               viewMode === 'split' ? { width: '100%', flexBasis: `${ratio * 100}%` } : undefined
@@ -569,7 +569,7 @@ export default function Home() {
           <section
             className={`
               w-full p-4 flex flex-col
-              ${viewMode === 'split' ? '' : 'h-full'}
+              ${viewMode === 'split' ? '' : 'md:h-full'}
             `}
             style={
               viewMode === 'split'
