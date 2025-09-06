@@ -74,27 +74,27 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
         {/* Editor panel */}
-        <div className="w-1/2 p-4 border-r border-gray-200 dark:border-gray-700">
-          <div className="h-full">
-            <div className="mb-2">
-              <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-                Editor
-              </h2>
-            </div>
+        <div className="w-full md:w-1/2 p-4 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 flex flex-col">
+          <div className="mb-3 flex-shrink-0">
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+              Editor
+            </h2>
+          </div>
+          <div className="flex-1 min-h-0 h-64 md:h-auto">
             <MarkdownEditor value={markdown} onChange={setMarkdown} />
           </div>
         </div>
 
         {/* Preview panel */}
-        <div className="w-1/2 p-4">
-          <div className="h-full">
-            <div className="mb-2">
-              <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-                Preview
-              </h2>
-            </div>
+        <div className="w-full md:w-1/2 p-4 flex flex-col">
+          <div className="mb-3 flex-shrink-0">
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+              Preview
+            </h2>
+          </div>
+          <div className="flex-1 min-h-0 h-64 md:h-auto">
             <MarkdownPreview content={markdown} />
           </div>
         </div>
