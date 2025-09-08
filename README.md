@@ -8,7 +8,7 @@
 
 A fast, free, and open‑source Markdown editor with a beautiful live preview. Built with modern web tech, perfect for docs, READMEs, notes, and blogs.
 
-🌐 Live: https://md-view.vercel.app • Repo: https://github.com/celery94/md-view • Issues: https://github.com/celery94/md-view/issues
+🌐 **[Try it live](https://www.md-view.com/)** | 📖 **[Documentation](#-features)** | 🐛 **[Report Issues](https://github.com/celery94/md-view/issues)**
 
 ## ✨ Features
 
@@ -120,7 +120,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Live Demo**: [https://md-view.vercel.app](https://md-view.vercel.app)
+- **Live Demo**: [https://www.md-view.com/](https://www.md-view.com/)
 - **GitHub**: [https://github.com/celery94/md-view](https://github.com/celery94/md-view)
 - **Issues**: [https://github.com/celery94/md-view/issues](https://github.com/celery94/md-view/issues)
 

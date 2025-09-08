@@ -5,7 +5,7 @@ import Analytics from "../components/Analytics";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://md-view.vercel.app'),
+  metadataBase: new URL('https://www.md-view.com/'),
   title: {
     default: "MD-View - Real-time Markdown Editor & Live Preview",
     template: "%s | MD-View"
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
       "Online markdown editor with live preview. Edit markdown, export HTML, and print to PDF. Syntax highlighting and GitHub Flavored Markdown included.",
     type: "website",
     locale: "en_US",
-    url: "https://md-view.vercel.app",
+    url: "https://www.md-view.com/",
     siteName: "MD-View",
     images: [
       {
@@ -103,7 +103,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/md-view-icon.svg" type="image/svg+xml" />
         <link rel="icon" href="/favicon-16x16.svg" type="image/svg+xml" sizes="16x16" />
-        <link rel="canonical" href="https://md-view.vercel.app" />
+        <link rel="canonical" href="https://www.md-view.com/" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="color-scheme" content="dark light" />
         <script
@@ -115,7 +115,7 @@ export default function RootLayout({
               "name": "MD-View",
               "alternateName": "Markdown Editor with Live Preview",
               "description": "Free online markdown editor with live preview. Edit markdown, export HTML, and print to PDF. Syntax highlighting and GitHub Flavored Markdown included.",
-              "url": "https://md-view.vercel.app",
+              "url": "https://www.md-view.com/",
               "applicationCategory": "DeveloperApplication",
               "operatingSystem": "All",
               "browserRequirements": "Requires JavaScript. Requires HTML5.",
