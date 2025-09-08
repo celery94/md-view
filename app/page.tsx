@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type React from "react";
 import Link from "next/link";
-import MarkdownEditor from "../components/MarkdownEditor";
+import RichMarkdownEditor from "../components/RichMarkdownEditor";
 import MarkdownPreview from "../components/MarkdownPreview";
 import ThemeSelector from "../components/ThemeSelector";
 import CompactThemeSelector from "../components/CompactThemeSelector";
@@ -540,7 +540,7 @@ export default function Home() {
               <p className="text-xs text-gray-500">Type your markdown here or drop a .md file to load it</p>
             </div>
             <div className="flex-1 min-h-0 h-64 md:h-auto">
-              <MarkdownEditor 
+              <RichMarkdownEditor 
                 ref={editorRef}
                 value={markdown} 
                 onChange={setMarkdown}
