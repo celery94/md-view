@@ -1,27 +1,26 @@
-# MD-View - Free Online Markdown Editor with Live Preview
+# MD-View — Free Online Markdown Editor with Live Preview
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-blue)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38bdf8)](https://tailwindcss.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A powerful, free, and open-source real-time Markdown editor with live preview, built with modern web technologies. Perfect for developers, writers, and anyone who works with Markdown documentation.
+A fast, free, and open‑source Markdown editor with a beautiful live preview. Built with modern web tech, perfect for docs, READMEs, notes, and blogs.
 
-🌐 **[Try it live](https://md-view.vercel.app)** | 📖 **[Documentation](#-features)** | 🐛 **[Report Issues](https://github.com/celery94/md-view/issues)**
+🌐 Live: https://md-view.vercel.app • Repo: https://github.com/celery94/md-view • Issues: https://github.com/celery94/md-view/issues
 
 ## ✨ Features
 
-- 🚀 **Real-time Live Preview** - See your markdown rendered instantly as you type
-- 📝 **GitHub Flavored Markdown** - Full support for tables, task lists, strikethrough, and more
-- 🎨 **Syntax Highlighting** - Beautiful code syntax highlighting for 100+ programming languages
-- 🌓 **Dark Mode Support** - Comfortable editing in both light and dark themes
-- 📱 **Responsive Design** - Works perfectly on desktop, tablet, and mobile devices
-- 📂 **Import/Export** - Load `.md` files and export to `.md` or `.html` formats
-- 🔒 **Privacy-Focused** - Your content stays in your browser, no data sent to servers
-- ⚡ **Fast & Lightweight** - Built with Next.js 15 and React 19 for optimal performance
-- ♿ **Accessible** - Full keyboard navigation and screen reader support
-- 🆓 **Completely Free** - No registration required, no premium features
+- Real‑time preview powered by `react-markdown` + GFM
+- Eight themes: default, Dark, GitHub, Notion, Medium, Paper, Minimal, Terminal
+- Syntax highlighting (highlight.js) with copy‑code buttons and language badges
+- GFM extras: tables, task lists, strikethrough, autolinks
+- Import `.md`, export `.md`/`.html` (print to PDF via browser)
+- View modes: Editor, Preview, or Split with draggable resize
+- Keyboard: Cmd/Ctrl+1/2/3 to switch view modes
+- Mobile‑friendly, accessible roles/labels, localStorage persistence
+- Safe by default: raw HTML rendering disabled
 
 ## 🚀 Quick Start
 
@@ -30,8 +29,8 @@ A powerful, free, and open-source real-time Markdown editor with live preview, b
 git clone https://github.com/celery94/md-view.git
 cd md-view
 
-# Install dependencies
-npm install
+# Install dependencies (uses lockfile)
+npm ci
 
 # Start development server
 npm run dev
@@ -54,10 +53,19 @@ npm run start
 - **Framework**: [Next.js 15](https://nextjs.org/) with App Router
 - **UI Library**: [React 19](https://reactjs.org/)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + `@tailwindcss/typography`
 - **Markdown**: [react-markdown](https://github.com/remarkjs/react-markdown) with [remark-gfm](https://github.com/remarkjs/remark-gfm)
 - **Syntax Highlighting**: [highlight.js](https://highlightjs.org/)
-- **Icons**: SVG icons optimized for web
+- **Icons**: [lucide-react](https://lucide.dev/icons)
+
+## 🧭 App Structure
+
+- `app/` — Next.js App Router entries (`page.tsx`, `layout.tsx`) and `globals.css`
+- `components/` — UI modules (`MarkdownEditor.tsx`, `MarkdownPreview.tsx`, selectors, menus)
+- `lib/` — Shared utilities, themes, SEO helpers
+- `public/` — Static assets (icons, images)
+
+Requires Node 18.18+ (or 20+).
 
 ## 📝 Available Scripts
 
@@ -69,11 +77,24 @@ npm run start
 - `npm run format` - Format code with Prettier
 - `npm run format:check` - Check code formatting
 
+## 🧰 Usage Tips
+
+- Switch themes from the preview header; state persists across reloads.
+- Split view is resizable and sync‑scrolls between editor and preview.
+- Use browser Print to save PDF (export HTML is also available).
+- Headings receive stable IDs for deep links; visible “#” anchor icons are disabled by default for a cleaner look.
+
 ## 🔒 Security
 
-- Raw HTML in markdown is disabled by default (`skipHtml: true`) to prevent XSS attacks
-- Content is sanitized and rendered safely
-- No external data collection or tracking
+- Raw HTML in markdown is disabled (`skipHtml: true`) to prevent XSS.
+- Code highlighting uses `rehype-highlight`; HTML injection is not allowed.
+- No external data collection; analytics (if enabled) is anonymized pageview only.
+
+## 🎨 Styling & Markdown Details
+
+- Typography via Tailwind `prose`; custom styles for code, tables, blockquotes.
+- Lists are tuned for readability: dot bullets, consistent indent, improved markers; task lists align checkboxes with text.
+- Images are lazy‑loaded and styled with borders/shadows.
 
 ## 🤝 Contributing
 
