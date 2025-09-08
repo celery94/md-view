@@ -10,7 +10,7 @@ import CompactThemeSelector from "../components/CompactThemeSelector";
 import ViewModeSelector from "../components/ViewModeSelector";
 import QuickActionsMenu from "../components/QuickActionsMenu";
 import { themes, getTheme } from "../lib/themes";
-import { Upload, FileText, FileCode, RotateCw, BookOpen, Edit3, Eye, Columns, Settings, MoreHorizontal } from "lucide-react";
+import { Upload, FileText, FileCode, RotateCw, BookOpen, Edit3, Eye, Columns, Settings, MoreHorizontal, Github } from "lucide-react";
 
 type ViewMode = 'split' | 'editor' | 'preview';
 
@@ -454,6 +454,17 @@ export default function Home() {
                     <BookOpen className="h-4 w-4" aria-hidden="true" />
                     <span className="hidden lg:inline">Guide</span>
                   </Link>
+                  <a 
+                    href="https://github.com/celery94/md-view"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
+                    aria-label="GitHub repository"
+                    title="Open GitHub repository"
+                  >
+                    <Github className="h-4 w-4" aria-hidden="true" />
+                    <span className="hidden lg:inline">GitHub</span>
+                  </a>
                   <button 
                     onClick={resetSample} 
                     className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
@@ -473,6 +484,7 @@ export default function Home() {
                     onExportHtml={exportHtml}
                     onReset={resetSample}
                     onGuide={() => window.open('/guide', '_blank')}
+                    onGithub={() => window.open('https://github.com/celery94/md-view', '_blank', 'noopener,noreferrer')}
                   />
                 </div>
               </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MoreHorizontal, Upload, FileText, FileCode, RotateCw, BookOpen } from 'lucide-react';
+import { MoreHorizontal, Upload, FileText, FileCode, RotateCw, BookOpen, Github } from 'lucide-react';
 
 interface QuickActionsMenuProps {
   onImport: () => void;
@@ -9,6 +9,7 @@ interface QuickActionsMenuProps {
   onExportHtml: () => void;
   onReset: () => void;
   onGuide: () => void;
+  onGithub: () => void;
 }
 
 export default function QuickActionsMenu({ 
@@ -16,7 +17,8 @@ export default function QuickActionsMenu({
   onExportMarkdown, 
   onExportHtml, 
   onReset, 
-  onGuide 
+  onGuide,
+  onGithub,
 }: QuickActionsMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -78,6 +80,13 @@ export default function QuickActionsMenu({
           >
             <BookOpen className="h-4 w-4" />
             Markdown Guide
+          </button>
+          <button
+            onClick={() => handleAction(onGithub)}
+            className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+          >
+            <Github className="h-4 w-4" />
+            View on GitHub
           </button>
           <button
             onClick={() => handleAction(onReset)}
