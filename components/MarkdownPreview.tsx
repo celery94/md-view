@@ -1,7 +1,7 @@
 'use client';
 
 import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Check, Copy as CopyIcon, Link2 } from 'lucide-react';
+import { Check, Copy as CopyIcon } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -86,15 +86,8 @@ const components: Components = {
     const text = getNodeText(children);
     const id = slugify(text);
     return (
-      <h1 id={id} className="group" {...(props as any)}>
+      <h1 id={id} {...(props as any)}>
         {children}
-        <a
-          href={`#${id}`}
-          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
-          aria-label="Link to this section"
-        >
-          <Link2 className="h-4 w-4" aria-hidden="true" />
-        </a>
       </h1>
     );
   },
@@ -102,15 +95,8 @@ const components: Components = {
     const text = getNodeText(children);
     const id = slugify(text);
     return (
-      <h2 id={id} className="group" {...(props as any)}>
+      <h2 id={id} {...(props as any)}>
         {children}
-        <a
-          href={`#${id}`}
-          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
-          aria-label="Link to this section"
-        >
-          <Link2 className="h-4 w-4" aria-hidden="true" />
-        </a>
       </h2>
     );
   },
@@ -118,15 +104,8 @@ const components: Components = {
     const text = getNodeText(children);
     const id = slugify(text);
     return (
-      <h3 id={id} className="group" {...(props as any)}>
+      <h3 id={id} {...(props as any)}>
         {children}
-        <a
-          href={`#${id}`}
-          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
-          aria-label="Link to this section"
-        >
-          <Link2 className="h-4 w-4" aria-hidden="true" />
-        </a>
       </h3>
     );
   },
@@ -134,15 +113,8 @@ const components: Components = {
     const text = getNodeText(children);
     const id = slugify(text);
     return (
-      <h4 id={id} className="group" {...(props as any)}>
+      <h4 id={id} {...(props as any)}>
         {children}
-        <a
-          href={`#${id}`}
-          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
-          aria-label="Link to this section"
-        >
-          <Link2 className="h-4 w-4" aria-hidden="true" />
-        </a>
       </h4>
     );
   },
@@ -150,15 +122,8 @@ const components: Components = {
     const text = getNodeText(children);
     const id = slugify(text);
     return (
-      <h5 id={id} className="group" {...(props as any)}>
+      <h5 id={id} {...(props as any)}>
         {children}
-        <a
-          href={`#${id}`}
-          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
-          aria-label="Link to this section"
-        >
-          <Link2 className="h-4 w-4" aria-hidden="true" />
-        </a>
       </h5>
     );
   },
@@ -166,15 +131,8 @@ const components: Components = {
     const text = getNodeText(children);
     const id = slugify(text);
     return (
-      <h6 id={id} className="group" {...(props as any)}>
+      <h6 id={id} {...(props as any)}>
         {children}
-        <a
-          href={`#${id}`}
-          className="heading-anchor inline-flex align-middle opacity-0 group-hover:opacity-100 transition-opacity"
-          aria-label="Link to this section"
-        >
-          <Link2 className="h-4 w-4" aria-hidden="true" />
-        </a>
       </h6>
     );
   },

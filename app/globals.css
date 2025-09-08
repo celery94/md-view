@@ -143,13 +143,6 @@ body {
 .prose :where(h1,h2,h3,h4,h5,h6) {
   scroll-margin-top: 6rem;
 }
-.prose .heading-anchor {
-  margin-left: 0.375rem; /* ml-1.5 */
-  color: var(--muted-foreground);
-}
-.prose :where(h1,h2,h3,h4,h5,h6):hover .heading-anchor {
-  color: var(--foreground);
-}
 
 /* Task list checkboxes */
 .prose input[type="checkbox"] {
@@ -158,6 +151,59 @@ body {
   vertical-align: middle;
   margin-right: 0.5rem;
   accent-color: #3b82f6; /* blue-500 */
+}
+
+/* Lists: spacing, markers, nesting */
+.prose ul {
+  list-style-type: disc; /* always dot bullets */
+  padding-left: 1.25rem; /* indent for bullet gutter */
+}
+.prose ul,
+.prose ol {
+  margin: 0.75rem 0; /* tighter but readable */
+}
+.prose li {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.prose li::marker {
+  color: #94a3b8; /* slate-400 */
+  font-weight: 600;
+}
+.prose ul > li {
+  padding-left: 0.375rem; /* extra space between dot and text */
+}
+.prose ol > li {
+  padding-left: 0.125rem; /* align with ul visual spacing */
+}
+.prose ul ul,
+.prose ul ol,
+.prose ol ul,
+.prose ol ol {
+  list-style-type: disc; /* keep dot bullets for nested unordered lists */
+  padding-left: 1.25rem; /* nested indent */
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Task lists: remove extra bullets and align items */
+.prose ul.contains-task-list,
+.prose ol.contains-task-list {
+  list-style: none;
+  padding-left: 0;
+}
+.prose li.task-list-item {
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.prose li.task-list-item > input[type="checkbox"] {
+  margin-top: 0.2rem; /* visually center with first line */
+}
+.prose li > p + ul,
+.prose li > p + ol {
+  margin-top: 0.375rem; /* space nested lists after paragraphs */
 }
 
 /* Keyboard keys */

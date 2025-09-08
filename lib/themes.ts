@@ -76,6 +76,10 @@ export const themes: Theme[] = [
       .dark-theme hr {
         border-color: #374151;
       }
+      .dark-theme li::marker {
+        color: #9ca3af; /* gray-400 for contrast on dark */
+        font-weight: 600;
+      }
       /* Dark theme specific copy button and language badge styles */
       .dark-theme .mdv-code .copy-button {
         background: #1f2937;
@@ -90,12 +94,7 @@ export const themes: Theme[] = [
         border: 1px solid #374151;
         color: #d1d5db;
       }
-      .dark-theme .heading-anchor {
-        color: #9ca3af;
-      }
-      .dark-theme .heading-anchor:hover {
-        color: #e5e7eb;
-      }
+      
       /* Dark theme success state for copy button */
       .dark-theme .mdv-code .copy-button .text-green-600 {
         color: #10b981 !important;
@@ -486,6 +485,10 @@ export const themes: Theme[] = [
         border: 1px solid #00ff00;
         background: #000;
       }
+      .terminal-theme li::marker {
+        color: #00ff00;
+        font-weight: 600;
+      }
       .terminal-theme th, .terminal-theme td {
         border: 1px solid #333;
         padding: 8px;
@@ -509,12 +512,7 @@ export const themes: Theme[] = [
         border: 1px solid #333;
         color: #00ff00;
       }
-      .terminal-theme .heading-anchor {
-        color: #666;
-      }
-      .terminal-theme .heading-anchor:hover {
-        color: #00ff00;
-      }
+      
       /* Terminal theme success state for copy button */
       .terminal-theme .mdv-code .copy-button .text-green-600 {
         color: #00ff00 !important;
