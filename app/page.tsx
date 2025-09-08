@@ -412,10 +412,10 @@ export default function Home() {
               {/* Action buttons grouped */}
               <div className="flex items-center gap-1 md:gap-2">
                 {/* File operations group */}
-                <div className="flex items-center gap-0.5 md:gap-1 bg-gray-50 rounded-lg p-1">
+                <div className="flex items-center gap-0.5 md:gap-1 bg-gray-100 rounded-lg p-1">
                   <button 
                     onClick={onPickFile} 
-                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
                     aria-label="Import markdown file"
                     title="Import .md file"
                   >
@@ -424,7 +424,7 @@ export default function Home() {
                   </button>
                   <button 
                     onClick={exportMarkdown} 
-                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
                     aria-label="Export as markdown file"
                     title="Export as .md file"
                   >
@@ -433,7 +433,7 @@ export default function Home() {
                   </button>
                   <button 
                     onClick={exportHtml} 
-                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
                     aria-label="Export as HTML file"
                     title="Export as .html file"
                   >
@@ -448,7 +448,7 @@ export default function Home() {
                 <div className="hidden md:flex items-center gap-1">
                   <Link 
                     href="/guide"
-                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
+                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors inline-flex items-center gap-1.5"
                     title="Markdown guide and tips"
                   >
                     <BookOpen className="h-4 w-4" aria-hidden="true" />
@@ -458,7 +458,7 @@ export default function Home() {
                     href="https://github.com/celery94/md-view"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
+                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors inline-flex items-center gap-1.5"
                     aria-label="GitHub repository"
                     title="Open GitHub repository"
                   >
@@ -467,7 +467,7 @@ export default function Home() {
                   </a>
                   <button 
                     onClick={resetSample} 
-                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
+                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors inline-flex items-center gap-1.5"
                     aria-label="Reset to sample content"
                     title="Reset to sample markdown"
                   >
