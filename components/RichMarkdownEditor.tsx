@@ -44,15 +44,15 @@ const RichMarkdownEditor = forwardRef<HTMLTextAreaElement, RichMarkdownEditorPro
       }
     };
 
-  const applyStyle = (style: 'bold' | 'italic' | 'strikethrough' | 'h1' | 'h2' | 'h3' | 'list' | 'link') => {
+  const applyStyle = (style: 'bold' | 'italic' | 'strikethrough' | 'h1' | 'h2' | 'h3' | 'list' | 'orderedList' | 'link' | 'code' | 'quote' | 'table' | 'image') => {
     const textarea = (ref as React.RefObject<HTMLTextAreaElement>)?.current;
     if (!textarea) return;
 
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
 
-    // For headings, work with the entire current line
-    if (style === 'h1' || style === 'h2' || style === 'h3') {
+    // For headings and blockquotes, work with the entire current line
+    if (style === 'h1' || style === 'h2' || style === 'h3' || style === 'quote') {
       // Find the start and end of the current line
       const lines = value.split('\n');
       let currentLineIndex = 0;
@@ -68,14 +68,26 @@ const RichMarkdownEditor = forwardRef<HTMLTextAreaElement, RichMarkdownEditorPro
       
       const currentLine = lines[currentLineIndex];
       const lineStart = charCount;
-      const lineEnd = charCount + currentLine.length;
       
-      // Remove existing heading markers if present
-      const cleanLine = currentLine.replace(/^#{1,6}\s*/, '');
+      let newLine;
+      let newCursorPosition;
       
-      // Add new heading marker
-      const headingLevel = style === 'h1' ? '#' : style === 'h2' ? '##' : '###';
-      const newLine = `${headingLevel} ${cleanLine}`;
+      if (style === 'quote') {
+        // Toggle blockquote
+        if (currentLine.startsWith('> ')) {
+          newLine = currentLine.substring(2);
+          newCursorPosition = lineStart + newLine.length;
+        } else {
+          newLine = `> ${currentLine}`;
+          newCursorPosition = lineStart + newLine.length;
+        }
+      } else {
+        // Handle headings
+        const cleanLine = currentLine.replace(/^#{1,6}\s*/, '');
+        const headingLevel = style === 'h1' ? '#' : style === 'h2' ? '##' : '###';
+        newLine = `${headingLevel} ${cleanLine}`;
+        newCursorPosition = lineStart + headingLevel.length + 1 + cleanLine.length;
+      }
       
       // Replace the line
       const newLines = [...lines];
@@ -86,7 +98,6 @@ const RichMarkdownEditor = forwardRef<HTMLTextAreaElement, RichMarkdownEditorPro
       
       setTimeout(() => {
         textarea.focus();
-        const newCursorPosition = lineStart + headingLevel.length + 1 + cleanLine.length;
         textarea.selectionStart = textarea.selectionEnd = newCursorPosition;
       }, 0);
       
@@ -111,13 +122,31 @@ const RichMarkdownEditor = forwardRef<HTMLTextAreaElement, RichMarkdownEditorPro
         markdown = `~~${selectedText}~~`;
         cursorPosition += 2;
         break;
+      case 'code':
+        markdown = `\`${selectedText}\``;
+        cursorPosition += 1;
+        break;
       case 'list':
         markdown = `- ${selectedText}`;
         cursorPosition += 2;
         break;
+      case 'orderedList':
+        markdown = `1. ${selectedText}`;
+        cursorPosition += 3;
+        break;
       case 'link':
         markdown = `[${selectedText}](url)`;
         cursorPosition += 1;
+        break;
+      case 'image':
+        markdown = `![${selectedText}](url)`;
+        cursorPosition += 2;
+        break;
+      case 'table':
+        markdown = selectedText.length > 0 
+          ? `| ${selectedText} | Column 2 |\n|-----------|----------|\n| Row 1     | Data     |`
+          : `| Column 1 | Column 2 |\n|-----------|----------|\n| Row 1     | Data     |`;
+        cursorPosition += selectedText.length > 0 ? 2 : 0;
         break;
     }
 
@@ -143,7 +172,12 @@ const RichMarkdownEditor = forwardRef<HTMLTextAreaElement, RichMarkdownEditorPro
         onH2={() => applyStyle('h2')}
         onH3={() => applyStyle('h3')}
         onList={() => applyStyle('list')}
+        onOrderedList={() => applyStyle('orderedList')}
         onLink={() => applyStyle('link')}
+        onCode={() => applyStyle('code')}
+        onQuote={() => applyStyle('quote')}
+        onTable={() => applyStyle('table')}
+        onImage={() => applyStyle('image')}
         onUndo={handleUndo}
         onRedo={handleRedo}
       />
