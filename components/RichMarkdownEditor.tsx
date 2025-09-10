@@ -44,14 +44,57 @@ const RichMarkdownEditor = forwardRef<HTMLTextAreaElement, RichMarkdownEditorPro
       }
     };
 
-  const applyStyle = (style: 'bold' | 'italic' | 'strikethrough' | 'heading' | 'list' | 'link') => {
+  const applyStyle = (style: 'bold' | 'italic' | 'strikethrough' | 'h1' | 'h2' | 'h3' | 'list' | 'link') => {
     const textarea = (ref as React.RefObject<HTMLTextAreaElement>)?.current;
     if (!textarea) return;
 
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
-    const selectedText = value.substring(start, end);
 
+    // For headings, work with the entire current line
+    if (style === 'h1' || style === 'h2' || style === 'h3') {
+      // Find the start and end of the current line
+      const lines = value.split('\n');
+      let currentLineIndex = 0;
+      let charCount = 0;
+      
+      for (let i = 0; i < lines.length; i++) {
+        if (charCount + lines[i].length >= start) {
+          currentLineIndex = i;
+          break;
+        }
+        charCount += lines[i].length + 1; // +1 for newline
+      }
+      
+      const currentLine = lines[currentLineIndex];
+      const lineStart = charCount;
+      const lineEnd = charCount + currentLine.length;
+      
+      // Remove existing heading markers if present
+      const cleanLine = currentLine.replace(/^#{1,6}\s*/, '');
+      
+      // Add new heading marker
+      const headingLevel = style === 'h1' ? '#' : style === 'h2' ? '##' : '###';
+      const newLine = `${headingLevel} ${cleanLine}`;
+      
+      // Replace the line
+      const newLines = [...lines];
+      newLines[currentLineIndex] = newLine;
+      const newValue = newLines.join('\n');
+      
+      onChange(newValue);
+      
+      setTimeout(() => {
+        textarea.focus();
+        const newCursorPosition = lineStart + headingLevel.length + 1 + cleanLine.length;
+        textarea.selectionStart = textarea.selectionEnd = newCursorPosition;
+      }, 0);
+      
+      return;
+    }
+
+    // For other styles, work with selected text
+    const selectedText = value.substring(start, end);
     let markdown;
     let cursorPosition = start;
 
@@ -67,10 +110,6 @@ const RichMarkdownEditor = forwardRef<HTMLTextAreaElement, RichMarkdownEditorPro
       case 'strikethrough':
         markdown = `~~${selectedText}~~`;
         cursorPosition += 2;
-        break;
-      case 'heading':
-        markdown = `## ${selectedText}`;
-        cursorPosition += 3;
         break;
       case 'list':
         markdown = `- ${selectedText}`;
@@ -100,7 +139,9 @@ const RichMarkdownEditor = forwardRef<HTMLTextAreaElement, RichMarkdownEditorPro
         onBold={() => applyStyle('bold')}
         onItalic={() => applyStyle('italic')}
         onStrikethrough={() => applyStyle('strikethrough')}
-        onHeading={() => applyStyle('heading')}
+        onH1={() => applyStyle('h1')}
+        onH2={() => applyStyle('h2')}
+        onH3={() => applyStyle('h3')}
         onList={() => applyStyle('list')}
         onLink={() => applyStyle('link')}
         onUndo={handleUndo}
