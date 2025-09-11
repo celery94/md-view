@@ -1,101 +1,63 @@
 # Copilot Instructions for md-view
 
-## Project Overview
+Concise guidance for AI agents working on this Next.js Markdown editor. Focus on the concrete patterns and files used here.
 
-A real-time markdown editor and preview application built with Next.js 15, React 19, and Tailwind CSS. The app features a split-pane interface with live markdown preview, syntax highlighting, and responsive design.
+## What this app is
 
-## Architecture
+- Real‑time Markdown editor with live preview, built on Next.js 15 (App Router), React 19, TypeScript, and Tailwind.
+- Features: split/resize panes, scroll sync, themes, syntax highlighting, import/export, and keyboard view‑mode shortcuts.
 
-### Core Components
+## Architecture and key modules
 
-- **`app/page.tsx`**: Main split-pane layout with responsive flex design (`flex-col md:flex-row`)
-- **`components/MarkdownEditor.tsx`**: Controlled textarea with monospace font and auto-scrolling
-- **`components/MarkdownPreview.tsx`**: React-markdown renderer with GitHub Flavored Markdown support
+- `app/page.tsx`: Orchestrates the UI and state. Manages view mode ('split' | 'editor' | 'preview'), pane ratio drag/resize, imports/exports, scroll sync, and persistence in localStorage (`mdv:content`, `mdv:ratio`, `mdv:theme`, `mdv:viewMode`).
+- `components/RichMarkdownEditor.tsx`: Toolbar + `MarkdownEditor` wrapper. Implements editing commands (bold/italic/headers/quote/etc.) and simple undo/redo stacks.
+- `components/MarkdownEditor.tsx`: Controlled `<textarea>` with `forwardRef`, independent scrolling, and scroll percentage reporting.
+- `components/MarkdownPreview.tsx`: `react-markdown` renderer with `remark-gfm`, custom heading slug IDs (`lib/slugify.ts`), code block UI (copy button, language badge), and independent scrolling. Syntax highlighting via dynamic `rehype-highlight` import; theme CSS injected at runtime.
+- `lib/themes.ts`: Theme registry returning CSS class sets and custom CSS used by preview; referenced via `getTheme(currentTheme)`.
+- `lib/seo-utils.ts`, `components/JsonLd.tsx`, `app/sitemap.ts`: SEO utilities.
 
-### Key Dependencies & Patterns
+## Rendering + security
 
-- **Markdown Processing**: `react-markdown` + `remark-gfm` + `rehype-highlight` + `rehype-raw`
-- **Styling**: Tailwind CSS with `@tailwindcss/typography` for prose styling
-- **Syntax Highlighting**: `highlight.js` with GitHub theme
-- **Layout Strategy**: Flexbox with `flex-1`, `min-h-0`, and responsive breakpoints
+- Markdown: `react-markdown` with `remark-gfm` only; HTML is disabled (`skipHtml`). If enabling raw HTML later, pair `rehype-raw` with `rehype-sanitize` and a safe schema (see AGENTS.md security tips).
+- Code blocks: UI controls are marked with `data-no-export` so export can strip them.
 
-## Development Workflows
+## Layout and interaction patterns
 
-### Local Development
+- Split layout: `flex-1 flex flex-col md:flex-row overflow-hidden` with each pane using `flex-1 min-h-0` and scrollable content (`h-full overflow-auto`). Mobile (< md) prefers single‑column and avoids split mode by default.
+- Pane resize: draggable vertical separator in split mode; ratio persisted to localStorage.
+- Scroll sync: editor and preview emit scroll percentages; the counterpart consumes them while guarding with an `isScrollingSelfRef` flag to avoid feedback loops.
+- Keyboard: Ctrl/Cmd+1/2/3 toggles view modes (global handler in `app/page.tsx`).
 
-```bash
-npm run dev        # Uses Turbopack for faster builds
-npm run build      # Production build with Turbopack
-npm run start      # Start production server
-```
+## Import/Export
 
-### Project-Specific Conventions
+- Import: hidden file input accepts `.md` and reads text via FileReader.
+- Export MD: download current source as `document.md`.
+- Export HTML: clones preview DOM, removes `[data-no-export]`, wraps in minimal printable HTML with theme styles from `lib/themes.ts` and inline defaults from `app/page.tsx` (`inlineStyles`).
 
-#### Component Structure
+## Styling and themes
 
-- All components use `'use client'` directive (client-side rendering)
-- Props interfaces defined inline above component functions
-- TypeScript with strict typing, using `any` only for react-markdown component props
+- Tailwind + `@tailwindcss/typography` for prose; preview applies theme classes from `getTheme(theme)` to container/prose.
+- Syntax highlight CSS is loaded via CDN (`github.min.css` or `github-dark.min.css`) based on current theme, then concatenated with theme custom CSS into an injected `<style>` tag.
 
-#### Layout Patterns
+## Conventions
 
-```tsx
-// Split-pane responsive pattern used throughout
-<div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-  <div className="w-full md:w-1/2 p-4 flex flex-col">
-    <div className="mb-3 flex-shrink-0">Header</div>
-    <div className="flex-1 min-h-0">Content</div>
-  </div>
-</div>
-```
+- TypeScript everywhere; components use `forwardRef` where refs are exposed. Avoid `any` except where required by `react-markdown` component typing.
+- Imports ordered external → internal; components PascalCase; hooks in `lib/` as `useXyz.ts` if added.
+- Accessibility: meaningful `aria-*` roles/labels on editor, preview, and controls.
 
-#### Styling Conventions
+## Dev workflows
 
-- Dark mode via CSS variables and `prefers-color-scheme`
-- Custom scrollbar styling in `globals.css`
-- Prose styling: `prose prose-slate dark:prose-invert max-w-none`
-- Responsive utilities: `w-full md:w-1/2`, `flex-col md:flex-row`
+- Node 18.18+ (or 20+). Commands:
+  - `npm ci` — install
+  - `npm run dev` — start dev server (Turbopack) at http://localhost:3000
+  - `npm run build` — production build
+  - `npm run start` — serve prod build
+  - `npm run typecheck` / `npm run lint` / `npm run format`
 
-#### Markdown Component Customization
+## Examples to follow
 
-```tsx
-// Standard pattern for customizing code blocks
-components={{
-  code({ className, children, ...props }: any) {
-    const match = /language-(\w+)/.exec(className || '');
-    const isInline = !match;
-    return !isInline ? (/* block code */) : (/* inline code */);
-  },
-}}
-```
+- Heading IDs in preview: see `components/MarkdownPreview.tsx` using `slugify(getNodeText(children))`.
+- Scroll sync wiring: `onScroll`/`scrollToPercentage` props across editor/preview with guard flags.
+- Toolbar editing commands: `components/RichMarkdownEditor.tsx` `applyStyle` for bold/italic/headers/quote/etc.
 
-## Critical Implementation Details
-
-### Height Management
-
-- Use `h-full overflow-auto` for scrollable containers
-- Apply `flex-1 min-h-0` to make flex children respect container height
-- Mobile: explicit heights like `h-64 md:h-auto` for proper mobile layout
-
-### State Management
-
-Simple `useState` for markdown content with direct prop passing. No external state management needed.
-
-### CSS Integration
-
-- Import order: `@import "tailwindcss"` then `@import "highlight.js/styles/github.css"`
-- Custom CSS variables for theme colors in `:root` and dark mode media queries
-
-## File Organization
-
-```
-app/
-├── layout.tsx          # Root layout with fonts and metadata
-├── page.tsx            # Main app with split-pane layout
-└── globals.css         # Global styles, scrollbar, prose customization
-components/
-├── MarkdownEditor.tsx  # Textarea with markdown-specific styling
-└── MarkdownPreview.tsx # React-markdown with plugins and custom renderers
-```
-
-When making changes, maintain the responsive flex layout pattern and ensure both editor and preview panels scroll independently.
+When adding features, preserve: independent scrolling of panes, `min-h-0` in flex children, localStorage keys (`mdv:*`), and `skipHtml` safety.
