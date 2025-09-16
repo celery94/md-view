@@ -50,7 +50,11 @@ export default function ViewModeSelector({ currentMode, onModeChange }: ViewMode
   });
 
   return (
-    <div className="flex items-center gap-0.5 md:gap-1 bg-gray-100 rounded-lg p-0.5 md:p-1" role="group" aria-label="View mode selector">
+    <div
+      className="flex items-center gap-1 rounded-full border border-white/70 bg-white/60 p-1 shadow-sm backdrop-blur"
+      role="group"
+      aria-label="View mode selector"
+    >
       {modes.map((mode) => {
         const Icon = mode.icon;
         return (
@@ -58,10 +62,10 @@ export default function ViewModeSelector({ currentMode, onModeChange }: ViewMode
             key={mode.id}
             onClick={() => onModeChange(mode.id)}
             className={`
-              px-2 md:px-3 py-1 md:py-1.5 text-xs rounded-md transition-all duration-200 inline-flex items-center gap-1 md:gap-1.5 relative
-              ${currentMode === mode.id 
-                ? 'bg-white text-gray-900 shadow-sm border border-gray-200' 
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              inline-flex items-center gap-1 md:gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200
+              ${currentMode === mode.id
+                ? 'bg-gradient-to-r from-sky-500 to-indigo-500 text-white shadow'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white'
               }
               ${mode.id === 'split' ? 'view-mode-split' : ''}
             `}
@@ -70,7 +74,7 @@ export default function ViewModeSelector({ currentMode, onModeChange }: ViewMode
           >
             <Icon className="h-3.5 w-3.5" aria-hidden="true" />
             <span className="hidden sm:inline">{mode.label}</span>
-            <kbd className="hidden lg:inline-block ml-1 px-1 py-0.5 text-[10px] bg-gray-100 border border-gray-200 rounded text-gray-500">
+            <kbd className="hidden lg:inline-block ml-1 rounded-full border border-white/70 bg-white/70 px-1.5 py-0.5 text-[10px] text-slate-500">
               ⌘{mode.shortcut}
             </kbd>
           </button>
