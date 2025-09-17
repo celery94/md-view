@@ -139,6 +139,8 @@ export default function Home() {
   const [currentTheme, setCurrentTheme] = useState('default');
   const [viewMode, setViewMode] = useState<ViewMode>('split');
   const [ratio, setRatio] = useState<number>(0.5);
+  // When top nav horizontal space is insufficient we collapse text labels and show icons only.
+  const [isNavCompact, setIsNavCompact] = useState(false);
   const [editorScrollPercentage, setEditorScrollPercentage] = useState<number | undefined>(undefined);
   const [previewScrollPercentage, setPreviewScrollPercentage] = useState<number | undefined>(undefined);
   const isDraggingRef = useRef(false);
@@ -146,6 +148,7 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const previewRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
+  const navRowRef = useRef<HTMLDivElement | null>(null);
 
   const primaryActionButton =
     "inline-flex items-center gap-1.5 rounded-xl bg-sky-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-sky-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3.5 md:text-sm";
@@ -218,6 +221,39 @@ export default function Home() {
       localStorage.setItem("mdv:viewMode", viewMode);
     } catch {}
   }, [viewMode]);
+
+  // Observe nav row size to decide if we need to collapse text labels into icon-only.
+  useEffect(() => {
+    const el = navRowRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      if (!el) return;
+      // Hard breakpoint: below 1000px viewport width always compact
+      if (window.innerWidth < 1000) {
+        setIsNavCompact(true);
+        return;
+      }
+      // Otherwise rely on actual overflow detection
+      const shouldCompact = el.scrollWidth > el.clientWidth + 4; // small tolerance
+      setIsNavCompact(shouldCompact);
+    };
+
+    measure(); // initial
+
+    let raf: number | null = null;
+    const ro = new ResizeObserver(() => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(measure);
+    });
+    ro.observe(el);
+    window.addEventListener('resize', measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', measure);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
 
   // Keyboard shortcuts for view modes
   useEffect(() => {
@@ -371,7 +407,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-slate-50 to-slate-100 text-slate-900">
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/80 backdrop-blur">
         <div className="flex w-full flex-col px-4 sm:px-6 lg:px-10 xl:px-14">
-          <div className="flex h-16 items-center justify-between gap-4 lg:gap-6">
+          <div ref={navRowRef} className="flex h-16 items-center justify-between gap-4 lg:gap-6">
             <div className="flex items-center gap-3 md:gap-4">
               <Link
                 href="/"
@@ -384,23 +420,27 @@ export default function Home() {
                   alt="MD-View logo"
                   className="h-8 w-8 rounded-xl bg-slate-100 p-1.5 ring-1 ring-slate-200 transition-transform duration-300 group-hover:scale-105"
                 />
-                <div className="hidden sm:block text-left">
-                  <h1 className="text-lg font-semibold leading-tight text-slate-900">MD-View</h1>
-                  <p className="text-xs font-medium text-slate-500">Markdown Editor</p>
-                </div>
+                {!isNavCompact && (
+                  <div className="hidden sm:block text-left">
+                    <h1 className="text-lg font-semibold leading-tight text-slate-900">MD-View</h1>
+                    <p className="text-xs font-medium text-slate-500">Markdown Editor</p>
+                  </div>
+                )}
               </Link>
 
               <div className="hidden md:block">
                 <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
               </div>
 
-              <div className={statPillClass}>
-                <span>{wordCount} words</span>
-                <span className="text-slate-300">•</span>
-                <span>{lineCount} lines</span>
-                <span className="text-slate-300">•</span>
-                <span>{fileSizeKb} KB</span>
-              </div>
+              {!isNavCompact && (
+                <div className={statPillClass}>
+                  <span>{wordCount} words</span>
+                  <span className="text-slate-300">•</span>
+                  <span>{lineCount} lines</span>
+                  <span className="text-slate-300">•</span>
+                  <span>{fileSizeKb} KB</span>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-2 md:justify-end md:gap-3">
@@ -417,7 +457,7 @@ export default function Home() {
                     title="Import .md file"
                   >
                     <Upload className="h-4 w-4" aria-hidden="true" />
-                    <span className="hidden md:inline">Import</span>
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Import</span>
                   </button>
                   <button
                     onClick={exportMarkdown}
@@ -426,7 +466,7 @@ export default function Home() {
                     title="Export as .md file"
                   >
                     <FileText className="h-4 w-4" aria-hidden="true" />
-                    <span className="hidden md:inline">Export MD</span>
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Export MD</span>
                   </button>
                   <button
                     onClick={exportHtml}
@@ -435,7 +475,7 @@ export default function Home() {
                     title="Export as .html file"
                   >
                     <FileCode className="h-4 w-4" aria-hidden="true" />
-                    <span className="hidden md:inline">Export HTML</span>
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Export HTML</span>
                   </button>
                 </div>
 
@@ -446,7 +486,7 @@ export default function Home() {
                     title="Markdown guide and tips"
                   >
                     <BookOpen className="h-4 w-4" aria-hidden="true" />
-                    <span className="hidden lg:inline">Guide</span>
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden lg:inline'}`}>Guide</span>
                   </Link>
                   <a
                     href="https://github.com/celery94/md-view"
@@ -457,7 +497,7 @@ export default function Home() {
                     title="Open GitHub repository"
                   >
                     <Github className="h-4 w-4" aria-hidden="true" />
-                    <span className="hidden lg:inline">GitHub</span>
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden lg:inline'}`}>GitHub</span>
                   </a>
                   <button
                     onClick={resetSample}
@@ -466,7 +506,7 @@ export default function Home() {
                     title="Reset to sample markdown"
                   >
                     <RotateCw className="h-4 w-4" aria-hidden="true" />
-                    <span className="hidden lg:inline">Reset</span>
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden lg:inline'}`}>Reset</span>
                   </button>
                 </div>
 
@@ -533,7 +573,8 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-              <div className="flex-1 min-h-0">
+              {/* Wrapper must be a flex container so nested editor (with flex-1) can stretch to available height. */}
+              <div className="flex flex-col flex-1 min-h-0">
                 <RichMarkdownEditor
                   ref={editorRef}
                   value={markdown}
@@ -585,7 +626,8 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="flex-1 min-h-0">
+              {/* Wrapper must be flex so preview (flex-1) fills remaining vertical space. */}
+              <div className="flex flex-col flex-1 min-h-0">
                 <MarkdownPreview
                   ref={previewRef}
                   content={debouncedMarkdown}
