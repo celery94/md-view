@@ -50,7 +50,11 @@ export default function ViewModeSelector({ currentMode, onModeChange }: ViewMode
   });
 
   return (
-    <div className="flex items-center gap-0.5 md:gap-1 bg-gray-100 rounded-lg p-0.5 md:p-1" role="group" aria-label="View mode selector">
+    <div
+      className="flex items-center gap-0.5 md:gap-1 rounded-2xl border border-slate-200 bg-white p-0.5 md:p-1 shadow-sm"
+      role="group"
+      aria-label="View mode selector"
+    >
       {modes.map((mode) => {
         const Icon = mode.icon;
         return (
@@ -58,10 +62,10 @@ export default function ViewModeSelector({ currentMode, onModeChange }: ViewMode
             key={mode.id}
             onClick={() => onModeChange(mode.id)}
             className={`
-              px-2 md:px-3 py-1 md:py-1.5 text-xs rounded-md transition-all duration-200 inline-flex items-center gap-1 md:gap-1.5 relative
+              inline-flex items-center gap-1 md:gap-1.5 px-2.5 md:px-3.5 py-1.5 text-xs font-medium rounded-xl transition-all duration-200
               ${currentMode === mode.id 
-                ? 'bg-white text-gray-900 shadow-sm border border-gray-200' 
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                ? 'bg-sky-100 text-sky-700 shadow' 
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }
               ${mode.id === 'split' ? 'view-mode-split' : ''}
             `}
@@ -70,7 +74,7 @@ export default function ViewModeSelector({ currentMode, onModeChange }: ViewMode
           >
             <Icon className="h-3.5 w-3.5" aria-hidden="true" />
             <span className="hidden sm:inline">{mode.label}</span>
-            <kbd className="hidden lg:inline-block ml-1 px-1 py-0.5 text-[10px] bg-gray-100 border border-gray-200 rounded text-gray-500">
+            <kbd className="hidden lg:inline-block ml-1 px-1.5 py-0.5 text-[10px] rounded border border-slate-200 bg-slate-100 text-slate-500">
               ⌘{mode.shortcut}
             </kbd>
           </button>

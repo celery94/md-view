@@ -65,7 +65,7 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Start typing your markdown here..."
-        className="w-full h-full p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black font-mono text-sm leading-relaxed overflow-auto"
+        className="w-full flex-1 min-h-0 resize-none overflow-auto rounded-2xl border border-slate-200 bg-slate-50 p-4 font-mono text-sm leading-relaxed text-slate-800 shadow-inner outline-none placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
         spellCheck={false}
         aria-label="Markdown editor textarea"
         aria-describedby="editor-description"

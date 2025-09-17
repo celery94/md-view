@@ -15,7 +15,7 @@ export const themes: Theme[] = [
     displayName: 'Default',
     description: 'Clean and minimal design',
     classes: {
-      container: 'h-full overflow-auto p-4 bg-white border border-gray-200 rounded-lg',
+      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-6 shadow-sm backdrop-blur',
       prose: 'prose prose-slate max-w-none'
     }
   },
@@ -24,7 +24,7 @@ export const themes: Theme[] = [
     displayName: 'Dark',
     description: 'Dark theme for low-light environments',
     classes: {
-      container: 'h-full overflow-auto p-4 bg-gray-900 border border-gray-700 rounded-lg',
+      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-slate-950/70 p-4 sm:p-6 shadow-sm backdrop-blur',
       prose: 'prose prose-invert max-w-none dark-theme'
     },
     customStyles: `
@@ -106,7 +106,7 @@ export const themes: Theme[] = [
     displayName: 'GitHub',
     description: 'GitHub-like styling',
     classes: {
-      container: 'h-full overflow-auto p-6 bg-white border border-gray-300 rounded-lg',
+      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-6 shadow-sm backdrop-blur',
       prose: 'prose prose-slate max-w-none github-theme'
     },
     customStyles: `
@@ -161,7 +161,7 @@ export const themes: Theme[] = [
     displayName: 'Notion',
     description: 'Notion-inspired design',
     classes: {
-      container: 'h-full overflow-auto p-6 bg-white border-0 rounded-lg',
+      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-6 backdrop-blur',
       prose: 'prose prose-slate max-w-none notion-theme'
     },
     customStyles: `
@@ -208,7 +208,7 @@ export const themes: Theme[] = [
     displayName: 'Medium',
     description: 'Medium.com-style typography',
     classes: {
-      container: 'h-full overflow-auto p-8 bg-white border-0 rounded-lg',
+      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-8 backdrop-blur',
       prose: 'prose prose-slate max-w-none medium-theme'
     },
     customStyles: `
@@ -284,7 +284,7 @@ export const themes: Theme[] = [
     displayName: 'Paper',
     description: 'Academic paper style',
     classes: {
-      container: 'h-full overflow-auto p-12 bg-white border border-gray-200 rounded-lg shadow-lg',
+      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-5 sm:p-10 xl:p-12 shadow-lg backdrop-blur',
       prose: 'prose prose-slate max-w-none paper-theme'
     },
     customStyles: `
@@ -359,7 +359,7 @@ export const themes: Theme[] = [
     displayName: 'Minimal',
     description: 'Ultra-clean minimal design',
     classes: {
-      container: 'h-full overflow-auto p-4 bg-gray-50 border-0 rounded-lg',
+      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-slate-100/90 p-4 sm:p-6 backdrop-blur',
       prose: 'prose prose-gray max-w-none minimal-theme'
     },
     customStyles: `
@@ -430,7 +430,7 @@ export const themes: Theme[] = [
     displayName: 'Terminal',
     description: 'Retro terminal/console style',
     classes: {
-      container: 'h-full overflow-auto p-4 bg-black border border-green-500 rounded-lg',
+      container: 'h-full overflow-auto rounded-3xl border border-emerald-500/70 bg-black/90 p-4 sm:p-6 shadow-lg',
       prose: 'prose prose-invert max-w-none terminal-theme'
     },
     customStyles: `

@@ -10,7 +10,7 @@ import CompactThemeSelector from "../components/CompactThemeSelector";
 import ViewModeSelector from "../components/ViewModeSelector";
 import QuickActionsMenu from "../components/QuickActionsMenu";
 import { themes, getTheme } from "../lib/themes";
-import { Upload, FileText, FileCode, RotateCw, BookOpen, Edit3, Eye, Columns, Settings, MoreHorizontal, Github } from "lucide-react";
+import { Upload, FileText, FileCode, RotateCw, BookOpen, Github } from "lucide-react";
 
 type ViewMode = 'split' | 'editor' | 'preview';
 
@@ -146,6 +146,18 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const previewRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const primaryActionButton =
+    "inline-flex items-center gap-1.5 rounded-xl bg-sky-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-sky-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3.5 md:text-sm";
+  const secondaryActionButton =
+    "inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:text-slate-900 hover:bg-slate-100 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm";
+  const quietNavButton =
+    "inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:text-slate-900 hover:bg-slate-100 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm";
+  const statPillClass =
+    "hidden xl:flex items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 shadow-sm";
+  const wordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
+  const lineCount = markdown.split('\n').length;
+  const fileSizeKb = Math.max(1, Math.round(new Blob([markdown]).size / 1024));
 
   // Load from localStorage
   useEffect(() => {
@@ -356,84 +368,69 @@ export default function Home() {
   }, [viewMode]);
 
   return (
-    <div className="h-screen flex flex-col">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-full mx-auto px-3 sm:px-4 md:px-6">
-          {/* Main navigation bar */}
-          <div className="flex items-center justify-between h-14 md:h-16">
-            {/* Left section - Logo and title */}
-            <div className="flex items-center gap-2 md:gap-4">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-slate-50 to-slate-100 text-slate-900">
+      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/80 backdrop-blur">
+        <div className="flex w-full flex-col px-4 sm:px-6 lg:px-10 xl:px-14">
+          <div className="flex h-16 items-center justify-between gap-4 lg:gap-6">
+            <div className="flex items-center gap-3 md:gap-4">
               <Link
                 href="/"
-                className="flex items-center gap-2 md:gap-3 group rounded-lg p-1.5 md:p-2 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-2.5 py-1.5 shadow-sm transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 aria-label="MD-View Home"
                 title="MD-View Home"
               >
                 <img
                   src="/md-view-icon.svg"
                   alt="MD-View logo"
-                  className="h-7 w-7 md:h-8 md:w-8 rounded group-hover:scale-105 transition-transform"
+                  className="h-8 w-8 rounded-xl bg-slate-100 p-1.5 ring-1 ring-slate-200 transition-transform duration-300 group-hover:scale-105"
                 />
-                <div className="hidden sm:block">
-                  <h1 className="text-lg md:text-xl font-bold text-gray-900">MD-View</h1>
-                  <p className="text-xs text-gray-500 leading-tight">Markdown Editor</p>
+                <div className="hidden sm:block text-left">
+                  <h1 className="text-lg font-semibold leading-tight text-slate-900">MD-View</h1>
+                  <p className="text-xs font-medium text-slate-500">Markdown Editor</p>
                 </div>
               </Link>
-              
-              {/* View mode selector */}
+
               <div className="hidden md:block">
                 <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
               </div>
 
-              {/* Document stats */}
-              <div className="hidden xl:flex items-center gap-3 text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg">
-                <span>
-                  {markdown.split(/\s+/).filter(word => word.length > 0).length} words
-                </span>
-                <span>•</span>
-                <span>
-                  {markdown.split('\n').length} lines
-                </span>
-                <span>•</span>
-                <span>
-                  {Math.round(new Blob([markdown]).size / 1024)}KB
-                </span>
+              <div className={statPillClass}>
+                <span>{wordCount} words</span>
+                <span className="text-slate-300">•</span>
+                <span>{lineCount} lines</span>
+                <span className="text-slate-300">•</span>
+                <span>{fileSizeKb} KB</span>
               </div>
             </div>
 
-            {/* Right section - Actions */}
-            <div className="flex items-center gap-2 md:gap-3">
-              {/* Mobile view mode selector */}
+            <div className="flex flex-wrap items-center justify-between gap-2 md:justify-end md:gap-3">
               <div className="md:hidden">
                 <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
               </div>
-              
-              {/* Action buttons grouped */}
-              <div className="flex items-center gap-1 md:gap-2">
-                {/* File operations group */}
-                <div className="flex items-center gap-0.5 md:gap-1 bg-gray-100 rounded-lg p-1">
-                  <button 
-                    onClick={onPickFile} 
-                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+
+              <div className="flex w-full items-center justify-end gap-1.5 md:w-auto md:gap-2">
+                <div className="hidden items-center gap-1 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm md:flex">
+                  <button
+                    onClick={onPickFile}
+                    className={primaryActionButton}
                     aria-label="Import markdown file"
                     title="Import .md file"
                   >
                     <Upload className="h-4 w-4" aria-hidden="true" />
                     <span className="hidden md:inline">Import</span>
                   </button>
-                  <button 
-                    onClick={exportMarkdown} 
-                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+                  <button
+                    onClick={exportMarkdown}
+                    className={secondaryActionButton}
                     aria-label="Export as markdown file"
                     title="Export as .md file"
                   >
                     <FileText className="h-4 w-4" aria-hidden="true" />
                     <span className="hidden md:inline">Export MD</span>
                   </button>
-                  <button 
-                    onClick={exportHtml} 
-                    className="px-2 md:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-white hover:shadow-sm transition-all inline-flex items-center gap-1.5"
+                  <button
+                    onClick={exportHtml}
+                    className={secondaryActionButton}
                     aria-label="Export as HTML file"
                     title="Export as .html file"
                   >
@@ -442,32 +439,29 @@ export default function Home() {
                   </button>
                 </div>
 
-                {/* Theme selector moved to Live Preview header (desktop) */}
-
-                {/* Additional actions */}
-                <div className="hidden md:flex items-center gap-1">
-                  <Link 
+                <div className="hidden md:flex items-center gap-1.5">
+                  <Link
                     href="/guide"
-                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors inline-flex items-center gap-1.5"
+                    className={quietNavButton}
                     title="Markdown guide and tips"
                   >
                     <BookOpen className="h-4 w-4" aria-hidden="true" />
                     <span className="hidden lg:inline">Guide</span>
                   </Link>
-                  <a 
+                  <a
                     href="https://github.com/celery94/md-view"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors inline-flex items-center gap-1.5"
+                    className={quietNavButton}
                     aria-label="GitHub repository"
                     title="Open GitHub repository"
                   >
                     <Github className="h-4 w-4" aria-hidden="true" />
                     <span className="hidden lg:inline">GitHub</span>
                   </a>
-                  <button 
-                    onClick={resetSample} 
-                    className="px-2 lg:px-2.5 py-1.5 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors inline-flex items-center gap-1.5"
+                  <button
+                    onClick={resetSample}
+                    className={quietNavButton}
                     aria-label="Reset to sample content"
                     title="Reset to sample markdown"
                   >
@@ -476,41 +470,36 @@ export default function Home() {
                   </button>
                 </div>
 
-                {/* Mobile actions menu */}
-                <div className="md:hidden">
+                <div className="flex justify-end md:hidden">
                   <QuickActionsMenu
                     onImport={onPickFile}
                     onExportMarkdown={exportMarkdown}
                     onExportHtml={exportHtml}
                     onReset={resetSample}
                     onGuide={() => window.open('/guide', '_blank')}
-                    onGithub={() => window.open('https://github.com/celery94/md-view', '_blank', 'noopener,noreferrer')}
+                    onGithub={() =>
+                      window.open('https://github.com/celery94/md-view', '_blank', 'noopener,noreferrer')
+                    }
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Secondary bar for mobile description and stats */}
-          <div className="border-t border-gray-100 py-1.5 md:py-2">
-            <div className="sm:hidden">
-              <p className="text-xs text-gray-500 text-center">
-                Real-time markdown editor with live preview
-              </p>
-            </div>
-            <div className="hidden sm:block xl:hidden">
-              <div className="flex justify-center items-center gap-2 md:gap-3 text-xs text-gray-500">
-                <span>{markdown.split(/\s+/).filter(word => word.length > 0).length} words</span>
-                <span>•</span>
-                <span>{markdown.split('\n').length} lines</span>
-                <span>•</span>
-                <span>{Math.round(new Blob([markdown]).size / 1024)}KB</span>
-              </div>
+          <div className="flex items-center justify-between border-t border-slate-200 py-2">
+            <p className="w-full text-center text-[11px] uppercase tracking-[0.2em] text-slate-500 sm:hidden">
+              Real-time markdown editor with live preview
+            </p>
+            <div className="hidden w-full items-center justify-center gap-2 text-xs text-slate-500 sm:flex xl:hidden">
+              <span>{wordCount} words</span>
+              <span className="text-slate-300">•</span>
+              <span>{lineCount} lines</span>
+              <span className="text-slate-300">•</span>
+              <span>{fileSizeKb} KB</span>
             </div>
           </div>
         </div>
 
-        {/* Hidden file input */}
         <input
           ref={fileInputRef}
           type="file"
@@ -521,86 +510,93 @@ export default function Home() {
         />
       </header>
 
-      {/* Main content */}
-      <main ref={containerRef} className="flex-1 flex flex-col md:flex-row overflow-hidden" role="main">
-        {/* Editor panel */}
-        {(viewMode === 'editor' || viewMode === 'split') && (
-          <section
-            className={`
-              w-full p-4 flex flex-col
-              ${viewMode === 'split' ? 'md:h-auto border-b md:border-b-0 md:border-r border-gray-200' : 'h-full'}
-            `}
-            style={viewMode === 'split' ? { width: "100%", flexBasis: `${ratio * 100}%` } : undefined}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            aria-label="Markdown editor section"
-          >
-            <div className="mb-3 flex-shrink-0">
-              <h2 className="text-lg font-semibold text-gray-700">Markdown Editor</h2>
-              <p className="text-xs text-gray-500">Type your markdown here or drop a .md file to load it</p>
-            </div>
-            <div className="flex-1 min-h-0 h-64 md:h-auto">
-              <RichMarkdownEditor 
-                ref={editorRef}
-                value={markdown} 
-                onChange={setMarkdown}
-                onScroll={handleEditorScroll}
-                scrollToPercentage={editorScrollPercentage}
-              />
-            </div>
-          </section>
-        )}
-
-        {/* Divider (split mode only) */}
-        {viewMode === 'split' && (
-          <div
-            onMouseDown={startDrag}
-            className="hidden md:block w-1 bg-gray-200 hover:bg-blue-400 cursor-col-resize"
-            style={{ userSelect: "none" }}
-            aria-label="Resize editor and preview panels"
-            role="separator"
-            aria-orientation="vertical"
-            tabIndex={0}
-            title="Drag to resize panels"
-          />
-        )}
-
-        {/* Preview panel */}
-        {(viewMode === 'preview' || viewMode === 'split') && (
-          <section 
-            className={`
-              w-full p-4 flex flex-col
-              ${viewMode === 'split' ? '' : 'h-full'}
-            `}
-            style={viewMode === 'split' ? { width: "100%", flexBasis: `${(1 - ratio) * 100}%` } : undefined} 
-            aria-label="Markdown preview section"
-          >
-            <div className="mb-3 flex-shrink-0 flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-700">Live Preview</h2>
-                <p className="text-xs text-gray-500">Real-time rendered markdown with syntax highlighting</p>
-              </div>
-              {/* Theme selector on the right side of Live Preview header */}
-              <div className="flex items-center gap-2">
-                <div className="hidden lg:block">
-                  <CompactThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
-                </div>
-                <div className="lg:hidden">
-                  <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+      <main className="relative flex flex-1 min-h-0 flex-col py-5 sm:py-8 lg:py-12" role="main">
+        <div
+          ref={containerRef}
+          className={`flex w-full flex-1 flex-col gap-5 px-4 sm:px-6 lg:px-10 xl:px-14 min-h-0 ${
+            viewMode === 'split' ? 'md:flex-row md:items-stretch md:gap-8' : ''
+          }`}
+        >
+          {(viewMode === 'editor' || viewMode === 'split') && (
+            <section
+              className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-3 sm:p-5 lg:p-6 shadow-[0_20px_40px_-25px_rgba(15,23,42,0.15)]"
+              style={viewMode === 'split' ? { width: '100%', flexBasis: `${ratio * 100}%` } : undefined}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              aria-label="Markdown editor section"
+            >
+              <div className="mb-3 flex flex-shrink-0 items-start justify-between gap-3 sm:mb-4">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900">Markdown Editor</h2>
+                  <p className="text-xs text-slate-500">
+                    Type your markdown or drop a .md file to load it instantly
+                  </p>
                 </div>
               </div>
+              <div className="flex-1 min-h-0">
+                <RichMarkdownEditor
+                  ref={editorRef}
+                  value={markdown}
+                  onChange={setMarkdown}
+                  onScroll={handleEditorScroll}
+                  scrollToPercentage={editorScrollPercentage}
+                />
+              </div>
+            </section>
+          )}
+
+          {viewMode === 'split' && (
+            <div
+              onMouseDown={startDrag}
+              className="group hidden md:flex w-px cursor-col-resize select-none items-stretch justify-center"
+              aria-label="Resize editor and preview panels"
+              role="separator"
+              aria-orientation="vertical"
+              tabIndex={0}
+              title="Drag to resize panels"
+            >
+              <div className="relative my-4 flex h-full w-full items-center">
+                <span className="mx-auto h-full w-px bg-slate-200" aria-hidden="true" />
+                <span
+                  className="absolute left-1/2 top-1/2 h-12 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-300 transition-colors duration-200 group-hover:bg-sky-400/60"
+                  aria-hidden="true"
+                />
+              </div>
             </div>
-            <div className="flex-1 min-h-0 h-64 md:h-auto">
-              <MarkdownPreview 
-                ref={previewRef} 
-                content={debouncedMarkdown} 
-                theme={currentTheme}
-                onScroll={handlePreviewScroll}
-                scrollToPercentage={previewScrollPercentage}
-              />
-            </div>
-          </section>
-        )}
+          )}
+
+          {(viewMode === 'preview' || viewMode === 'split') && (
+            <section
+              className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-3 sm:p-5 lg:p-6 shadow-[0_20px_40px_-25px_rgba(15,23,42,0.15)]"
+              style={viewMode === 'split' ? { width: '100%', flexBasis: `${(1 - ratio) * 100}%` } : undefined}
+              aria-label="Markdown preview section"
+            >
+              <div className="mb-3 flex flex-shrink-0 items-center justify-between gap-3 sm:mb-4">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900">Live Preview</h2>
+                  <p className="text-xs text-slate-500">See the rendered markdown with your chosen theme</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="hidden lg:block">
+                    <CompactThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+                  </div>
+                  <div className="lg:hidden">
+                    <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+                  </div>
+                </div>
+              </div>
+              <div className="flex-1 min-h-0">
+                <MarkdownPreview
+                  ref={previewRef}
+                  content={debouncedMarkdown}
+                  theme={currentTheme}
+                  onScroll={handlePreviewScroll}
+                  scrollToPercentage={previewScrollPercentage}
+                />
+              </div>
+            </section>
+          )}
+        </div>
       </main>
     </div>
   );

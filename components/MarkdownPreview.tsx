@@ -51,14 +51,14 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
         data-no-export="true"
       >
         {language ? (
-          <span className="language-badge px-2 py-0.5 text-[10px] leading-4 rounded bg-gray-800 text-gray-100 border border-gray-700 select-none">
+          <span className="language-badge select-none rounded-full border border-slate-200 bg-white px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-700 shadow-sm">
             {language}
           </span>
         ) : null}
         <button
           type="button"
           onClick={onCopy}
-          className="copy-button px-2 py-1 text-xs rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 inline-flex items-center gap-1.5"
+          className="copy-button inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           aria-label="Copy code"
         >
           {copied ? (
@@ -254,7 +254,7 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(
     return (
       <div 
         ref={previewRef}
-        className={`${currentTheme.classes.container} h-full overflow-auto`}
+        className={`markdown-preview ${currentTheme.classes.container} flex-1 min-h-0 overflow-auto`}
         role="region"
         aria-label="Markdown preview area"
         aria-live="polite"
