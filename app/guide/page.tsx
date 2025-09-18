@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowLeft, BookOpen, Zap, Code, Download, Upload, Shield, Smartphone } from 'lucide-react'
+import Footer from '../../components/Footer'
 
 export const metadata: Metadata = {
   title: 'Guide: Features & Markdown Basics | MD-View',
@@ -381,6 +382,8 @@ print(f"Word count: {word_count}")
 
         </div>
       </main>
+
+      <Footer />
     </div>
   )
 }

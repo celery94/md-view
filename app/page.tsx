@@ -9,6 +9,7 @@ import ThemeSelector from "../components/ThemeSelector";
 import CompactThemeSelector from "../components/CompactThemeSelector";
 import ViewModeSelector from "../components/ViewModeSelector";
 import QuickActionsMenu from "../components/QuickActionsMenu";
+import Footer from "../components/Footer";
 import { themes, getTheme } from "../lib/themes";
 import { Upload, FileText, FileCode, RotateCw, BookOpen, Github } from "lucide-react";
 
@@ -640,6 +641,8 @@ export default function Home() {
           )}
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }
