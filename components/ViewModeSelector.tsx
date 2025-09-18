@@ -8,9 +8,10 @@ type ViewMode = 'split' | 'editor' | 'preview';
 interface ViewModeSelectorProps {
   currentMode: ViewMode;
   onModeChange: (mode: ViewMode) => void;
+  showLabels?: boolean;
 }
 
-export default function ViewModeSelector({ currentMode, onModeChange }: ViewModeSelectorProps) {
+export default function ViewModeSelector({ currentMode, onModeChange, showLabels = true }: ViewModeSelectorProps) {
   const [isMobile, setIsMobile] = useState(false);
 
   // Check if we're on mobile
@@ -73,8 +74,14 @@ export default function ViewModeSelector({ currentMode, onModeChange }: ViewMode
             aria-label={mode.label}
           >
             <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-            <span className="hidden sm:inline">{mode.label}</span>
-            <kbd className="hidden lg:inline-block ml-1 px-1.5 py-0.5 text-[10px] rounded border border-slate-200 bg-slate-100 text-slate-500">
+            <span className={showLabels ? 'hidden sm:inline' : 'sr-only'}>{mode.label}</span>
+            <kbd
+              className={
+                showLabels
+                  ? 'hidden lg:inline-block ml-1 px-1.5 py-0.5 text-[10px] rounded border border-slate-200 bg-slate-100 text-slate-500'
+                  : 'hidden'
+              }
+            >
               ⌘{mode.shortcut}
             </kbd>
           </button>

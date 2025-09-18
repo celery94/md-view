@@ -429,7 +429,7 @@ export default function Home() {
               </Link>
 
               <div className="hidden md:block">
-                <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
+                <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} showLabels={false} />
               </div>
 
               {!isNavCompact && (
@@ -445,7 +445,7 @@ export default function Home() {
 
             <div className="flex flex-wrap items-center justify-between gap-2 md:justify-end md:gap-3">
               <div className="md:hidden">
-                <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
+                <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} showLabels={false} />
               </div>
 
               <div className="flex w-full items-center justify-end gap-1.5 md:w-auto md:gap-2">
@@ -486,7 +486,7 @@ export default function Home() {
                     title="Markdown guide and tips"
                   >
                     <BookOpen className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden lg:inline'}`}>Guide</span>
+                    <span className="sr-only">Guide</span>
                   </Link>
                   <a
                     href="https://github.com/celery94/md-view"
@@ -497,7 +497,7 @@ export default function Home() {
                     title="Open GitHub repository"
                   >
                     <Github className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden lg:inline'}`}>GitHub</span>
+                    <span className="sr-only">GitHub</span>
                   </a>
                   <button
                     onClick={resetSample}
@@ -506,7 +506,7 @@ export default function Home() {
                     title="Reset to sample markdown"
                   >
                     <RotateCw className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden lg:inline'}`}>Reset</span>
+                    <span className="sr-only">Reset</span>
                   </button>
                 </div>
 
