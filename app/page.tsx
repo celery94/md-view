@@ -1,17 +1,27 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import type React from "react";
-import Link from "next/link";
-import RichMarkdownEditor from "../components/RichMarkdownEditor";
-import MarkdownPreview from "../components/MarkdownPreview";
-import ThemeSelector from "../components/ThemeSelector";
-import CompactThemeSelector from "../components/CompactThemeSelector";
-import ViewModeSelector from "../components/ViewModeSelector";
-import QuickActionsMenu from "../components/QuickActionsMenu";
-import Footer from "../components/Footer";
-import { themes, getTheme } from "../lib/themes";
-import { Upload, FileText, FileCode, RotateCw, BookOpen, Github, Copy, Check, AlertCircle } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import Link from 'next/link';
+import RichMarkdownEditor from '../components/RichMarkdownEditor';
+import MarkdownPreview from '../components/MarkdownPreview';
+import ThemeSelector from '../components/ThemeSelector';
+import CompactThemeSelector from '../components/CompactThemeSelector';
+import ViewModeSelector from '../components/ViewModeSelector';
+import QuickActionsMenu from '../components/QuickActionsMenu';
+import Footer from '../components/Footer';
+import { themes, getTheme } from '../lib/themes';
+import {
+  Upload,
+  FileText,
+  FileCode,
+  RotateCw,
+  BookOpen,
+  Github,
+  Copy,
+  Check,
+  AlertCircle,
+} from 'lucide-react';
 
 type ViewMode = 'split' | 'editor' | 'preview';
 type CopyStatus = 'idle' | 'styled' | 'plain' | 'error';
@@ -143,8 +153,12 @@ export default function Home() {
   const [ratio, setRatio] = useState<number>(0.5);
   // When top nav horizontal space is insufficient we collapse text labels and show icons only.
   const [isNavCompact, setIsNavCompact] = useState(false);
-  const [editorScrollPercentage, setEditorScrollPercentage] = useState<number | undefined>(undefined);
-  const [previewScrollPercentage, setPreviewScrollPercentage] = useState<number | undefined>(undefined);
+  const [editorScrollPercentage, setEditorScrollPercentage] = useState<number | undefined>(
+    undefined
+  );
+  const [previewScrollPercentage, setPreviewScrollPercentage] = useState<number | undefined>(
+    undefined
+  );
   const [copyStatus, setCopyStatus] = useState<CopyStatus>('idle');
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -155,31 +169,31 @@ export default function Home() {
   const copyStatusResetRef = useRef<number | null>(null);
 
   const primaryActionButton =
-    "inline-flex items-center gap-1.5 rounded-xl bg-sky-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-sky-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3.5 md:text-sm";
+    'inline-flex items-center gap-1.5 rounded-xl bg-sky-600 px-2.5 py-1 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-sky-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm';
   const secondaryActionButton =
-    "inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:text-slate-900 hover:bg-slate-100 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm";
+    'inline-flex items-center gap-1.5 rounded-xl px-2 py-1 text-xs font-medium text-slate-600 transition-colors hover:text-slate-900 hover:bg-slate-100 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-2.5 md:text-sm';
   const quietNavButton =
-    "inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:text-slate-900 hover:bg-slate-100 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm";
+    'inline-flex items-center gap-1.5 rounded-xl px-2 py-1 text-xs font-medium text-slate-600 transition-colors hover:text-slate-900 hover:bg-slate-100 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-2.5 md:text-sm';
   const statPillClass =
-    "hidden xl:flex items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 shadow-sm";
+    'hidden xl:flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-0.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 shadow-sm';
   const wordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
   const lineCount = markdown.split('\n').length;
   const fileSizeKb = Math.max(1, Math.round(new Blob([markdown]).size / 1024));
   const previewCopyButtonClass = [
-    "inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium transition-colors focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm",
-    "hover:bg-slate-100",
+    'inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium transition-colors focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm',
+    'hover:bg-slate-100',
     copyStatus === 'styled'
-      ? "text-green-600 hover:text-green-600"
+      ? 'text-green-600 hover:text-green-600'
       : copyStatus === 'plain'
-        ? "text-amber-600 hover:text-amber-600"
+        ? 'text-amber-600 hover:text-amber-600'
         : copyStatus === 'error'
-          ? "text-red-600 hover:text-red-600"
-          : "text-slate-600 hover:text-slate-900",
-  ].join(" ");
+          ? 'text-red-600 hover:text-red-600'
+          : 'text-slate-600 hover:text-slate-900',
+  ].join(' ');
   const mobilePrimaryActionButton =
-    "inline-flex flex-none items-center gap-1.5 rounded-xl bg-sky-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-sky-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+    'inline-flex flex-none items-center gap-1.5 rounded-xl bg-sky-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-sky-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
   const mobileActionButton =
-    "inline-flex flex-none items-center gap-1.5 rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-xs font-medium text-slate-700 shadow-sm backdrop-blur transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+    'inline-flex flex-none items-center gap-1.5 rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-xs font-medium text-slate-700 shadow-sm backdrop-blur transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
   const mobileCopyButtonClass = [
     mobileActionButton,
     copyStatus === 'styled'
@@ -193,25 +207,28 @@ export default function Home() {
     .filter(Boolean)
     .join(' ');
 
-  const updateCopyStatus = useCallback((status: CopyStatus) => {
-    if (copyStatusResetRef.current) {
-      window.clearTimeout(copyStatusResetRef.current);
-      copyStatusResetRef.current = null;
-    }
+  const updateCopyStatus = useCallback(
+    (status: CopyStatus) => {
+      if (copyStatusResetRef.current) {
+        window.clearTimeout(copyStatusResetRef.current);
+        copyStatusResetRef.current = null;
+      }
 
-    setCopyStatus(status);
+      setCopyStatus(status);
 
-    if (status === 'idle') {
-      return;
-    }
+      if (status === 'idle') {
+        return;
+      }
 
-    const delay = status === 'error' ? 2500 : 1800;
+      const delay = status === 'error' ? 2500 : 1800;
 
-    copyStatusResetRef.current = window.setTimeout(() => {
-      setCopyStatus('idle');
-      copyStatusResetRef.current = null;
-    }, delay);
-  }, [copyStatusResetRef]);
+      copyStatusResetRef.current = window.setTimeout(() => {
+        setCopyStatus('idle');
+        copyStatusResetRef.current = null;
+      }, delay);
+    },
+    [copyStatusResetRef]
+  );
 
   const getSerializablePreview = useCallback(() => {
     const theme = getTheme(currentTheme);
@@ -247,13 +264,13 @@ export default function Home() {
   // Load from localStorage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("mdv:content");
+      const saved = localStorage.getItem('mdv:content');
       if (saved) setMarkdown(saved);
-      const savedRatio = localStorage.getItem("mdv:ratio");
+      const savedRatio = localStorage.getItem('mdv:ratio');
       if (savedRatio) setRatio(Math.min(0.8, Math.max(0.2, Number(savedRatio))));
-      const savedTheme = localStorage.getItem("mdv:theme");
+      const savedTheme = localStorage.getItem('mdv:theme');
       if (savedTheme) setCurrentTheme(savedTheme);
-      const savedViewMode = localStorage.getItem("mdv:viewMode") as ViewMode;
+      const savedViewMode = localStorage.getItem('mdv:viewMode') as ViewMode;
       if (savedViewMode && ['split', 'editor', 'preview'].includes(savedViewMode)) {
         // Check if we're on mobile and the saved mode is split
         const isMobile = window.innerWidth < 768;
@@ -271,7 +288,7 @@ export default function Home() {
   useEffect(() => {
     const t = setTimeout(() => {
       try {
-        localStorage.setItem("mdv:content", markdown);
+        localStorage.setItem('mdv:content', markdown);
       } catch {}
     }, 300);
     return () => clearTimeout(t);
@@ -286,21 +303,21 @@ export default function Home() {
   // Persist split ratio
   useEffect(() => {
     try {
-      localStorage.setItem("mdv:ratio", String(ratio));
+      localStorage.setItem('mdv:ratio', String(ratio));
     } catch {}
   }, [ratio]);
 
   // Persist theme selection
   useEffect(() => {
     try {
-      localStorage.setItem("mdv:theme", currentTheme);
+      localStorage.setItem('mdv:theme', currentTheme);
     } catch {}
   }, [currentTheme]);
 
   // Persist view mode selection
   useEffect(() => {
     try {
-      localStorage.setItem("mdv:viewMode", viewMode);
+      localStorage.setItem('mdv:viewMode', viewMode);
     } catch {}
   }, [viewMode]);
 
@@ -346,11 +363,12 @@ export default function Home() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Only handle shortcuts when not typing in inputs
-      if (e.target instanceof HTMLElement && (
-        e.target.tagName === 'TEXTAREA' || 
-        e.target.tagName === 'INPUT' || 
-        e.target.contentEditable === 'true'
-      )) {
+      if (
+        e.target instanceof HTMLElement &&
+        (e.target.tagName === 'TEXTAREA' ||
+          e.target.tagName === 'INPUT' ||
+          e.target.contentEditable === 'true')
+      ) {
         return;
       }
 
@@ -384,14 +402,14 @@ export default function Home() {
 
   const startDrag = useCallback(() => {
     isDraggingRef.current = true;
-    document.body.style.cursor = "col-resize";
-    document.body.style.userSelect = "none";
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
   }, []);
 
   const stopDrag = useCallback(() => {
     isDraggingRef.current = false;
-    document.body.style.cursor = "";
-    document.body.style.userSelect = "";
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
   }, []);
 
   useEffect(() => {
@@ -405,11 +423,11 @@ export default function Home() {
     function onUp() {
       if (isDraggingRef.current) stopDrag();
     }
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
     return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
     };
   }, [stopDrag]);
 
@@ -421,16 +439,19 @@ export default function Home() {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      if (typeof reader.result === "string") setMarkdown(reader.result);
+      if (typeof reader.result === 'string') setMarkdown(reader.result);
     };
     reader.readAsText(file);
   }, []);
 
-  const onDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    const f = e.dataTransfer.files?.[0];
-    onFileChosen(f);
-  }, [onFileChosen]);
+  const onDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      const f = e.dataTransfer.files?.[0];
+      onFileChosen(f);
+    },
+    [onFileChosen]
+  );
 
   const onDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -441,7 +462,7 @@ export default function Home() {
   const download = useCallback((name: string, content: string, type: string) => {
     const blob = new Blob([content], { type });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     a.download = name;
     document.body.appendChild(a);
@@ -451,14 +472,14 @@ export default function Home() {
   }, []);
 
   const exportMarkdown = useCallback(() => {
-    download("document.md", markdown, "text/markdown;charset=utf-8");
+    download('document.md', markdown, 'text/markdown;charset=utf-8');
   }, [download, markdown]);
 
   const exportHtml = useCallback(() => {
     const { theme, htmlContent, styles } = getSerializablePreview();
 
     const doc = `<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>Markdown Export</title><style>${styles}</style></head><body><main class=\"${theme.classes.prose}\">${htmlContent}</main></body></html>`;
-    download("document.html", doc, "text/html;charset=utf-8");
+    download('document.html', doc, 'text/html;charset=utf-8');
   }, [download, getSerializablePreview]);
 
   const copyPreviewToClipboard = useCallback(async () => {
@@ -513,17 +534,23 @@ export default function Home() {
   }, []);
 
   // Scroll synchronization handlers
-  const handleEditorScroll = useCallback((scrollPercentage: number) => {
-    if (viewMode === 'split') {
-      setPreviewScrollPercentage(scrollPercentage);
-    }
-  }, [viewMode]);
+  const handleEditorScroll = useCallback(
+    (scrollPercentage: number) => {
+      if (viewMode === 'split') {
+        setPreviewScrollPercentage(scrollPercentage);
+      }
+    },
+    [viewMode]
+  );
 
-  const handlePreviewScroll = useCallback((scrollPercentage: number) => {
-    if (viewMode === 'split') {
-      setEditorScrollPercentage(scrollPercentage);
-    }
-  }, [viewMode]);
+  const handlePreviewScroll = useCallback(
+    (scrollPercentage: number) => {
+      if (viewMode === 'split') {
+        setEditorScrollPercentage(scrollPercentage);
+      }
+    },
+    [viewMode]
+  );
 
   // Reset scroll sync when switching view modes
   useEffect(() => {
@@ -541,16 +568,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-slate-50 to-slate-100 text-slate-900">
-      <header className="sticky top-0 z-30 border-b border-slate-200 bg-gradient-to-b from-white/95 via-white/90 to-white/85 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.35)] backdrop-blur supports-[backdrop-filter]:bg-white/70">
-        <div className="flex w-full flex-col gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:px-10 xl:px-14">
+      <header className="sticky top-0 z-30 bg-gradient-to-b from-white/95 via-white/90 to-white/85 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.35)] backdrop-blur supports-[backdrop-filter]:bg-white/70">
+        <div className="flex w-full flex-col gap-1.5 px-4 py-1.5 sm:px-6 sm:py-2.5 lg:px-10 xl:px-14">
           <div
             ref={navRowRef}
-            className="flex flex-col gap-3 md:h-20 md:flex-row md:items-center md:justify-between md:gap-6"
+            className="flex flex-col gap-1.5 md:flex-row md:items-center md:justify-between md:gap-3"
           >
-            <div className="flex items-center gap-3 md:gap-4">
+            <div className="flex items-center gap-2 md:gap-2.5">
               <Link
                 href="/"
-                className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white/90 px-2.5 py-1.5 shadow-sm backdrop-blur transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                className="group flex items-center gap-2 rounded-2xl border border-slate-200 bg-white/90 px-2.5 py-1 shadow-sm backdrop-blur transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 aria-label="MD-View Home"
                 title="MD-View Home"
               >
@@ -566,7 +593,11 @@ export default function Home() {
               </Link>
 
               <div className="hidden md:block">
-                <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} showLabels={false} />
+                <ViewModeSelector
+                  currentMode={viewMode}
+                  onModeChange={setViewMode}
+                  showLabels={false}
+                />
               </div>
 
               {!isNavCompact && (
@@ -580,8 +611,8 @@ export default function Home() {
               )}
             </div>
 
-            <div className="hidden md:flex items-center gap-3">
-              <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-white/80 p-1.5 shadow-sm">
+            <div className="hidden md:flex items-center gap-2">
+              <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-white/80 p-1 shadow-sm">
                 <button
                   onClick={onPickFile}
                   className={primaryActionButton}
@@ -598,7 +629,9 @@ export default function Home() {
                   title="Export as .md file"
                 >
                   <FileText className="h-4 w-4" aria-hidden="true" />
-                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Export MD</span>
+                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
+                    Export MD
+                  </span>
                 </button>
                 <button
                   onClick={exportHtml}
@@ -607,16 +640,14 @@ export default function Home() {
                   title="Export as .html file"
                 >
                   <FileCode className="h-4 w-4" aria-hidden="true" />
-                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Export HTML</span>
+                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
+                    Export HTML
+                  </span>
                 </button>
               </div>
 
               <div className="flex items-center gap-1.5">
-                <Link
-                  href="/guide"
-                  className={quietNavButton}
-                  title="Markdown guide and tips"
-                >
+                <Link href="/guide" className={quietNavButton} title="Markdown guide and tips">
                   <BookOpen className="h-4 w-4" aria-hidden="true" />
                   <span className="sr-only">Guide</span>
                 </Link>
@@ -643,126 +674,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          <div className="md:hidden flex flex-col gap-3">
-            <div className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white/80 px-3 py-2 shadow-sm backdrop-blur">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-400">View</p>
-                <p className="text-xs font-medium text-slate-600">Choose how you work</p>
-              </div>
-              <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} showLabels={false} />
-            </div>
-
-            <div>
-              <div className="mb-2 flex items-center justify-between px-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
-                <span>Quick actions</span>
-                <span className="text-slate-300">Swipe</span>
-              </div>
-              <div className="-mx-1 flex items-center gap-2 overflow-x-auto pb-2">
-                <button
-                  onClick={onPickFile}
-                  className={mobilePrimaryActionButton}
-                  aria-label="Import markdown file"
-                  title="Import .md file"
-                >
-                  <Upload className="h-4 w-4" aria-hidden="true" />
-                  <span>Import</span>
-                </button>
-                <button
-                  onClick={exportMarkdown}
-                  className={mobileActionButton}
-                  aria-label="Export as markdown file"
-                  title="Export as .md file"
-                >
-                  <FileText className="h-4 w-4" aria-hidden="true" />
-                  <span>Export MD</span>
-                </button>
-                <button
-                  onClick={exportHtml}
-                  className={mobileActionButton}
-                  aria-label="Export as HTML file"
-                  title="Export as .html file"
-                >
-                  <FileCode className="h-4 w-4" aria-hidden="true" />
-                  <span>Export HTML</span>
-                </button>
-                <button
-                  onClick={copyPreviewToClipboard}
-                  className={mobileCopyButtonClass}
-                  aria-label="Copy preview HTML to clipboard"
-                  title="Copy preview HTML to clipboard"
-                >
-                  {copyStatus === 'styled' ? (
-                    <>
-                      <Check className="h-4 w-4" aria-hidden="true" />
-                      <span>Copied</span>
-                    </>
-                  ) : copyStatus === 'plain' ? (
-                    <>
-                      <Check className="h-4 w-4" aria-hidden="true" />
-                      <span>Copied text</span>
-                    </>
-                  ) : copyStatus === 'error' ? (
-                    <>
-                      <AlertCircle className="h-4 w-4" aria-hidden="true" />
-                      <span>Copy failed</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-4 w-4" aria-hidden="true" />
-                      <span>Copy HTML</span>
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={resetSample}
-                  className={mobileActionButton}
-                  aria-label="Reset to sample content"
-                  title="Reset to sample markdown"
-                >
-                  <RotateCw className="h-4 w-4" aria-hidden="true" />
-                  <span>Reset</span>
-                </button>
-                <QuickActionsMenu
-                  onImport={onPickFile}
-                  onExportMarkdown={exportMarkdown}
-                  onExportHtml={exportHtml}
-                  onCopyPreview={copyPreviewToClipboard}
-                  onReset={resetSample}
-                  onGuide={openGuide}
-                  onGithub={openGithub}
-                  triggerClassName={mobileActionButton}
-                  triggerLabel="More"
-                />
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-slate-200 bg-white/75 px-3 py-2 text-xs text-slate-600 shadow-sm backdrop-blur">
-              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-                <span>{wordCount} words</span>
-                <span className="text-slate-300">•</span>
-                <span>{lineCount} lines</span>
-                <span className="text-slate-300">•</span>
-                <span>{fileSizeKb} KB</span>
-              </div>
-              <p className="mt-2 text-[11px] uppercase tracking-[0.26em] text-slate-500">
-                Real-time markdown editor with live preview
-              </p>
-            </div>
-          </div>
-
-          <div className="hidden md:flex items-center justify-between border-t border-slate-200 py-2">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-slate-500">
-              Real-time markdown editor with live preview
-            </p>
-            <div className="flex items-center gap-2 text-xs text-slate-500 xl:hidden">
-              <span>{wordCount} words</span>
-              <span className="text-slate-300">•</span>
-              <span>{lineCount} lines</span>
-              <span className="text-slate-300">•</span>
-              <span>{fileSizeKb} KB</span>
-            </div>
-          </div>
         </div>
 
         <input
@@ -785,7 +696,9 @@ export default function Home() {
           {(viewMode === 'editor' || viewMode === 'split') && (
             <section
               className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-3 sm:p-5 lg:p-6 shadow-[0_20px_40px_-25px_rgba(15,23,42,0.15)]"
-              style={viewMode === 'split' ? { width: '100%', flexBasis: `${ratio * 100}%` } : undefined}
+              style={
+                viewMode === 'split' ? { width: '100%', flexBasis: `${ratio * 100}%` } : undefined
+              }
               onDrop={onDrop}
               onDragOver={onDragOver}
               aria-label="Markdown editor section"
@@ -834,13 +747,19 @@ export default function Home() {
           {(viewMode === 'preview' || viewMode === 'split') && (
             <section
               className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-3 sm:p-5 lg:p-6 shadow-[0_20px_40px_-25px_rgba(15,23,42,0.15)]"
-              style={viewMode === 'split' ? { width: '100%', flexBasis: `${(1 - ratio) * 100}%` } : undefined}
+              style={
+                viewMode === 'split'
+                  ? { width: '100%', flexBasis: `${(1 - ratio) * 100}%` }
+                  : undefined
+              }
               aria-label="Markdown preview section"
             >
               <div className="mb-3 flex flex-shrink-0 items-center justify-between gap-3 sm:mb-4">
                 <div>
                   <h2 className="text-lg font-semibold text-slate-900">Live Preview</h2>
-                  <p className="text-xs text-slate-500">See the rendered markdown with your chosen theme</p>
+                  <p className="text-xs text-slate-500">
+                    See the rendered markdown with your chosen theme
+                  </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -873,7 +792,10 @@ export default function Home() {
                     )}
                   </button>
                   <div className="hidden lg:block">
-                    <CompactThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+                    <CompactThemeSelector
+                      currentTheme={currentTheme}
+                      onThemeChange={setCurrentTheme}
+                    />
                   </div>
                   <div className="lg:hidden">
                     <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
