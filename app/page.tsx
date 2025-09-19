@@ -176,6 +176,22 @@ export default function Home() {
           ? "text-red-600 hover:text-red-600"
           : "text-slate-600 hover:text-slate-900",
   ].join(" ");
+  const mobilePrimaryActionButton =
+    "inline-flex flex-none items-center gap-1.5 rounded-xl bg-sky-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-sky-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+  const mobileActionButton =
+    "inline-flex flex-none items-center gap-1.5 rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-xs font-medium text-slate-700 shadow-sm backdrop-blur transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+  const mobileCopyButtonClass = [
+    mobileActionButton,
+    copyStatus === 'styled'
+      ? 'border-green-500/70 text-green-600 hover:bg-green-50'
+      : copyStatus === 'plain'
+        ? 'border-amber-500/70 text-amber-600 hover:bg-amber-50'
+        : copyStatus === 'error'
+          ? 'border-red-500/70 text-red-600 hover:bg-red-50'
+          : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const updateCopyStatus = useCallback((status: CopyStatus) => {
     if (copyStatusResetRef.current) {
@@ -295,7 +311,12 @@ export default function Home() {
 
     const measure = () => {
       if (!el) return;
-      // Hard breakpoint: below 1000px viewport width always compact
+      // Below md breakpoint we stack the navigation, so keep full labels visible
+      if (window.innerWidth < 768) {
+        setIsNavCompact(false);
+        return;
+      }
+      // Between md and lg widths, collapse labels to keep layout tidy
       if (window.innerWidth < 1000) {
         setIsNavCompact(true);
         return;
@@ -477,6 +498,20 @@ export default function Home() {
     }
   }, [getSerializablePreview, updateCopyStatus]);
 
+  const openGuide = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.open('/guide', '_blank');
+  }, []);
+
+  const openGithub = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.open('https://github.com/celery94/md-view', '_blank', 'noopener,noreferrer');
+  }, []);
+
   // Scroll synchronization handlers
   const handleEditorScroll = useCallback((scrollPercentage: number) => {
     if (viewMode === 'split') {
@@ -506,13 +541,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-slate-50 to-slate-100 text-slate-900">
-      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/80 backdrop-blur">
-        <div className="flex w-full flex-col px-4 sm:px-6 lg:px-10 xl:px-14">
-          <div ref={navRowRef} className="flex h-16 items-center justify-between gap-4 lg:gap-6">
+      <header className="sticky top-0 z-30 border-b border-slate-200 bg-gradient-to-b from-white/95 via-white/90 to-white/85 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.35)] backdrop-blur supports-[backdrop-filter]:bg-white/70">
+        <div className="flex w-full flex-col gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:px-10 xl:px-14">
+          <div
+            ref={navRowRef}
+            className="flex flex-col gap-3 md:h-20 md:flex-row md:items-center md:justify-between md:gap-6"
+          >
             <div className="flex items-center gap-3 md:gap-4">
               <Link
                 href="/"
-                className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-2.5 py-1.5 shadow-sm transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white/90 px-2.5 py-1.5 shadow-sm backdrop-blur transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 aria-label="MD-View Home"
                 title="MD-View Home"
               >
@@ -521,12 +559,10 @@ export default function Home() {
                   alt="MD-View logo"
                   className="h-8 w-8 rounded-xl bg-slate-100 p-1.5 ring-1 ring-slate-200 transition-transform duration-300 group-hover:scale-105"
                 />
-                {!isNavCompact && (
-                  <div className="hidden sm:block text-left">
-                    <h1 className="text-lg font-semibold leading-tight text-slate-900">MD-View</h1>
-                    <p className="text-xs font-medium text-slate-500">Markdown Editor</p>
-                  </div>
-                )}
+                <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
+                  <h1 className="text-lg font-semibold leading-tight text-slate-900">MD-View</h1>
+                  <p className="text-xs font-medium text-slate-500">Markdown Editor</p>
+                </div>
               </Link>
 
               <div className="hidden md:block">
@@ -544,95 +580,182 @@ export default function Home() {
               )}
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 md:justify-end md:gap-3">
-              <div className="md:hidden">
-                <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} showLabels={false} />
+            <div className="hidden md:flex items-center gap-3">
+              <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-white/80 p-1.5 shadow-sm">
+                <button
+                  onClick={onPickFile}
+                  className={primaryActionButton}
+                  aria-label="Import markdown file"
+                  title="Import .md file"
+                >
+                  <Upload className="h-4 w-4" aria-hidden="true" />
+                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Import</span>
+                </button>
+                <button
+                  onClick={exportMarkdown}
+                  className={secondaryActionButton}
+                  aria-label="Export as markdown file"
+                  title="Export as .md file"
+                >
+                  <FileText className="h-4 w-4" aria-hidden="true" />
+                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Export MD</span>
+                </button>
+                <button
+                  onClick={exportHtml}
+                  className={secondaryActionButton}
+                  aria-label="Export as HTML file"
+                  title="Export as .html file"
+                >
+                  <FileCode className="h-4 w-4" aria-hidden="true" />
+                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Export HTML</span>
+                </button>
               </div>
 
-              <div className="flex w-full items-center justify-end gap-1.5 md:w-auto md:gap-2">
-                <div className="hidden items-center gap-1 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm md:flex">
-                  <button
-                    onClick={onPickFile}
-                    className={primaryActionButton}
-                    aria-label="Import markdown file"
-                    title="Import .md file"
-                  >
-                    <Upload className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Import</span>
-                  </button>
-                  <button
-                    onClick={exportMarkdown}
-                    className={secondaryActionButton}
-                    aria-label="Export as markdown file"
-                    title="Export as .md file"
-                  >
-                    <FileText className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Export MD</span>
-                  </button>
-                  <button
-                    onClick={exportHtml}
-                    className={secondaryActionButton}
-                    aria-label="Export as HTML file"
-                    title="Export as .html file"
-                  >
-                    <FileCode className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Export HTML</span>
-                  </button>
-                </div>
-
-                <div className="hidden md:flex items-center gap-1.5">
-                  <Link
-                    href="/guide"
-                    className={quietNavButton}
-                    title="Markdown guide and tips"
-                  >
-                    <BookOpen className="h-4 w-4" aria-hidden="true" />
-                    <span className="sr-only">Guide</span>
-                  </Link>
-                  <a
-                    href="https://github.com/celery94/md-view"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={quietNavButton}
-                    aria-label="GitHub repository"
-                    title="Open GitHub repository"
-                  >
-                    <Github className="h-4 w-4" aria-hidden="true" />
-                    <span className="sr-only">GitHub</span>
-                  </a>
-                  <button
-                    onClick={resetSample}
-                    className={quietNavButton}
-                    aria-label="Reset to sample content"
-                    title="Reset to sample markdown"
-                  >
-                    <RotateCw className="h-4 w-4" aria-hidden="true" />
-                    <span className="sr-only">Reset</span>
-                  </button>
-                </div>
-
-                <div className="flex justify-end md:hidden">
-                  <QuickActionsMenu
-                    onImport={onPickFile}
-                    onExportMarkdown={exportMarkdown}
-                    onExportHtml={exportHtml}
-                    onCopyPreview={copyPreviewToClipboard}
-                    onReset={resetSample}
-                    onGuide={() => window.open('/guide', '_blank')}
-                    onGithub={() =>
-                      window.open('https://github.com/celery94/md-view', '_blank', 'noopener,noreferrer')
-                    }
-                  />
-                </div>
+              <div className="flex items-center gap-1.5">
+                <Link
+                  href="/guide"
+                  className={quietNavButton}
+                  title="Markdown guide and tips"
+                >
+                  <BookOpen className="h-4 w-4" aria-hidden="true" />
+                  <span className="sr-only">Guide</span>
+                </Link>
+                <a
+                  href="https://github.com/celery94/md-view"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={quietNavButton}
+                  aria-label="GitHub repository"
+                  title="Open GitHub repository"
+                >
+                  <Github className="h-4 w-4" aria-hidden="true" />
+                  <span className="sr-only">GitHub</span>
+                </a>
+                <button
+                  onClick={resetSample}
+                  className={quietNavButton}
+                  aria-label="Reset to sample content"
+                  title="Reset to sample markdown"
+                >
+                  <RotateCw className="h-4 w-4" aria-hidden="true" />
+                  <span className="sr-only">Reset</span>
+                </button>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between border-t border-slate-200 py-2">
-            <p className="w-full text-center text-[11px] uppercase tracking-[0.2em] text-slate-500 sm:hidden">
+          <div className="md:hidden flex flex-col gap-3">
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white/80 px-3 py-2 shadow-sm backdrop-blur">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-400">View</p>
+                <p className="text-xs font-medium text-slate-600">Choose how you work</p>
+              </div>
+              <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} showLabels={false} />
+            </div>
+
+            <div>
+              <div className="mb-2 flex items-center justify-between px-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+                <span>Quick actions</span>
+                <span className="text-slate-300">Swipe</span>
+              </div>
+              <div className="-mx-1 flex items-center gap-2 overflow-x-auto pb-2">
+                <button
+                  onClick={onPickFile}
+                  className={mobilePrimaryActionButton}
+                  aria-label="Import markdown file"
+                  title="Import .md file"
+                >
+                  <Upload className="h-4 w-4" aria-hidden="true" />
+                  <span>Import</span>
+                </button>
+                <button
+                  onClick={exportMarkdown}
+                  className={mobileActionButton}
+                  aria-label="Export as markdown file"
+                  title="Export as .md file"
+                >
+                  <FileText className="h-4 w-4" aria-hidden="true" />
+                  <span>Export MD</span>
+                </button>
+                <button
+                  onClick={exportHtml}
+                  className={mobileActionButton}
+                  aria-label="Export as HTML file"
+                  title="Export as .html file"
+                >
+                  <FileCode className="h-4 w-4" aria-hidden="true" />
+                  <span>Export HTML</span>
+                </button>
+                <button
+                  onClick={copyPreviewToClipboard}
+                  className={mobileCopyButtonClass}
+                  aria-label="Copy preview HTML to clipboard"
+                  title="Copy preview HTML to clipboard"
+                >
+                  {copyStatus === 'styled' ? (
+                    <>
+                      <Check className="h-4 w-4" aria-hidden="true" />
+                      <span>Copied</span>
+                    </>
+                  ) : copyStatus === 'plain' ? (
+                    <>
+                      <Check className="h-4 w-4" aria-hidden="true" />
+                      <span>Copied text</span>
+                    </>
+                  ) : copyStatus === 'error' ? (
+                    <>
+                      <AlertCircle className="h-4 w-4" aria-hidden="true" />
+                      <span>Copy failed</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-4 w-4" aria-hidden="true" />
+                      <span>Copy HTML</span>
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={resetSample}
+                  className={mobileActionButton}
+                  aria-label="Reset to sample content"
+                  title="Reset to sample markdown"
+                >
+                  <RotateCw className="h-4 w-4" aria-hidden="true" />
+                  <span>Reset</span>
+                </button>
+                <QuickActionsMenu
+                  onImport={onPickFile}
+                  onExportMarkdown={exportMarkdown}
+                  onExportHtml={exportHtml}
+                  onCopyPreview={copyPreviewToClipboard}
+                  onReset={resetSample}
+                  onGuide={openGuide}
+                  onGithub={openGithub}
+                  triggerClassName={mobileActionButton}
+                  triggerLabel="More"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white/75 px-3 py-2 text-xs text-slate-600 shadow-sm backdrop-blur">
+              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+                <span>{wordCount} words</span>
+                <span className="text-slate-300">•</span>
+                <span>{lineCount} lines</span>
+                <span className="text-slate-300">•</span>
+                <span>{fileSizeKb} KB</span>
+              </div>
+              <p className="mt-2 text-[11px] uppercase tracking-[0.26em] text-slate-500">
+                Real-time markdown editor with live preview
+              </p>
+            </div>
+          </div>
+
+          <div className="hidden md:flex items-center justify-between border-t border-slate-200 py-2">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-slate-500">
               Real-time markdown editor with live preview
             </p>
-            <div className="hidden w-full items-center justify-center gap-2 text-xs text-slate-500 sm:flex xl:hidden">
+            <div className="flex items-center gap-2 text-xs text-slate-500 xl:hidden">
               <span>{wordCount} words</span>
               <span className="text-slate-300">•</span>
               <span>{lineCount} lines</span>
