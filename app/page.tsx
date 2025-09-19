@@ -11,9 +11,10 @@ import ViewModeSelector from "../components/ViewModeSelector";
 import QuickActionsMenu from "../components/QuickActionsMenu";
 import Footer from "../components/Footer";
 import { themes, getTheme } from "../lib/themes";
-import { Upload, FileText, FileCode, RotateCw, BookOpen, Github } from "lucide-react";
+import { Upload, FileText, FileCode, RotateCw, BookOpen, Github, Copy, Check, AlertCircle } from "lucide-react";
 
 type ViewMode = 'split' | 'editor' | 'preview';
+type CopyStatus = 'idle' | 'styled' | 'plain' | 'error';
 
 const initialMarkdown = `# MD-View: Free Online Markdown Editor with Live Preview
 
@@ -144,12 +145,14 @@ export default function Home() {
   const [isNavCompact, setIsNavCompact] = useState(false);
   const [editorScrollPercentage, setEditorScrollPercentage] = useState<number | undefined>(undefined);
   const [previewScrollPercentage, setPreviewScrollPercentage] = useState<number | undefined>(undefined);
+  const [copyStatus, setCopyStatus] = useState<CopyStatus>('idle');
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const previewRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
   const navRowRef = useRef<HTMLDivElement | null>(null);
+  const copyStatusResetRef = useRef<number | null>(null);
 
   const primaryActionButton =
     "inline-flex items-center gap-1.5 rounded-xl bg-sky-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-sky-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3.5 md:text-sm";
@@ -162,6 +165,68 @@ export default function Home() {
   const wordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
   const lineCount = markdown.split('\n').length;
   const fileSizeKb = Math.max(1, Math.round(new Blob([markdown]).size / 1024));
+  const previewCopyButtonClass = [
+    "inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium transition-colors focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm",
+    "hover:bg-slate-100",
+    copyStatus === 'styled'
+      ? "text-green-600 hover:text-green-600"
+      : copyStatus === 'plain'
+        ? "text-amber-600 hover:text-amber-600"
+        : copyStatus === 'error'
+          ? "text-red-600 hover:text-red-600"
+          : "text-slate-600 hover:text-slate-900",
+  ].join(" ");
+
+  const updateCopyStatus = useCallback((status: CopyStatus) => {
+    if (copyStatusResetRef.current) {
+      window.clearTimeout(copyStatusResetRef.current);
+      copyStatusResetRef.current = null;
+    }
+
+    setCopyStatus(status);
+
+    if (status === 'idle') {
+      return;
+    }
+
+    const delay = status === 'error' ? 2500 : 1800;
+
+    copyStatusResetRef.current = window.setTimeout(() => {
+      setCopyStatus('idle');
+      copyStatusResetRef.current = null;
+    }, delay);
+  }, [copyStatusResetRef]);
+
+  const getSerializablePreview = useCallback(() => {
+    const theme = getTheme(currentTheme);
+    const previewElement = previewRef.current;
+
+    if (!previewElement || typeof document === 'undefined') {
+      return {
+        theme,
+        htmlContent: '',
+        plainText: '',
+        styles: `${inlineStyles}${theme.customStyles || ''}`,
+      };
+    }
+
+    const clone = previewElement.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll('[data-no-export]').forEach((el) => el.remove());
+
+    const htmlContent = clone.innerHTML;
+    const plainText = clone.innerText;
+
+    const styleElement = document.getElementById('theme-custom-styles') as HTMLStyleElement | null;
+    const dynamicStyles = styleElement?.textContent ?? '';
+    const styles = `${inlineStyles}${dynamicStyles || theme.customStyles || ''}`;
+
+    return {
+      theme,
+      htmlContent,
+      plainText,
+      styles,
+    };
+  }, [currentTheme]);
 
   // Load from localStorage
   useEffect(() => {
@@ -369,21 +434,48 @@ export default function Home() {
   }, [download, markdown]);
 
   const exportHtml = useCallback(() => {
-    // Clone preview DOM and strip non-exportable UI (e.g., copy buttons)
-    let htmlContent = "";
-    if (previewRef.current) {
-      const clone = previewRef.current.cloneNode(true) as HTMLElement;
-      clone.querySelectorAll('[data-no-export]')?.forEach((el) => el.remove());
-      htmlContent = clone.innerHTML;
-    }
-    
-    // Get current theme for export
-    const theme = getTheme(currentTheme);
-    const themeStyles = theme.customStyles || '';
-    
-    const doc = `<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>Markdown Export</title><style>${inlineStyles}${themeStyles}</style></head><body><main class=\"${theme.classes.prose}\">${htmlContent}</main></body></html>`;
+    const { theme, htmlContent, styles } = getSerializablePreview();
+
+    const doc = `<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>Markdown Export</title><style>${styles}</style></head><body><main class=\"${theme.classes.prose}\">${htmlContent}</main></body></html>`;
     download("document.html", doc, "text/html;charset=utf-8");
-  }, [download, currentTheme]);
+  }, [download, getSerializablePreview]);
+
+  const copyPreviewToClipboard = useCallback(async () => {
+    if (typeof navigator === 'undefined') {
+      updateCopyStatus('error');
+      return;
+    }
+
+    try {
+      const { theme, htmlContent, plainText, styles } = getSerializablePreview();
+      const htmlDocument = `<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>Markdown Preview</title><style>${styles}</style></head><body><main class=\"${theme.classes.prose}\">${htmlContent}</main></body></html>`;
+
+      const clipboard = navigator.clipboard;
+
+      if (clipboard && 'write' in clipboard && typeof ClipboardItem !== 'undefined') {
+        const htmlBlob = new Blob([htmlDocument], { type: 'text/html' });
+        const textBlob = new Blob([plainText], { type: 'text/plain' });
+        await clipboard.write([
+          new ClipboardItem({
+            'text/html': htmlBlob,
+            'text/plain': textBlob,
+          }),
+        ]);
+        updateCopyStatus('styled');
+        return;
+      }
+
+      if (clipboard && 'writeText' in clipboard) {
+        await clipboard.writeText(plainText);
+        updateCopyStatus('plain');
+        return;
+      }
+
+      updateCopyStatus('error');
+    } catch {
+      updateCopyStatus('error');
+    }
+  }, [getSerializablePreview, updateCopyStatus]);
 
   // Scroll synchronization handlers
   const handleEditorScroll = useCallback((scrollPercentage: number) => {
@@ -403,6 +495,14 @@ export default function Home() {
     setEditorScrollPercentage(undefined);
     setPreviewScrollPercentage(undefined);
   }, [viewMode]);
+
+  useEffect(() => {
+    return () => {
+      if (copyStatusResetRef.current) {
+        window.clearTimeout(copyStatusResetRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-slate-50 to-slate-100 text-slate-900">
@@ -516,6 +616,7 @@ export default function Home() {
                     onImport={onPickFile}
                     onExportMarkdown={exportMarkdown}
                     onExportHtml={exportHtml}
+                    onCopyPreview={copyPreviewToClipboard}
                     onReset={resetSample}
                     onGuide={() => window.open('/guide', '_blank')}
                     onGithub={() =>
@@ -619,6 +720,35 @@ export default function Home() {
                   <p className="text-xs text-slate-500">See the rendered markdown with your chosen theme</p>
                 </div>
                 <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={copyPreviewToClipboard}
+                    className={previewCopyButtonClass}
+                    aria-label="Copy preview HTML to clipboard"
+                    title="Copy preview HTML to clipboard"
+                  >
+                    {copyStatus === 'styled' ? (
+                      <>
+                        <Check className="h-4 w-4" aria-hidden="true" />
+                        <span>Copied</span>
+                      </>
+                    ) : copyStatus === 'plain' ? (
+                      <>
+                        <Check className="h-4 w-4" aria-hidden="true" />
+                        <span>Copied text</span>
+                      </>
+                    ) : copyStatus === 'error' ? (
+                      <>
+                        <AlertCircle className="h-4 w-4" aria-hidden="true" />
+                        <span>Copy failed</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-4 w-4" aria-hidden="true" />
+                        <span>Copy HTML</span>
+                      </>
+                    )}
+                  </button>
                   <div className="hidden lg:block">
                     <CompactThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
                   </div>

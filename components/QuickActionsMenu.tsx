@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MoreHorizontal, Upload, FileText, FileCode, RotateCw, BookOpen, Github } from 'lucide-react';
+import { MoreHorizontal, Upload, FileText, FileCode, RotateCw, BookOpen, Github, Copy } from 'lucide-react';
 
 interface QuickActionsMenuProps {
   onImport: () => void;
   onExportMarkdown: () => void;
   onExportHtml: () => void;
+  onCopyPreview: () => void;
   onReset: () => void;
   onGuide: () => void;
   onGithub: () => void;
@@ -15,8 +16,9 @@ interface QuickActionsMenuProps {
 export default function QuickActionsMenu({ 
   onImport, 
   onExportMarkdown, 
-  onExportHtml, 
-  onReset, 
+  onExportHtml,
+  onCopyPreview,
+  onReset,
   onGuide,
   onGithub,
 }: QuickActionsMenuProps) {
@@ -72,6 +74,13 @@ export default function QuickActionsMenu({
           >
             <FileCode className="h-4 w-4" />
             Export as HTML
+          </button>
+          <button
+            onClick={() => handleAction(onCopyPreview)}
+            className="flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-left text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
+          >
+            <Copy className="h-4 w-4" />
+            Copy preview HTML
           </button>
           <hr className="my-2 border-slate-200" />
           <button
