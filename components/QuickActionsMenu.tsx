@@ -11,16 +11,20 @@ interface QuickActionsMenuProps {
   onReset: () => void;
   onGuide: () => void;
   onGithub: () => void;
+  triggerClassName?: string;
+  triggerLabel?: string;
 }
 
-export default function QuickActionsMenu({ 
-  onImport, 
-  onExportMarkdown, 
+export default function QuickActionsMenu({
+  onImport,
+  onExportMarkdown,
   onExportHtml,
   onCopyPreview,
   onReset,
   onGuide,
   onGithub,
+  triggerClassName,
+  triggerLabel,
 }: QuickActionsMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -45,11 +49,14 @@ export default function QuickActionsMenu({
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="rounded-xl border border-slate-200 bg-white p-2 text-slate-600 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-        aria-label="More actions"
-        title="More actions"
+        className={`inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white p-2 text-slate-600 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${triggerClassName ?? ''}`}
+        aria-label={triggerLabel ? `${triggerLabel} actions` : 'More actions'}
+        title={triggerLabel ? `${triggerLabel} actions` : 'More actions'}
       >
         <MoreHorizontal className="h-5 w-5" />
+        {triggerLabel ? (
+          <span className="text-xs font-semibold text-current">{triggerLabel}</span>
+        ) : null}
       </button>
 
       {isOpen && (
