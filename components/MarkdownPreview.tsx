@@ -13,6 +13,9 @@ interface MarkdownPreviewProps {
   theme?: string;
   onScroll?: (scrollPercentage: number) => void;
   scrollToPercentage?: number;
+  variant?: 'app' | 'document';
+  className?: string;
+  contentClassName?: string;
 }
 
 function CodeBlock({ className, children, ...props }: React.ComponentProps<'code'>) {
@@ -158,7 +161,18 @@ const components: Components = {
 };
 
 const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(
-  function MarkdownPreview({ content, theme = 'default', onScroll, scrollToPercentage }, ref) {
+  function MarkdownPreview(
+    {
+      content,
+      theme = 'default',
+      onScroll,
+      scrollToPercentage,
+      variant = 'app',
+      className,
+      contentClassName,
+    },
+    ref
+  ) {
     const [hlPlugin, setHlPlugin] = useState<any>(null);
     const currentTheme = getTheme(theme);
     const internalRef = useRef<HTMLDivElement>(null);
@@ -251,17 +265,31 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(
       };
     }, [currentTheme, theme]);
 
+    const containerClasses = [
+      'markdown-preview',
+      variant === 'app'
+        ? `${currentTheme.classes.container} flex-1 min-h-0 overflow-auto`
+        : 'document-preview w-full overflow-auto print:overflow-visible',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    const proseClasses = [currentTheme.classes.prose, contentClassName]
+      .filter(Boolean)
+      .join(' ');
+
     return (
-      <div 
+      <div
         ref={previewRef}
-        className={`markdown-preview ${currentTheme.classes.container} flex-1 min-h-0 overflow-auto`}
+        className={containerClasses}
         role="region"
         aria-label="Markdown preview area"
         aria-live="polite"
         aria-describedby="preview-description"
         data-theme={theme}
       >
-        <div className={currentTheme.classes.prose}>
+        <div className={proseClasses}>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             rehypePlugins={rehypePlugins}

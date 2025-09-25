@@ -255,3 +255,67 @@ body {
     display: none !important;
   }
 }
+
+/* Document view adjustments */
+.document-preview .copy-button,
+.document-preview .language-badge {
+  display: none !important;
+}
+
+.document-view-body {
+  background: #ffffff;
+}
+
+.document-view-overlay .prose {
+  color: #0f172a;
+}
+
+.document-view-overlay .prose :where(h1,h2,h3,h4,h5,h6) {
+  color: #0f172a;
+}
+
+@media print {
+  body {
+    background: #ffffff;
+  }
+
+  .document-view-body {
+    padding: 0.75in 0.85in 0.85in;
+  }
+
+  .document-preview {
+    box-shadow: none !important;
+  }
+
+  .document-preview .prose {
+    color: #0f172a !important;
+  }
+
+  .document-preview .prose :where(h1,h2,h3,h4,h5,h6) {
+    color: #0f172a !important;
+  }
+
+  .document-preview .prose pre {
+    background-color: #f8fafc !important;
+    border-color: #d4d4d8 !important;
+    color: #0f172a !important;
+  }
+
+  .document-preview .prose blockquote {
+    background-color: #f8fafc !important;
+    border-left-color: #94a3b8 !important;
+    color: #1f2937 !important;
+  }
+
+  .document-preview .prose table {
+    box-shadow: none !important;
+  }
+
+  .document-preview .prose tr:nth-child(even) {
+    background-color: #e2e8f0 !important;
+  }
+
+  .document-preview .prose a {
+    color: #0f172a !important;
+  }
+}

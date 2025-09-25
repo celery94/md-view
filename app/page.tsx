@@ -10,6 +10,8 @@ import CompactThemeSelector from '../components/CompactThemeSelector';
 import ViewModeSelector from '../components/ViewModeSelector';
 import QuickActionsMenu from '../components/QuickActionsMenu';
 import Footer from '../components/Footer';
+import DocumentView from '../components/DocumentView';
+import TableOfContents, { type TocHeading } from '../components/TableOfContents';
 import { themes, getTheme } from '../lib/themes';
 import {
   Upload,
@@ -21,6 +23,8 @@ import {
   Copy,
   Check,
   AlertCircle,
+  Printer,
+  ListTree,
 } from 'lucide-react';
 
 type ViewMode = 'split' | 'editor' | 'preview';
@@ -160,6 +164,10 @@ export default function Home() {
     undefined
   );
   const [copyStatus, setCopyStatus] = useState<CopyStatus>('idle');
+  const [isDocumentViewOpen, setIsDocumentViewOpen] = useState(false);
+  const [tableOfContents, setTableOfContents] = useState<TocHeading[]>([]);
+  const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
+  const [isTocVisible, setIsTocVisible] = useState(true);
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -167,6 +175,8 @@ export default function Home() {
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
   const navRowRef = useRef<HTMLDivElement | null>(null);
   const copyStatusResetRef = useRef<number | null>(null);
+  const activeHeadingRef = useRef<string | null>(null);
+  const hasUserToggledTocRef = useRef(false);
 
   const primaryActionButton =
     'inline-flex items-center gap-1.5 rounded-xl bg-sky-600 px-2.5 py-1 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-sky-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm';
@@ -206,6 +216,130 @@ export default function Home() {
   ]
     .filter(Boolean)
     .join(' ');
+  const hasHeadings = tableOfContents.length > 0;
+  const tocReopenButtonClass =
+    'fixed bottom-4 right-4 z-40 inline-flex items-center gap-1.5 rounded-full bg-sky-600 px-3 py-2 text-xs font-semibold text-white shadow-lg transition hover:bg-sky-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
+
+  useEffect(() => {
+    activeHeadingRef.current = activeHeadingId;
+  }, [activeHeadingId]);
+
+  const updateActiveHeading = useCallback(() => {
+    const preview = previewRef.current;
+    if (!preview) {
+      if (activeHeadingRef.current !== null) {
+        activeHeadingRef.current = null;
+        setActiveHeadingId(null);
+      }
+      return;
+    }
+
+    const headingElements = preview.querySelectorAll<HTMLElement>('h1, h2, h3, h4, h5, h6');
+    if (headingElements.length === 0) {
+      if (activeHeadingRef.current !== null) {
+        activeHeadingRef.current = null;
+        setActiveHeadingId(null);
+      }
+      return;
+    }
+
+    const scrollTop = preview.scrollTop;
+    const offset = 56;
+    const containerTop = preview.getBoundingClientRect().top;
+
+    let currentId = headingElements[0].id || null;
+
+    for (let i = 0; i < headingElements.length; i += 1) {
+      const heading = headingElements[i];
+      if (!heading.id) continue;
+      const elementTop =
+        heading.getBoundingClientRect().top - containerTop + scrollTop;
+      if (elementTop <= scrollTop + offset) {
+        currentId = heading.id;
+      } else {
+        break;
+      }
+    }
+
+    if (currentId && activeHeadingRef.current !== currentId) {
+      activeHeadingRef.current = currentId;
+      setActiveHeadingId(currentId);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const collectHeadings = () => {
+      const preview = previewRef.current;
+      if (!preview) {
+        setTableOfContents([]);
+        if (activeHeadingRef.current !== null) {
+          activeHeadingRef.current = null;
+          setActiveHeadingId(null);
+        }
+        return;
+      }
+
+      const headingElements = Array.from(
+        preview.querySelectorAll<HTMLElement>('h1, h2, h3, h4, h5, h6')
+      );
+
+      if (headingElements.length === 0) {
+        setTableOfContents([]);
+        if (activeHeadingRef.current !== null) {
+          activeHeadingRef.current = null;
+          setActiveHeadingId(null);
+        }
+        return;
+      }
+
+      const items: TocHeading[] = headingElements
+        .map((heading) => ({
+          id: heading.id,
+          title: heading.textContent?.trim() ?? '',
+          level: Number(heading.tagName.slice(1)),
+        }))
+        .filter((item) => Boolean(item.id) && Boolean(item.title));
+
+      setTableOfContents(items);
+
+      if (items.length > 0) {
+        const existingActive = items.find((item) => item.id === activeHeadingRef.current);
+        if (!existingActive) {
+          const nextId = items[0]?.id ?? null;
+          activeHeadingRef.current = nextId;
+          setActiveHeadingId(nextId);
+        }
+      }
+
+      updateActiveHeading();
+    };
+
+    const frame = window.requestAnimationFrame(collectHeadings);
+    return () => window.cancelAnimationFrame(frame);
+  }, [debouncedMarkdown, updateActiveHeading, viewMode]);
+
+  useEffect(() => {
+    if (!hasHeadings) {
+      setIsTocVisible(false);
+      return;
+    }
+
+    if (typeof window !== 'undefined') {
+      const isMd = window.matchMedia('(min-width: 768px)').matches;
+      if (!isMd) {
+        setIsTocVisible(false);
+        return;
+      }
+    }
+
+    if (!hasUserToggledTocRef.current) {
+      setIsTocVisible(true);
+    }
+  }, [hasHeadings]);
 
   const updateCopyStatus = useCallback(
     (status: CopyStatus) => {
@@ -533,6 +667,62 @@ export default function Home() {
     window.open('https://github.com/celery94/md-view', '_blank', 'noopener,noreferrer');
   }, []);
 
+  const openDocumentView = useCallback(() => {
+    setIsDocumentViewOpen(true);
+  }, []);
+
+  const closeDocumentView = useCallback(() => {
+    setIsDocumentViewOpen(false);
+  }, []);
+
+  const hideToc = useCallback(() => {
+    hasUserToggledTocRef.current = true;
+    setIsTocVisible(false);
+  }, []);
+
+  const showToc = useCallback(() => {
+    if (!hasHeadings) {
+      return;
+    }
+    if (typeof window !== 'undefined') {
+      const isMd = window.matchMedia('(min-width: 768px)').matches;
+      if (!isMd) {
+        return;
+      }
+    }
+    hasUserToggledTocRef.current = true;
+    setIsTocVisible(true);
+  }, [hasHeadings]);
+
+  const scrollToHeading = useCallback(
+    (headingId: string) => {
+      const preview = previewRef.current;
+      if (!preview) {
+        return;
+      }
+
+      const escapeSelector = (value: string) =>
+        value.replace(/([!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g, '\\$1');
+
+      const target = preview.querySelector<HTMLElement>(`#${escapeSelector(headingId)}`);
+      if (!target) {
+        return;
+      }
+
+      target.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+
+      activeHeadingRef.current = headingId;
+      setActiveHeadingId(headingId);
+
+      if (typeof window !== 'undefined') {
+        window.requestAnimationFrame(() => {
+          updateActiveHeading();
+        });
+      }
+    },
+    [updateActiveHeading]
+  );
+
   // Scroll synchronization handlers
   const handleEditorScroll = useCallback(
     (scrollPercentage: number) => {
@@ -548,9 +738,21 @@ export default function Home() {
       if (viewMode === 'split') {
         setEditorScrollPercentage(scrollPercentage);
       }
+      updateActiveHeading();
     },
-    [viewMode]
+    [updateActiveHeading, viewMode]
   );
+
+  useEffect(() => {
+    if (previewScrollPercentage === undefined) {
+      return;
+    }
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const frame = window.requestAnimationFrame(() => updateActiveHeading());
+    return () => window.cancelAnimationFrame(frame);
+  }, [previewScrollPercentage, updateActiveHeading]);
 
   // Reset scroll sync when switching view modes
   useEffect(() => {
@@ -567,7 +769,10 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-slate-50 to-slate-100 text-slate-900">
+    <>
+      <div
+        className={`min-h-screen flex flex-col bg-gradient-to-br from-white via-slate-50 to-slate-100 text-slate-900 ${isDocumentViewOpen ? 'print:hidden' : ''}`}
+      >
       <header className="sticky top-0 z-30 bg-gradient-to-b from-white/95 via-white/90 to-white/85 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.35)] backdrop-blur supports-[backdrop-filter]:bg-white/70">
         <div className="flex w-full flex-col gap-1.5 px-4 py-1.5 sm:px-6 sm:py-2.5 lg:px-10 xl:px-14">
           <div
@@ -644,6 +849,17 @@ export default function Home() {
                     Export HTML
                   </span>
                 </button>
+                <button
+                  onClick={openDocumentView}
+                  className={secondaryActionButton}
+                  aria-label="Open document view"
+                  title="Open print-friendly document view"
+                >
+                  <Printer className="h-4 w-4" aria-hidden="true" />
+                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
+                    Document view
+                  </span>
+                </button>
               </div>
 
               <div className="flex items-center gap-1.5">
@@ -673,8 +889,62 @@ export default function Home() {
                 </button>
               </div>
             </div>
+            </div>
           </div>
-        </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-1 md:hidden">
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={openDocumentView}
+                className={mobileActionButton}
+                aria-label="Open document view"
+                title="Open print-friendly document view"
+              >
+                <Printer className="h-4 w-4" aria-hidden="true" />
+                <span>Document</span>
+              </button>
+              <button
+                type="button"
+                onClick={copyPreviewToClipboard}
+                className={mobileCopyButtonClass}
+                aria-label="Copy preview HTML to clipboard"
+                title="Copy preview HTML to clipboard"
+              >
+                {copyStatus === 'styled' ? (
+                  <>
+                    <Check className="h-4 w-4" aria-hidden="true" />
+                    <span>Copied</span>
+                  </>
+                ) : copyStatus === 'plain' ? (
+                  <>
+                    <Check className="h-4 w-4" aria-hidden="true" />
+                    <span>Text only</span>
+                  </>
+                ) : copyStatus === 'error' ? (
+                  <>
+                    <AlertCircle className="h-4 w-4" aria-hidden="true" />
+                    <span>Failed</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-4 w-4" aria-hidden="true" />
+                    <span>Copy HTML</span>
+                  </>
+                )}
+              </button>
+            </div>
+            <QuickActionsMenu
+              onImport={onPickFile}
+              onExportMarkdown={exportMarkdown}
+              onExportHtml={exportHtml}
+              onCopyPreview={copyPreviewToClipboard}
+              onReset={resetSample}
+              onGuide={openGuide}
+              onGithub={openGithub}
+              triggerClassName={`${mobileActionButton} flex-none`}
+              triggerLabel="More"
+            />
+          </div>
 
         <input
           ref={fileInputRef}
@@ -802,7 +1072,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              {/* Wrapper must be flex so preview (flex-1) fills remaining vertical space. */}
+              {/* Wrapper must be a flex column so preview (flex-1) can stretch to available height. */}
               <div className="flex flex-col flex-1 min-h-0">
                 <MarkdownPreview
                   ref={previewRef}
@@ -818,7 +1088,45 @@ export default function Home() {
       </main>
 
       <Footer />
-    </div>
+      </div>
+      {hasHeadings && isTocVisible && !isDocumentViewOpen ? (
+        <div
+          className="fixed bottom-6 right-4 z-30 hidden md:block w-[min(70vw,18rem)] drop-shadow-xl"
+          role="complementary"
+          aria-label="Floating table of contents"
+        >
+          <TableOfContents
+            headings={tableOfContents}
+            activeId={activeHeadingId}
+            onNavigate={scrollToHeading}
+            onClose={hideToc}
+            className="h-full overflow-y-auto"
+            style={{ maxHeight: 'calc(100vh - 8rem)' }}
+            emptyHint="Add headings (e.g. # Title) to generate a table of contents."
+          />
+        </div>
+      ) : null}
+      {hasHeadings && !isTocVisible && !isDocumentViewOpen ? (
+        <button
+          type="button"
+          onClick={showToc}
+          className={`${tocReopenButtonClass} hidden md:inline-flex`}
+          aria-label="Show table of contents"
+          title="Show table of contents"
+        >
+          <ListTree className="h-4 w-4" aria-hidden="true" />
+          <span>Show ToC</span>
+        </button>
+      ) : null}
+      {isDocumentViewOpen ? (
+        <DocumentView
+          content={debouncedMarkdown}
+          theme={currentTheme}
+          onThemeChange={setCurrentTheme}
+          onClose={closeDocumentView}
+        />
+      ) : null}
+    </>
   );
 }
 

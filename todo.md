@@ -55,8 +55,8 @@ Note: In offline environments without new deps, we use `skipHtml`. When dependen
 - [ ] Mermaid diagrams for flowcharts/sequence (opt-in; lazy-load). (files: `components/MarkdownPreview.tsx`)
 - [ ] File System Access API for open/save on supported browsers. (files: `app/page.tsx`)
 - [ ] PWA + offline support; cache highlight themes. (files: `public/manifest.json`, service worker)
-- [ ] Print/PDF-friendly “document” view. (files: `app/page.tsx`, CSS)
-- [ ] Table of contents (auto-generated from headings) with scrollspy; optional sidebar. (files: `components/MarkdownPreview.tsx`, `app/page.tsx`)
+- [x] Print/PDF-friendly “document” view. (files: `app/page.tsx`, CSS)
+- [x] Table of contents (auto-generated from headings) with scrollspy; optional sidebar. (files: `components/MarkdownPreview.tsx`, `app/page.tsx`)
 
 ## Notes / Observations
 
