@@ -167,7 +167,7 @@ export default function Home() {
   const [isDocumentViewOpen, setIsDocumentViewOpen] = useState(false);
   const [tableOfContents, setTableOfContents] = useState<TocHeading[]>([]);
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
-  const [isTocVisible, setIsTocVisible] = useState(true);
+  const [isTocVisible, setIsTocVisible] = useState(false);
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -252,8 +252,7 @@ export default function Home() {
     for (let i = 0; i < headingElements.length; i += 1) {
       const heading = headingElements[i];
       if (!heading.id) continue;
-      const elementTop =
-        heading.getBoundingClientRect().top - containerTop + scrollTop;
+      const elementTop = heading.getBoundingClientRect().top - containerTop + scrollTop;
       if (elementTop <= scrollTop + offset) {
         currentId = heading.id;
       } else {
@@ -336,9 +335,7 @@ export default function Home() {
       }
     }
 
-    if (!hasUserToggledTocRef.current) {
-      setIsTocVisible(true);
-    }
+    // ToC remains hidden by default - only show if user explicitly toggles it
   }, [hasHeadings]);
 
   const updateCopyStatus = useCallback(
@@ -773,122 +770,124 @@ export default function Home() {
       <div
         className={`min-h-screen flex flex-col bg-gradient-to-br from-white via-slate-50 to-slate-100 text-slate-900 ${isDocumentViewOpen ? 'print:hidden' : ''}`}
       >
-      <header className="sticky top-0 z-30 bg-gradient-to-b from-white/95 via-white/90 to-white/85 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.35)] backdrop-blur supports-[backdrop-filter]:bg-white/70">
-        <div className="flex w-full flex-col gap-1.5 px-4 py-1.5 sm:px-6 sm:py-2.5 lg:px-10 xl:px-14">
-          <div
-            ref={navRowRef}
-            className="flex flex-col gap-1.5 md:flex-row md:items-center md:justify-between md:gap-3"
-          >
-            <div className="flex items-center gap-2 md:gap-2.5">
-              <Link
-                href="/"
-                className="group flex items-center gap-2 rounded-2xl border border-slate-200 bg-white/90 px-2.5 py-1 shadow-sm backdrop-blur transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                aria-label="MD-View Home"
-                title="MD-View Home"
-              >
-                <img
-                  src="/md-view-icon.svg"
-                  alt="MD-View logo"
-                  className="h-8 w-8 rounded-xl bg-slate-100 p-1.5 ring-1 ring-slate-200 transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
-                  <h1 className="text-lg font-semibold leading-tight text-slate-900">MD-View</h1>
-                  <p className="text-xs font-medium text-slate-500">Markdown Editor</p>
-                </div>
-              </Link>
-
-              <div className="hidden md:block">
-                <ViewModeSelector
-                  currentMode={viewMode}
-                  onModeChange={setViewMode}
-                  showLabels={false}
-                />
-              </div>
-
-              {!isNavCompact && (
-                <div className={statPillClass}>
-                  <span>{wordCount} words</span>
-                  <span className="text-slate-300">•</span>
-                  <span>{lineCount} lines</span>
-                  <span className="text-slate-300">•</span>
-                  <span>{fileSizeKb} KB</span>
-                </div>
-              )}
-            </div>
-
-            <div className="hidden md:flex items-center gap-2">
-              <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-white/80 p-1 shadow-sm">
-                <button
-                  onClick={onPickFile}
-                  className={primaryActionButton}
-                  aria-label="Import markdown file"
-                  title="Import .md file"
+        <header className="sticky top-0 z-30 bg-gradient-to-b from-white/95 via-white/90 to-white/85 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.35)] backdrop-blur supports-[backdrop-filter]:bg-white/70">
+          <div className="flex w-full flex-col gap-1.5 px-4 py-1.5 sm:px-6 sm:py-2.5 lg:px-10 xl:px-14">
+            <div
+              ref={navRowRef}
+              className="flex flex-col gap-1.5 md:flex-row md:items-center md:justify-between md:gap-3"
+            >
+              <div className="flex items-center gap-2 md:gap-2.5">
+                <Link
+                  href="/"
+                  className="group flex items-center gap-2 rounded-2xl border border-slate-200 bg-white/90 px-2.5 py-1 shadow-sm backdrop-blur transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  aria-label="MD-View Home"
+                  title="MD-View Home"
                 >
-                  <Upload className="h-4 w-4" aria-hidden="true" />
-                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Import</span>
-                </button>
-                <button
-                  onClick={exportMarkdown}
-                  className={secondaryActionButton}
-                  aria-label="Export as markdown file"
-                  title="Export as .md file"
-                >
-                  <FileText className="h-4 w-4" aria-hidden="true" />
-                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
-                    Export MD
-                  </span>
-                </button>
-                <button
-                  onClick={exportHtml}
-                  className={secondaryActionButton}
-                  aria-label="Export as HTML file"
-                  title="Export as .html file"
-                >
-                  <FileCode className="h-4 w-4" aria-hidden="true" />
-                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
-                    Export HTML
-                  </span>
-                </button>
-                <button
-                  onClick={openDocumentView}
-                  className={secondaryActionButton}
-                  aria-label="Open document view"
-                  title="Open print-friendly document view"
-                >
-                  <Printer className="h-4 w-4" aria-hidden="true" />
-                  <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
-                    Document view
-                  </span>
-                </button>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <Link href="/guide" className={quietNavButton} title="Markdown guide and tips">
-                  <BookOpen className="h-4 w-4" aria-hidden="true" />
-                  <span className="sr-only">Guide</span>
+                  <img
+                    src="/md-view-icon.svg"
+                    alt="MD-View logo"
+                    className="h-8 w-8 rounded-xl bg-slate-100 p-1.5 ring-1 ring-slate-200 transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
+                    <h1 className="text-lg font-semibold leading-tight text-slate-900">MD-View</h1>
+                    <p className="text-xs font-medium text-slate-500">Markdown Editor</p>
+                  </div>
                 </Link>
-                <a
-                  href="https://github.com/celery94/md-view"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={quietNavButton}
-                  aria-label="GitHub repository"
-                  title="Open GitHub repository"
-                >
-                  <Github className="h-4 w-4" aria-hidden="true" />
-                  <span className="sr-only">GitHub</span>
-                </a>
-                <button
-                  onClick={resetSample}
-                  className={quietNavButton}
-                  aria-label="Reset to sample content"
-                  title="Reset to sample markdown"
-                >
-                  <RotateCw className="h-4 w-4" aria-hidden="true" />
-                  <span className="sr-only">Reset</span>
-                </button>
+
+                <div className="hidden md:block">
+                  <ViewModeSelector
+                    currentMode={viewMode}
+                    onModeChange={setViewMode}
+                    showLabels={false}
+                  />
+                </div>
+
+                {!isNavCompact && (
+                  <div className={statPillClass}>
+                    <span>{wordCount} words</span>
+                    <span className="text-slate-300">•</span>
+                    <span>{lineCount} lines</span>
+                    <span className="text-slate-300">•</span>
+                    <span>{fileSizeKb} KB</span>
+                  </div>
+                )}
               </div>
-            </div>
+
+              <div className="hidden md:flex items-center gap-2">
+                <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-white/80 p-1 shadow-sm">
+                  <button
+                    onClick={onPickFile}
+                    className={primaryActionButton}
+                    aria-label="Import markdown file"
+                    title="Import .md file"
+                  >
+                    <Upload className="h-4 w-4" aria-hidden="true" />
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
+                      Import
+                    </span>
+                  </button>
+                  <button
+                    onClick={exportMarkdown}
+                    className={secondaryActionButton}
+                    aria-label="Export as markdown file"
+                    title="Export as .md file"
+                  >
+                    <FileText className="h-4 w-4" aria-hidden="true" />
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
+                      Export MD
+                    </span>
+                  </button>
+                  <button
+                    onClick={exportHtml}
+                    className={secondaryActionButton}
+                    aria-label="Export as HTML file"
+                    title="Export as .html file"
+                  >
+                    <FileCode className="h-4 w-4" aria-hidden="true" />
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
+                      Export HTML
+                    </span>
+                  </button>
+                  <button
+                    onClick={openDocumentView}
+                    className={secondaryActionButton}
+                    aria-label="Open document view"
+                    title="Open print-friendly document view"
+                  >
+                    <Printer className="h-4 w-4" aria-hidden="true" />
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
+                      Document view
+                    </span>
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <Link href="/guide" className={quietNavButton} title="Markdown guide and tips">
+                    <BookOpen className="h-4 w-4" aria-hidden="true" />
+                    <span className="sr-only">Guide</span>
+                  </Link>
+                  <a
+                    href="https://github.com/celery94/md-view"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={quietNavButton}
+                    aria-label="GitHub repository"
+                    title="Open GitHub repository"
+                  >
+                    <Github className="h-4 w-4" aria-hidden="true" />
+                    <span className="sr-only">GitHub</span>
+                  </a>
+                  <button
+                    onClick={resetSample}
+                    className={quietNavButton}
+                    aria-label="Reset to sample content"
+                    title="Reset to sample markdown"
+                  >
+                    <RotateCw className="h-4 w-4" aria-hidden="true" />
+                    <span className="sr-only">Reset</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -946,148 +945,148 @@ export default function Home() {
             />
           </div>
 
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".md,.markdown,text/markdown,text/plain"
-          className="hidden"
-          onChange={(e) => onFileChosen(e.target.files?.[0] ?? null)}
-          aria-label="File input for markdown files"
-        />
-      </header>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".md,.markdown,text/markdown,text/plain"
+            className="hidden"
+            onChange={(e) => onFileChosen(e.target.files?.[0] ?? null)}
+            aria-label="File input for markdown files"
+          />
+        </header>
 
-      <main className="relative flex flex-1 min-h-0 flex-col py-5 sm:py-8 lg:py-12" role="main">
-        <div
-          ref={containerRef}
-          className={`flex w-full flex-1 flex-col gap-5 px-4 sm:px-6 lg:px-10 xl:px-14 min-h-0 ${
-            viewMode === 'split' ? 'md:flex-row md:items-stretch md:gap-8' : ''
-          }`}
-        >
-          {(viewMode === 'editor' || viewMode === 'split') && (
-            <section
-              className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-3 sm:p-5 lg:p-6 shadow-[0_20px_40px_-25px_rgba(15,23,42,0.15)]"
-              style={
-                viewMode === 'split' ? { width: '100%', flexBasis: `${ratio * 100}%` } : undefined
-              }
-              onDrop={onDrop}
-              onDragOver={onDragOver}
-              aria-label="Markdown editor section"
-            >
-              <div className="mb-3 flex flex-shrink-0 items-start justify-between gap-3 sm:mb-4">
-                <div>
-                  <h2 className="text-lg font-semibold text-slate-900">Markdown Editor</h2>
-                  <p className="text-xs text-slate-500">
-                    Type your markdown or drop a .md file to load it instantly
-                  </p>
-                </div>
-              </div>
-              {/* Wrapper must be a flex container so nested editor (with flex-1) can stretch to available height. */}
-              <div className="flex flex-col flex-1 min-h-0">
-                <RichMarkdownEditor
-                  ref={editorRef}
-                  value={markdown}
-                  onChange={setMarkdown}
-                  onScroll={handleEditorScroll}
-                  scrollToPercentage={editorScrollPercentage}
-                />
-              </div>
-            </section>
-          )}
-
-          {viewMode === 'split' && (
-            <div
-              onMouseDown={startDrag}
-              className="group hidden md:flex w-px cursor-col-resize select-none items-stretch justify-center"
-              aria-label="Resize editor and preview panels"
-              role="separator"
-              aria-orientation="vertical"
-              tabIndex={0}
-              title="Drag to resize panels"
-            >
-              <div className="relative my-4 flex h-full w-full items-center">
-                <span className="mx-auto h-full w-px bg-slate-200" aria-hidden="true" />
-                <span
-                  className="absolute left-1/2 top-1/2 h-12 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-300 transition-colors duration-200 group-hover:bg-sky-400/60"
-                  aria-hidden="true"
-                />
-              </div>
-            </div>
-          )}
-
-          {(viewMode === 'preview' || viewMode === 'split') && (
-            <section
-              className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-3 sm:p-5 lg:p-6 shadow-[0_20px_40px_-25px_rgba(15,23,42,0.15)]"
-              style={
-                viewMode === 'split'
-                  ? { width: '100%', flexBasis: `${(1 - ratio) * 100}%` }
-                  : undefined
-              }
-              aria-label="Markdown preview section"
-            >
-              <div className="mb-3 flex flex-shrink-0 items-center justify-between gap-3 sm:mb-4">
-                <div>
-                  <h2 className="text-lg font-semibold text-slate-900">Live Preview</h2>
-                  <p className="text-xs text-slate-500">
-                    See the rendered markdown with your chosen theme
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={copyPreviewToClipboard}
-                    className={previewCopyButtonClass}
-                    aria-label="Copy preview HTML to clipboard"
-                    title="Copy preview HTML to clipboard"
-                  >
-                    {copyStatus === 'styled' ? (
-                      <>
-                        <Check className="h-4 w-4" aria-hidden="true" />
-                        <span>Copied</span>
-                      </>
-                    ) : copyStatus === 'plain' ? (
-                      <>
-                        <Check className="h-4 w-4" aria-hidden="true" />
-                        <span>Copied text</span>
-                      </>
-                    ) : copyStatus === 'error' ? (
-                      <>
-                        <AlertCircle className="h-4 w-4" aria-hidden="true" />
-                        <span>Copy failed</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="h-4 w-4" aria-hidden="true" />
-                        <span>Copy HTML</span>
-                      </>
-                    )}
-                  </button>
-                  <div className="hidden lg:block">
-                    <CompactThemeSelector
-                      currentTheme={currentTheme}
-                      onThemeChange={setCurrentTheme}
-                    />
-                  </div>
-                  <div className="lg:hidden">
-                    <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+        <main className="relative flex flex-1 min-h-0 flex-col py-5 sm:py-8 lg:py-12" role="main">
+          <div
+            ref={containerRef}
+            className={`flex w-full flex-1 flex-col gap-5 px-4 sm:px-6 lg:px-10 xl:px-14 min-h-0 ${
+              viewMode === 'split' ? 'md:flex-row md:items-stretch md:gap-8' : ''
+            }`}
+          >
+            {(viewMode === 'editor' || viewMode === 'split') && (
+              <section
+                className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-3 sm:p-5 lg:p-6 shadow-[0_20px_40px_-25px_rgba(15,23,42,0.15)]"
+                style={
+                  viewMode === 'split' ? { width: '100%', flexBasis: `${ratio * 100}%` } : undefined
+                }
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                aria-label="Markdown editor section"
+              >
+                <div className="mb-3 flex flex-shrink-0 items-start justify-between gap-3 sm:mb-4">
+                  <div>
+                    <h2 className="text-lg font-semibold text-slate-900">Markdown Editor</h2>
+                    <p className="text-xs text-slate-500">
+                      Type your markdown or drop a .md file to load it instantly
+                    </p>
                   </div>
                 </div>
-              </div>
-              {/* Wrapper must be a flex column so preview (flex-1) can stretch to available height. */}
-              <div className="flex flex-col flex-1 min-h-0">
-                <MarkdownPreview
-                  ref={previewRef}
-                  content={debouncedMarkdown}
-                  theme={currentTheme}
-                  onScroll={handlePreviewScroll}
-                  scrollToPercentage={previewScrollPercentage}
-                />
-              </div>
-            </section>
-          )}
-        </div>
-      </main>
+                {/* Wrapper must be a flex container so nested editor (with flex-1) can stretch to available height. */}
+                <div className="flex flex-col flex-1 min-h-0">
+                  <RichMarkdownEditor
+                    ref={editorRef}
+                    value={markdown}
+                    onChange={setMarkdown}
+                    onScroll={handleEditorScroll}
+                    scrollToPercentage={editorScrollPercentage}
+                  />
+                </div>
+              </section>
+            )}
 
-      <Footer />
+            {viewMode === 'split' && (
+              <div
+                onMouseDown={startDrag}
+                className="group hidden md:flex w-px cursor-col-resize select-none items-stretch justify-center"
+                aria-label="Resize editor and preview panels"
+                role="separator"
+                aria-orientation="vertical"
+                tabIndex={0}
+                title="Drag to resize panels"
+              >
+                <div className="relative my-4 flex h-full w-full items-center">
+                  <span className="mx-auto h-full w-px bg-slate-200" aria-hidden="true" />
+                  <span
+                    className="absolute left-1/2 top-1/2 h-12 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-300 transition-colors duration-200 group-hover:bg-sky-400/60"
+                    aria-hidden="true"
+                  />
+                </div>
+              </div>
+            )}
+
+            {(viewMode === 'preview' || viewMode === 'split') && (
+              <section
+                className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200 bg-white p-3 sm:p-5 lg:p-6 shadow-[0_20px_40px_-25px_rgba(15,23,42,0.15)]"
+                style={
+                  viewMode === 'split'
+                    ? { width: '100%', flexBasis: `${(1 - ratio) * 100}%` }
+                    : undefined
+                }
+                aria-label="Markdown preview section"
+              >
+                <div className="mb-3 flex flex-shrink-0 items-center justify-between gap-3 sm:mb-4">
+                  <div>
+                    <h2 className="text-lg font-semibold text-slate-900">Live Preview</h2>
+                    <p className="text-xs text-slate-500">
+                      See the rendered markdown with your chosen theme
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={copyPreviewToClipboard}
+                      className={previewCopyButtonClass}
+                      aria-label="Copy preview HTML to clipboard"
+                      title="Copy preview HTML to clipboard"
+                    >
+                      {copyStatus === 'styled' ? (
+                        <>
+                          <Check className="h-4 w-4" aria-hidden="true" />
+                          <span>Copied</span>
+                        </>
+                      ) : copyStatus === 'plain' ? (
+                        <>
+                          <Check className="h-4 w-4" aria-hidden="true" />
+                          <span>Copied text</span>
+                        </>
+                      ) : copyStatus === 'error' ? (
+                        <>
+                          <AlertCircle className="h-4 w-4" aria-hidden="true" />
+                          <span>Copy failed</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-4 w-4" aria-hidden="true" />
+                          <span>Copy HTML</span>
+                        </>
+                      )}
+                    </button>
+                    <div className="hidden lg:block">
+                      <CompactThemeSelector
+                        currentTheme={currentTheme}
+                        onThemeChange={setCurrentTheme}
+                      />
+                    </div>
+                    <div className="lg:hidden">
+                      <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+                    </div>
+                  </div>
+                </div>
+                {/* Wrapper must be a flex column so preview (flex-1) can stretch to available height. */}
+                <div className="flex flex-col flex-1 min-h-0">
+                  <MarkdownPreview
+                    ref={previewRef}
+                    content={debouncedMarkdown}
+                    theme={currentTheme}
+                    onScroll={handlePreviewScroll}
+                    scrollToPercentage={previewScrollPercentage}
+                  />
+                </div>
+              </section>
+            )}
+          </div>
+        </main>
+
+        <Footer />
       </div>
       {hasHeadings && isTocVisible && !isDocumentViewOpen ? (
         <div
