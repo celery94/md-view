@@ -1,18 +1,20 @@
 import { MetadataRoute } from 'next'
 
+const baseUrl = 'https://www.md-view.com'
+
+const lastModified = new Date('2025-09-26')
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://www.md-view.com/'
-  
   return [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: 'monthly',
       priority: 1,
     },
     {
       url: `${baseUrl}/guide`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: 'weekly',
       priority: 0.8,
     },

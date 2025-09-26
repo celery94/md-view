@@ -3,6 +3,36 @@ import Link from 'next/link'
 import { ArrowLeft, BookOpen, Zap, Code, Download, Upload, Shield, Smartphone } from 'lucide-react'
 import Footer from '../../components/Footer'
 
+const guideStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: 'MD-View User Guide',
+  description:
+    'Master MD-View features including live preview, GitHub Flavored Markdown support, syntax highlighting, import/export flows, and keyboard shortcuts.',
+  image: 'https://www.md-view.com/og-image.png',
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': 'https://www.md-view.com/guide',
+  },
+  author: {
+    '@type': 'Organization',
+    name: 'MD-View',
+    url: 'https://www.md-view.com/',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'MD-View',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://www.md-view.com/md-view-icon.svg',
+      width: 128,
+      height: 128,
+    },
+  },
+  datePublished: '2024-05-01T00:00:00.000Z',
+  dateModified: '2025-09-26T00:00:00.000Z',
+} as const
+
 export const metadata: Metadata = {
   title: 'Guide: Features & Markdown Basics | MD-View',
   description:
@@ -18,11 +48,45 @@ export const metadata: Metadata = {
     'export html',
     'pdf',
   ],
+  alternates: {
+    canonical: '/guide',
+  },
+  openGraph: {
+    title: 'Guide: Features & Markdown Basics | MD-View',
+    description:
+      'Master MD-View features, Markdown syntax, GitHub Flavored Markdown, and export workflows in this comprehensive guide.',
+    type: 'article',
+    url: 'https://www.md-view.com/guide',
+    publishedTime: '2024-05-01T00:00:00.000Z',
+    modifiedTime: '2025-09-26T00:00:00.000Z',
+    siteName: 'MD-View',
+    images: [
+      {
+        url: 'https://www.md-view.com/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'MD-View markdown editor guide preview',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Guide: Features & Markdown Basics | MD-View',
+    description:
+      'Learn how to get the most out of MD-View with live preview tips, markdown basics, and export workflows.',
+    images: ['https://www.md-view.com/og-image.png'],
+    creator: '@mdview',
+  },
 }
 
 export default function Guide() {
   return (
-    <div className="h-screen flex flex-col">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(guideStructuredData) }}
+      />
+      <div className="h-screen flex flex-col">
       {/* Header - consistent with main page */}
       <header className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-full mx-auto px-3 sm:px-4 md:px-6">
@@ -87,8 +151,15 @@ export default function Guide() {
           </div>
 
           {/* Features Grid */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <section
+            id="key-features"
+            className="mb-12"
+            aria-labelledby="key-features-heading"
+          >
+            <h2
+              id="key-features-heading"
+              className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2"
+            >
               <Zap className="h-6 w-6 text-blue-600" />
               Key Features
             </h2>
@@ -196,9 +267,16 @@ export default function Guide() {
           </section>
 
           {/* Export Guide */}
-          <section className="mb-12">
+          <section
+            id="export-html-pdf"
+            className="mb-12"
+            aria-labelledby="export-html-pdf-heading"
+          >
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 md:p-8 border border-blue-200">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <h2
+                id="export-html-pdf-heading"
+                className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2"
+              >
                 <Download className="h-6 w-6 text-blue-600" />
                 Export to HTML & PDF
               </h2>
@@ -219,9 +297,16 @@ export default function Guide() {
           </section>
 
           {/* Markdown Basics */}
-          <section className="mb-12">
+          <section
+            id="markdown-basics"
+            className="mb-12"
+            aria-labelledby="markdown-basics-heading"
+          >
             <div className="bg-white rounded-lg p-6 md:p-8 shadow-sm">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <h2
+                id="markdown-basics-heading"
+                className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2"
+              >
                 <Code className="h-6 w-6 text-purple-600" />
                 Markdown Basics
               </h2>
@@ -260,9 +345,16 @@ Horizontal rule above this line`}</pre>
           </section>
 
           {/* GitHub Flavored Markdown */}
-          <section className="mb-12">
+          <section
+            id="github-flavored-markdown"
+            className="mb-12"
+            aria-labelledby="gfm-heading"
+          >
             <div className="bg-white rounded-lg p-6 md:p-8 shadow-sm">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <h2
+                id="gfm-heading"
+                className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2"
+              >
                 <Code className="h-6 w-6 text-green-600" />
                 GitHub Flavored Markdown (GFM)
               </h2>
@@ -330,9 +422,16 @@ print(f"Word count: {word_count}")
           </section>
 
           {/* Tips and Limitations */}
-          <section className="mb-12">
+          <section
+            id="tips-limitations"
+            className="mb-12"
+            aria-labelledby="tips-limitations-heading"
+          >
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <h2
+                id="tips-limitations-heading"
+                className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2"
+              >
                 <Shield className="h-6 w-6 text-yellow-600" />
                 Tips & Limitations
               </h2>
@@ -384,6 +483,7 @@ print(f"Word count: {word_count}")
       </main>
 
       <Footer />
-    </div>
+      </div>
+    </>
   )
 }
