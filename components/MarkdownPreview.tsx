@@ -50,24 +50,24 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
     <div className="relative group mdv-code">
       {/* Top-right controls */}
       <div
-        className="absolute right-2 top-2 z-10 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute right-3 top-3 z-10 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200"
         data-no-export="true"
       >
         {language ? (
-          <span className="language-badge select-none rounded-full border border-slate-200 bg-white px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-700 shadow-sm">
+          <span className="language-badge select-none rounded-full border border-sky-200/80 bg-gradient-to-br from-sky-50 to-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-700 shadow-[0_2px_8px_rgba(14,165,233,0.15)] backdrop-blur-sm">
             {language}
           </span>
         ) : null}
         <button
           type="button"
           onClick={onCopy}
-          className="copy-button inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          className="copy-button inline-flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-gradient-to-br from-white to-slate-50/50 px-3 py-1.5 text-xs font-medium text-slate-700 shadow-[0_2px_8px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(15,23,42,0.12)] hover:scale-105 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           aria-label="Copy code"
         >
           {copied ? (
             <>
               <Check className="h-3.5 w-3.5 text-green-600" aria-hidden="true" />
-              <span>Copied</span>
+              <span className="font-semibold">Copied</span>
             </>
           ) : (
             <>

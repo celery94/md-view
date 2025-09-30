@@ -13,6 +13,66 @@
   --font-geist-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+/* Modern smooth scrolling */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -45,45 +105,69 @@ body {
   --mdv-marker: #cbd5f5;
 }
 
-/* Custom scrollbar styles */
+/* Custom scrollbar styles - Modern and refined */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--muted);
-  border-radius: 4px;
+  background: rgba(241, 245, 249, 0.5);
+  border-radius: 10px;
+  margin: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(148, 163, 184, 0.6), rgba(100, 116, 139, 0.7));
+  border-radius: 10px;
+  border: 2px solid rgba(241, 245, 249, 0.5);
+  transition: all 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--foreground);
+  background: linear-gradient(180deg, rgba(100, 116, 139, 0.8), rgba(71, 85, 105, 0.9));
+  border-color: rgba(226, 232, 240, 0.7);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, rgba(71, 85, 105, 0.9), rgba(51, 65, 85, 1));
 }
 
 /* Custom styles for markdown preview */
 .prose pre {
   background-color: var(--mdv-muted);
-  padding: 1rem;
-  border-radius: 0.5rem;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
   overflow-x: auto;
   border: 1px solid var(--mdv-border);
   position: relative;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
 }
 
-/* Inline code chips */
+.prose pre:hover {
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+/* Inline code chips - Enhanced design */
 .prose :not(pre) > code {
   font-size: 0.875rem;
   font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  background-color: var(--mdv-muted);
+  background: linear-gradient(135deg, rgba(241, 245, 249, 0.95), rgba(226, 232, 240, 0.9));
   color: var(--mdv-foreground);
-  padding: 0.125rem 0.35rem;
-  border-radius: 0.25rem;
-  border: 1px solid var(--mdv-border);
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.prose :not(pre) > code:hover {
+  background: linear-gradient(135deg, rgba(226, 232, 240, 1), rgba(203, 213, 225, 0.95));
+  border-color: rgba(148, 163, 184, 0.35);
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08);
 }
 
 /* Remove duplication inside fenced blocks */
@@ -108,47 +192,91 @@ body {
 .prose h4,
 .prose h5,
 .prose h6 {
-  font-weight: 600;
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
   color: var(--mdv-foreground);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  transition: color 0.2s ease;
+}
+
+.prose h1 {
+  font-size: 2.25em;
+  margin-top: 0;
+}
+
+.prose h2 {
+  font-size: 1.75em;
 }
 
 .prose blockquote {
   border-left: 4px solid #3b82f6;
-  background-color: var(--mdv-accent);
-  padding: 1rem;
+  background: linear-gradient(to right, rgba(59, 130, 246, 0.08), var(--mdv-accent));
+  padding: 1.25rem 1.5rem;
   font-style: italic;
-  margin: 1rem 0;
-  border-radius: 0 0.375rem 0.375rem 0;
+  margin: 1.5rem 0;
+  border-radius: 0 0.75rem 0.75rem 0;
   color: var(--mdv-foreground);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.prose blockquote::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(59, 130, 246, 0.2), transparent);
 }
 
 .prose table {
   width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5rem 0;
   background-color: var(--mdv-background);
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   overflow: hidden;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 0 0 1px var(--mdv-border);
 }
 
 .prose th,
 .prose td {
-  border: 1px solid var(--mdv-border);
-  padding: 0.75rem;
+  border: none;
+  border-bottom: 1px solid var(--mdv-border);
+  padding: 0.875rem 1rem;
   text-align: left;
+  transition: background-color 0.15s ease;
 }
 
 .prose th {
-  background-color: var(--mdv-accent);
+  background: linear-gradient(to bottom, var(--mdv-accent), rgba(241, 245, 249, 0.5));
   font-weight: 600;
   color: var(--mdv-accent-foreground);
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--mdv-border);
 }
 
-.prose tr:nth-child(even) {
+.prose tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.prose tbody tr:nth-child(even) {
   background-color: var(--mdv-muted);
+}
+
+.prose tbody tr:hover {
+  background-color: rgba(59, 130, 246, 0.06) !important;
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: none;
 }
 
 /* Links */
@@ -244,10 +372,7 @@ body {
   box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);
 }
 
-/* Table row hover */
-.prose tbody tr:hover {
-  background-color: #f8fafc; /* slate-50 */
-}
+/* Removed - now handled in enhanced table section above */
 
 /* Mobile-specific: Hide split mode button as additional safety measure */
 @media (max-width: 767px) {

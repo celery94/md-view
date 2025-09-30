@@ -22,10 +22,10 @@ interface ToolbarProps {
 
 export default function Toolbar({ onBold, onItalic, onStrikethrough, onH1, onH2, onH3, onList, onOrderedList, onLink, onCode, onQuote, onTable, onImage, onUndo, onRedo }: ToolbarProps) {
   const buttonClass =
-    "rounded-xl p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+    "rounded-xl p-2 text-slate-500 transition-all duration-200 hover:bg-gradient-to-br hover:from-slate-100 hover:to-slate-50 hover:text-slate-900 hover:shadow-sm active:scale-90 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
 
   return (
-    <div className="flex flex-wrap items-center gap-1.5 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
+    <div className="flex flex-wrap items-center gap-1.5 rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white to-slate-50/50 p-2.5 shadow-[0_2px_8px_rgba(15,23,42,0.08)] backdrop-blur-sm animate-fade-in">
       {/* Undo/Redo Group */}
       <button type="button" onClick={onUndo} className={buttonClass} title="Undo">
         <Undo className="h-4 w-4" />
