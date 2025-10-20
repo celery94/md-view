@@ -186,6 +186,7 @@ export default function RootLayout({
         <link rel="canonical" href="https://www.md-view.com/" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="color-scheme" content="dark light" />
+        <meta name="google-adsense-account" content="ca-pub-5786030221199442" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
