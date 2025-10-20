@@ -179,13 +179,13 @@ export default function Home() {
   const hasUserToggledTocRef = useRef(false);
 
   const primaryActionButton =
-    'inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 px-2.5 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(14,165,233,0.3)] transition-all duration-200 hover:shadow-[0_6px_20px_rgba(14,165,233,0.4)] hover:scale-105 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm';
+    'inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 px-3 py-2 text-xs font-semibold text-white shadow-[0_4px_16px_rgba(14,165,233,0.35)] transition-all duration-200 hover:shadow-[0_8px_24px_rgba(14,165,233,0.45)] hover:scale-[1.02] hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-4 md:py-2 md:text-sm';
   const secondaryActionButton =
-    'inline-flex items-center gap-1.5 rounded-xl px-2 py-1.5 text-xs font-medium text-slate-600 transition-all duration-200 hover:text-slate-900 hover:bg-gradient-to-br hover:from-slate-50 hover:to-slate-100 hover:shadow-sm active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-2.5 md:text-sm';
+    'inline-flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-xs font-medium text-slate-600 transition-all duration-200 hover:text-slate-900 hover:bg-gradient-to-br hover:from-slate-100 hover:via-slate-50 hover:to-white hover:shadow-md hover:scale-[1.02] active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm';
   const quietNavButton =
-    'inline-flex items-center gap-1.5 rounded-xl px-2 py-1.5 text-xs font-medium text-slate-600 transition-all duration-200 hover:text-slate-900 hover:bg-gradient-to-br hover:from-slate-50 hover:to-slate-100 hover:shadow-sm active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-2.5 md:text-sm';
+    'inline-flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-xs font-medium text-slate-600 transition-all duration-200 hover:text-slate-900 hover:bg-gradient-to-br hover:from-slate-100 hover:via-slate-50 hover:to-white hover:shadow-md hover:scale-[1.02] active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm';
   const statPillClass =
-    'hidden xl:flex items-center gap-2 rounded-full border border-slate-200/80 bg-gradient-to-br from-white to-slate-50 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 shadow-[0_2px_8px_rgba(15,23,42,0.08)] backdrop-blur-sm';
+    'hidden xl:flex items-center gap-2.5 rounded-full border border-slate-200/60 bg-gradient-to-r from-white via-slate-50 to-white px-5 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-600 shadow-[0_2px_12px_rgba(15,23,42,0.1)] backdrop-blur-sm ring-1 ring-slate-100/50';
   const wordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
   const lineCount = markdown.split('\n').length;
   const fileSizeKb = Math.max(1, Math.round(new Blob([markdown]).size / 1024));
@@ -201,9 +201,9 @@ export default function Home() {
           : 'text-slate-600 hover:text-slate-900',
   ].join(' ');
   const mobilePrimaryActionButton =
-    'inline-flex flex-none items-center gap-1.5 rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 px-3 py-2.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(14,165,233,0.3)] transition-all duration-200 hover:shadow-[0_6px_20px_rgba(14,165,233,0.4)] hover:scale-105 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
+    'inline-flex flex-none items-center gap-2 rounded-xl bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 px-4 py-3 text-xs font-bold text-white shadow-[0_4px_16px_rgba(14,165,233,0.35)] transition-all duration-200 hover:shadow-[0_6px_24px_rgba(14,165,233,0.45)] hover:scale-[1.02] hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
   const mobileActionButton =
-    'inline-flex flex-none items-center gap-1.5 rounded-xl border border-slate-200/80 bg-gradient-to-br from-white/90 to-slate-50/80 px-3 py-2.5 text-xs font-medium text-slate-700 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md hover:scale-105 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
+    'inline-flex flex-none items-center gap-2 rounded-xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50/50 to-white px-4 py-3 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-lg hover:scale-[1.02] hover:border-slate-300/80 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
   const mobileCopyButtonClass = [
     mobileActionButton,
     copyStatus === 'styled'
@@ -218,7 +218,7 @@ export default function Home() {
     .join(' ');
   const hasHeadings = tableOfContents.length > 0;
   const tocReopenButtonClass =
-    'fixed bottom-4 right-4 z-40 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-sky-500 to-sky-600 px-4 py-2.5 text-xs font-semibold text-white shadow-[0_6px_24px_rgba(14,165,233,0.35)] transition-all duration-200 hover:shadow-[0_8px_32px_rgba(14,165,233,0.45)] hover:scale-105 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
+    'fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 px-5 py-3 text-sm font-bold text-white shadow-[0_8px_32px_rgba(14,165,233,0.4)] transition-all duration-200 hover:shadow-[0_12px_40px_rgba(14,165,233,0.5)] hover:scale-105 hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
 
   useEffect(() => {
     activeHeadingRef.current = activeHeadingId;
@@ -770,8 +770,8 @@ export default function Home() {
       <div
         className={`min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-white to-slate-100 text-slate-900 ${isDocumentViewOpen ? 'print:hidden' : ''}`}
       >
-        <header className="sticky top-0 z-30 bg-gradient-to-b from-white/98 via-white/95 to-white/92 shadow-[0_1px_0_rgba(148,163,184,0.1),0_12px_32px_-16px_rgba(15,23,42,0.15)] backdrop-blur-xl border-b border-slate-100/50 supports-[backdrop-filter]:bg-white/80">
-          <div className="flex w-full flex-col gap-1.5 px-4 py-2 sm:px-6 sm:py-3 lg:px-10 xl:px-14 animate-fade-in">
+        <header className="sticky top-0 z-30 bg-gradient-to-b from-white via-white/98 to-white/95 shadow-[0_1px_0_rgba(148,163,184,0.15),0_16px_40px_-20px_rgba(15,23,42,0.18)] backdrop-blur-xl border-b border-slate-200/60 supports-[backdrop-filter]:bg-white/85">
+          <div className="flex w-full flex-col gap-2 px-4 py-3 sm:px-6 sm:py-4 lg:px-10 xl:px-16 animate-fade-in">
             <div
               ref={navRowRef}
               className="flex flex-col gap-1.5 md:flex-row md:items-center md:justify-between md:gap-3"
@@ -779,18 +779,20 @@ export default function Home() {
               <div className="flex items-center gap-2 md:gap-2.5">
                 <Link
                   href="/"
-                  className="group flex items-center gap-2 rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white to-slate-50/50 px-3 py-2 shadow-[0_2px_8px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-300 hover:shadow-[0_4px_16px_rgba(15,23,42,0.12)] hover:scale-105 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="group flex items-center gap-2.5 rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/30 to-white px-4 py-2.5 shadow-[0_4px_12px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-300 hover:shadow-[0_6px_20px_rgba(15,23,42,0.14)] hover:scale-[1.02] hover:border-slate-300/70 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   aria-label="MD-View Home"
                   title="MD-View Home"
                 >
                   <img
                     src="/md-view-icon.svg"
                     alt="MD-View logo"
-                    className="h-8 w-8 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 p-1.5 ring-1 ring-slate-200/80 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    className="h-9 w-9 rounded-xl bg-gradient-to-br from-slate-100 via-slate-50 to-white p-2 ring-1 ring-slate-200/80 shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-lg"
                   />
                   <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
-                    <h1 className="text-lg font-semibold leading-tight text-slate-900">MD-View</h1>
-                    <p className="text-xs font-medium text-slate-500">Markdown Editor</p>
+                    <h1 className="text-lg font-bold leading-tight tracking-tight text-slate-900">
+                      MD-View
+                    </h1>
+                    <p className="text-xs font-semibold text-slate-500">Markdown Editor</p>
                   </div>
                 </Link>
 
@@ -964,7 +966,7 @@ export default function Home() {
           >
             {(viewMode === 'editor' || viewMode === 'split') && (
               <section
-                className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white to-slate-50/30 p-4 sm:p-6 lg:p-7 shadow-[0_8px_32px_rgba(15,23,42,0.08),0_2px_8px_rgba(15,23,42,0.04)] backdrop-blur-sm animate-scale-in"
+                className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/20 to-white p-5 sm:p-7 lg:p-8 shadow-[0_12px_40px_rgba(15,23,42,0.1),0_4px_12px_rgba(15,23,42,0.05)] backdrop-blur-sm animate-scale-in ring-1 ring-slate-100/50"
                 style={
                   viewMode === 'split' ? { width: '100%', flexBasis: `${ratio * 100}%` } : undefined
                 }
@@ -972,10 +974,12 @@ export default function Home() {
                 onDragOver={onDragOver}
                 aria-label="Markdown editor section"
               >
-                <div className="mb-4 flex flex-shrink-0 items-start justify-between gap-3">
+                <div className="mb-5 flex flex-shrink-0 items-start justify-between gap-3">
                   <div>
-                    <h2 className="text-lg font-bold text-slate-900 tracking-tight">Markdown Editor</h2>
-                    <p className="text-xs text-slate-500 mt-0.5">
+                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+                      Markdown Editor
+                    </h2>
+                    <p className="text-sm text-slate-600 mt-1 font-medium">
                       Type your markdown or drop a .md file to load it instantly
                     </p>
                   </div>
@@ -1015,7 +1019,7 @@ export default function Home() {
 
             {(viewMode === 'preview' || viewMode === 'split') && (
               <section
-                className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white to-slate-50/30 p-4 sm:p-6 lg:p-7 shadow-[0_8px_32px_rgba(15,23,42,0.08),0_2px_8px_rgba(15,23,42,0.04)] backdrop-blur-sm animate-scale-in"
+                className="relative flex w-full flex-1 min-h-0 flex-col rounded-3xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/20 to-white p-5 sm:p-7 lg:p-8 shadow-[0_12px_40px_rgba(15,23,42,0.1),0_4px_12px_rgba(15,23,42,0.05)] backdrop-blur-sm animate-scale-in ring-1 ring-slate-100/50"
                 style={
                   viewMode === 'split'
                     ? { width: '100%', flexBasis: `${(1 - ratio) * 100}%` }
@@ -1023,10 +1027,12 @@ export default function Home() {
                 }
                 aria-label="Markdown preview section"
               >
-                <div className="mb-4 flex flex-shrink-0 items-center justify-between gap-3">
+                <div className="mb-5 flex flex-shrink-0 items-center justify-between gap-3">
                   <div>
-                    <h2 className="text-lg font-bold text-slate-900 tracking-tight">Live Preview</h2>
-                    <p className="text-xs text-slate-500 mt-0.5">
+                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+                      Live Preview
+                    </h2>
+                    <p className="text-sm text-slate-600 mt-1 font-medium">
                       See the rendered markdown with your chosen theme
                     </p>
                   </div>

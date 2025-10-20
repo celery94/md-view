@@ -11,130 +11,137 @@ interface MarkdownEditorProps {
   scrollToPercentage?: number;
 }
 
-const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
-  function MarkdownEditor({ value, onChange, onScroll, scrollToPercentage }, ref) {
-    const internalRef = useRef<HTMLTextAreaElement>(null);
-    const isScrollingSelfRef = useRef(false);
-    const [contextMenu, setContextMenu] = useState<{
-      x: number;
-      y: number;
-      isVisible: boolean;
-    }>({ x: 0, y: 0, isVisible: false });
-    const [isFormatting, setIsFormatting] = useState(false);
+const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(function MarkdownEditor(
+  { value, onChange, onScroll, scrollToPercentage },
+  ref
+) {
+  const internalRef = useRef<HTMLTextAreaElement>(null);
+  const isScrollingSelfRef = useRef(false);
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+    isVisible: boolean;
+  }>({ x: 0, y: 0, isVisible: false });
+  const [isFormatting, setIsFormatting] = useState(false);
 
-    // Use the forwarded ref or the internal ref
-    const textareaRef = (ref as React.RefObject<HTMLTextAreaElement>) || internalRef;
+  // Use the forwarded ref or the internal ref
+  const textareaRef = (ref as React.RefObject<HTMLTextAreaElement>) || internalRef;
 
-    const handleScroll = useCallback((e: Event) => {
+  const handleScroll = useCallback(
+    (e: Event) => {
       if (isScrollingSelfRef.current) return;
-      
+
       const target = e.target as HTMLTextAreaElement;
       const scrollTop = target.scrollTop;
       const scrollHeight = target.scrollHeight;
       const clientHeight = target.clientHeight;
-      
+
       if (scrollHeight <= clientHeight) return;
-      
+
       const scrollPercentage = scrollTop / (scrollHeight - clientHeight);
       onScroll?.(scrollPercentage);
-    }, [onScroll]);
+    },
+    [onScroll]
+  );
 
-    // Handle external scroll commands
-    useEffect(() => {
-      if (scrollToPercentage === undefined || !textareaRef.current) return;
-      
-      const textarea = textareaRef.current;
-      const scrollHeight = textarea.scrollHeight;
-      const clientHeight = textarea.clientHeight;
-      
-      if (scrollHeight <= clientHeight) return;
-      
-      isScrollingSelfRef.current = true;
-      textarea.scrollTop = scrollToPercentage * (scrollHeight - clientHeight);
-      
-      // Reset flag after a short delay
-      setTimeout(() => {
-        isScrollingSelfRef.current = false;
-      }, 100);
-    }, [scrollToPercentage, textareaRef]);
+  // Handle external scroll commands
+  useEffect(() => {
+    if (scrollToPercentage === undefined || !textareaRef.current) return;
 
-    // Add scroll event listener
-    useEffect(() => {
-      const textarea = textareaRef.current;
-      if (!textarea || !onScroll) return;
-      
-      textarea.addEventListener('scroll', handleScroll);
-      return () => textarea.removeEventListener('scroll', handleScroll);
-    }, [handleScroll, onScroll, textareaRef]);
+    const textarea = textareaRef.current;
+    const scrollHeight = textarea.scrollHeight;
+    const clientHeight = textarea.clientHeight;
 
-    // Handle right-click context menu
-    const handleContextMenu = useCallback((e: React.MouseEvent) => {
-      e.preventDefault();
-      setContextMenu({
-        x: e.clientX,
-        y: e.clientY,
-        isVisible: true,
-      });
-    }, []);
+    if (scrollHeight <= clientHeight) return;
 
-    // Close context menu
-    const closeContextMenu = useCallback(() => {
-      setContextMenu(prev => ({ ...prev, isVisible: false }));
-    }, []);
+    isScrollingSelfRef.current = true;
+    textarea.scrollTop = scrollToPercentage * (scrollHeight - clientHeight);
 
-    // Format document using Prettier
-    const handleFormatDocument = useCallback(async () => {
-      if (isFormatting) return; // Prevent multiple concurrent formatting
-      
-      setIsFormatting(true);
-      try {
-        const formatted = await formatMarkdown(value);
-        if (formatted !== value) {
-          onChange(formatted);
-        }
-      } catch (error) {
-        console.error('Failed to format document:', error);
-      } finally {
-        setIsFormatting(false);
+    // Reset flag after a short delay
+    setTimeout(() => {
+      isScrollingSelfRef.current = false;
+    }, 100);
+  }, [scrollToPercentage, textareaRef]);
+
+  // Add scroll event listener
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea || !onScroll) return;
+
+    textarea.addEventListener('scroll', handleScroll);
+    return () => textarea.removeEventListener('scroll', handleScroll);
+  }, [handleScroll, onScroll, textareaRef]);
+
+  // Handle right-click context menu
+  const handleContextMenu = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setContextMenu({
+      x: e.clientX,
+      y: e.clientY,
+      isVisible: true,
+    });
+  }, []);
+
+  // Close context menu
+  const closeContextMenu = useCallback(() => {
+    setContextMenu((prev) => ({ ...prev, isVisible: false }));
+  }, []);
+
+  // Format document using Prettier
+  const handleFormatDocument = useCallback(async () => {
+    if (isFormatting) return; // Prevent multiple concurrent formatting
+
+    setIsFormatting(true);
+    try {
+      const formatted = await formatMarkdown(value);
+      if (formatted !== value) {
+        onChange(formatted);
       }
-    }, [value, onChange, isFormatting]);
+    } catch (error) {
+      console.error('Failed to format document:', error);
+    } finally {
+      setIsFormatting(false);
+    }
+  }, [value, onChange, isFormatting]);
 
-    // Handle keyboard shortcuts
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+  // Handle keyboard shortcuts
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
       // Shift+Alt+F to format document (like VS Code)
       if (e.shiftKey && e.altKey && e.key === 'F') {
         e.preventDefault();
         handleFormatDocument();
       }
-    }, [handleFormatDocument]);
+    },
+    [handleFormatDocument]
+  );
 
-    return (
-      <>
-        <textarea
-          ref={textareaRef}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onContextMenu={handleContextMenu}
-          onKeyDown={handleKeyDown}
-          placeholder="Start typing your markdown here..."
-          className="w-full flex-1 min-h-[20rem] md:min-h-0 resize-none overflow-auto rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-50/50 to-white p-4 font-mono text-sm leading-relaxed text-slate-800 shadow-inner transition-all duration-200 outline-none placeholder:text-slate-400 focus-visible:border-sky-300 focus-visible:ring-4 focus-visible:ring-sky-100 focus-visible:shadow-[0_0_0_4px_rgba(56,189,248,0.1)]"
-          spellCheck={false}
-          aria-label="Markdown editor textarea"
-          aria-describedby="editor-description"
-          role="textbox"
-          aria-multiline="true"
-        />
-        <ContextMenu
-          x={contextMenu.x}
-          y={contextMenu.y}
-          isVisible={contextMenu.isVisible}
-          isFormatting={isFormatting}
-          onClose={closeContextMenu}
-          onFormatDocument={handleFormatDocument}
-        />
-      </>
-    );
-  }
-);
+  return (
+    <>
+      <textarea
+        ref={textareaRef}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onContextMenu={handleContextMenu}
+        onKeyDown={handleKeyDown}
+        placeholder="Start typing your markdown here..."
+        className="w-full flex-1 min-h-[20rem] md:min-h-0 resize-none overflow-auto rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-50/50 to-white p-4 font-mono text-sm leading-relaxed text-slate-800 shadow-inner transition-all duration-200 outline-none placeholder:text-slate-400 focus-visible:border-sky-300 focus-visible:ring-4 focus-visible:ring-sky-100 focus-visible:shadow-[0_0_0_4px_rgba(56,189,248,0.1)]"
+        spellCheck={false}
+        aria-label="Markdown editor textarea"
+        aria-describedby="editor-description"
+        role="textbox"
+        aria-multiline="true"
+      />
+      <ContextMenu
+        x={contextMenu.x}
+        y={contextMenu.y}
+        isVisible={contextMenu.isVisible}
+        isFormatting={isFormatting}
+        onClose={closeContextMenu}
+        onFormatDocument={handleFormatDocument}
+      />
+    </>
+  );
+});
 
 export default MarkdownEditor;

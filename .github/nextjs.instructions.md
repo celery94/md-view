@@ -1,5 +1,5 @@
 ---
-applyTo: "**"
+applyTo: '**'
 ---
 
 # Next.js Best Practices for LLMs (2025)
@@ -44,7 +44,7 @@ This document summarizes the latest, authoritative best practices for building, 
 
 ```tsx
 // Server Component
-import DashboardNavbar from "@/components/DashboardNavbar";
+import DashboardNavbar from '@/components/DashboardNavbar';
 
 export default async function DashboardPage() {
   // ...server logic...

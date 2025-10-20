@@ -15,17 +15,19 @@ export const themes: Theme[] = [
     displayName: 'Default',
     description: 'Clean and minimal design',
     classes: {
-      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-6 shadow-sm backdrop-blur',
-      prose: 'prose prose-slate max-w-none'
-    }
+      container:
+        'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-6 shadow-sm backdrop-blur',
+      prose: 'prose prose-slate max-w-none',
+    },
   },
   {
     name: 'dark',
     displayName: 'Dark',
     description: 'Dark theme for low-light environments',
     classes: {
-      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-slate-950/70 p-4 sm:p-6 shadow-sm backdrop-blur',
-      prose: 'prose prose-invert max-w-none dark-theme'
+      container:
+        'h-full overflow-auto rounded-3xl border border-white/10 bg-slate-950/70 p-4 sm:p-6 shadow-sm backdrop-blur',
+      prose: 'prose prose-invert max-w-none dark-theme',
     },
     customStyles: `
       .dark-theme {
@@ -99,15 +101,16 @@ export const themes: Theme[] = [
       .dark-theme .mdv-code .copy-button .text-green-600 {
         color: #10b981 !important;
       }
-    `
+    `,
   },
   {
     name: 'github',
     displayName: 'GitHub',
     description: 'GitHub-like styling',
     classes: {
-      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-6 shadow-sm backdrop-blur',
-      prose: 'prose prose-slate max-w-none github-theme'
+      container:
+        'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-6 shadow-sm backdrop-blur',
+      prose: 'prose prose-slate max-w-none github-theme',
     },
     customStyles: `
       .github-theme h1 { 
@@ -154,15 +157,16 @@ export const themes: Theme[] = [
       .github-theme table td {
         border: 1px solid #d0d7de;
       }
-    `
+    `,
   },
   {
     name: 'notion',
     displayName: 'Notion',
     description: 'Notion-inspired design',
     classes: {
-      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-6 backdrop-blur',
-      prose: 'prose prose-slate max-w-none notion-theme'
+      container:
+        'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-6 backdrop-blur',
+      prose: 'prose prose-slate max-w-none notion-theme',
     },
     customStyles: `
       .notion-theme {
@@ -201,15 +205,16 @@ export const themes: Theme[] = [
         padding: 0.2em 0.4em;
         font-size: 85%;
       }
-    `
+    `,
   },
   {
     name: 'medium',
     displayName: 'Medium',
     description: 'Medium.com-style typography',
     classes: {
-      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-8 backdrop-blur',
-      prose: 'prose prose-slate max-w-none medium-theme'
+      container:
+        'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-4 sm:p-8 backdrop-blur',
+      prose: 'prose prose-slate max-w-none medium-theme',
     },
     customStyles: `
       .medium-theme {
@@ -277,15 +282,16 @@ export const themes: Theme[] = [
         font-family: Menlo, Monaco, "Courier New", Courier, monospace;
         font-size: 16px;
       }
-    `
+    `,
   },
   {
     name: 'paper',
     displayName: 'Paper',
     description: 'Academic paper style',
     classes: {
-      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-5 sm:p-10 xl:p-12 shadow-lg backdrop-blur',
-      prose: 'prose prose-slate max-w-none paper-theme'
+      container:
+        'h-full overflow-auto rounded-3xl border border-white/10 bg-white/95 p-5 sm:p-10 xl:p-12 shadow-lg backdrop-blur',
+      prose: 'prose prose-slate max-w-none paper-theme',
     },
     customStyles: `
       .paper-theme {
@@ -352,15 +358,16 @@ export const themes: Theme[] = [
         background: #f0f0f0;
         font-weight: bold;
       }
-    `
+    `,
   },
   {
     name: 'minimal',
     displayName: 'Minimal',
     description: 'Ultra-clean minimal design',
     classes: {
-      container: 'h-full overflow-auto rounded-3xl border border-white/10 bg-slate-100/90 p-4 sm:p-6 backdrop-blur',
-      prose: 'prose prose-gray max-w-none minimal-theme'
+      container:
+        'h-full overflow-auto rounded-3xl border border-white/10 bg-slate-100/90 p-4 sm:p-6 backdrop-blur',
+      prose: 'prose prose-gray max-w-none minimal-theme',
     },
     customStyles: `
       .minimal-theme {
@@ -423,15 +430,16 @@ export const themes: Theme[] = [
         font-weight: 600;
         color: #555;
       }
-    `
+    `,
   },
   {
     name: 'terminal',
     displayName: 'Terminal',
     description: 'Retro terminal/console style',
     classes: {
-      container: 'h-full overflow-auto rounded-3xl border border-emerald-500/70 bg-black/90 p-4 sm:p-6 shadow-lg',
-      prose: 'prose prose-invert max-w-none terminal-theme'
+      container:
+        'h-full overflow-auto rounded-3xl border border-emerald-500/70 bg-black/90 p-4 sm:p-6 shadow-lg',
+      prose: 'prose prose-invert max-w-none terminal-theme',
     },
     customStyles: `
       .terminal-theme {
@@ -517,14 +525,14 @@ export const themes: Theme[] = [
       .terminal-theme .mdv-code .copy-button .text-green-600 {
         color: #00ff00 !important;
       }
-    `
-  }
+    `,
+  },
 ];
 
 export function getTheme(themeName: string): Theme {
-  return themes.find(theme => theme.name === themeName) || themes[0];
+  return themes.find((theme) => theme.name === themeName) || themes[0];
 }
 
 export function getThemeNames(): string[] {
-  return themes.map(theme => theme.name);
+  return themes.map((theme) => theme.name);
 }

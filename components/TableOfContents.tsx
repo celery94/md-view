@@ -32,7 +32,7 @@ export default function TableOfContents({
 
   return (
     <nav
-      className={`flex h-full flex-col gap-3 rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white/98 to-slate-50/50 p-5 shadow-[0_8px_32px_rgba(15,23,42,0.12)] backdrop-blur-xl animate-slide-in ${
+      className={`flex h-full flex-col gap-4 rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/30 to-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.15)] backdrop-blur-xl animate-slide-in ring-1 ring-slate-100/50 ${
         className ?? ''
       }`}
       aria-label="Table of contents"
@@ -40,14 +40,14 @@ export default function TableOfContents({
     >
       <div className="flex items-center justify-between gap-2">
         <div>
-          <p className="text-sm font-bold text-slate-900 tracking-tight">Table of Contents</p>
-          <p className="text-xs text-slate-500 mt-0.5">Jump across document sections</p>
+          <p className="text-base font-bold text-slate-900 tracking-tight">Table of Contents</p>
+          <p className="text-xs text-slate-600 mt-1 font-medium">Jump across document sections</p>
         </div>
         {onClose ? (
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-transparent bg-slate-100 text-slate-500 transition-all duration-200 hover:bg-slate-200 hover:text-slate-700 hover:scale-110 active:scale-90 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-gradient-to-br from-white to-slate-50 text-slate-500 shadow-sm transition-all duration-200 hover:bg-slate-100 hover:text-slate-700 hover:scale-110 hover:shadow-md active:scale-90 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             aria-label="Close table of contents"
           >
             <X className="h-4 w-4" aria-hidden="true" />
@@ -69,10 +69,10 @@ export default function TableOfContents({
                 <button
                   type="button"
                   onClick={handleSelect(heading.id)}
-                  className={`w-full rounded-xl px-3 py-2.5 text-left transition-all duration-200 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                  className={`w-full rounded-xl px-3.5 py-3 text-left transition-all duration-200 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                     isActive
-                      ? 'bg-gradient-to-br from-sky-100 to-sky-50 font-semibold text-sky-700 shadow-[0_2px_8px_rgba(14,165,233,0.2)] scale-105'
-                      : 'text-slate-600 hover:bg-gradient-to-br hover:from-slate-100 hover:to-slate-50 hover:text-slate-900 hover:shadow-sm active:scale-95'
+                      ? 'bg-gradient-to-br from-sky-100 via-sky-50 to-blue-50 font-bold text-sky-700 shadow-[0_4px_12px_rgba(14,165,233,0.25)] scale-[1.02] ring-1 ring-sky-200/50'
+                      : 'text-slate-600 hover:bg-gradient-to-br hover:from-slate-100 hover:via-slate-50 hover:to-white hover:text-slate-900 hover:shadow-md hover:scale-[1.02] active:scale-95'
                   }`}
                   style={{ paddingLeft: `${padding + 0.75}rem` }}
                   aria-current={isActive ? 'true' : undefined}

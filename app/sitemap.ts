@@ -1,8 +1,8 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from 'next';
 
-const baseUrl = 'https://www.md-view.com'
+const baseUrl = 'https://www.md-view.com';
 
-const lastModified = new Date('2025-09-26')
+const lastModified = new Date('2025-09-26');
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -18,5 +18,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
-  ]
+  ];
 }

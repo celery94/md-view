@@ -1,6 +1,22 @@
 'use client';
 
-import { Bold, Italic, Strikethrough, Heading1, Heading2, Heading3, List, ListOrdered, Link, Code, Quote, Table, Image as ImageIcon, Undo, Redo } from 'lucide-react';
+import {
+  Bold,
+  Italic,
+  Strikethrough,
+  Heading1,
+  Heading2,
+  Heading3,
+  List,
+  ListOrdered,
+  Link,
+  Code,
+  Quote,
+  Table,
+  Image as ImageIcon,
+  Undo,
+  Redo,
+} from 'lucide-react';
 
 interface ToolbarProps {
   onBold: () => void;
@@ -20,12 +36,28 @@ interface ToolbarProps {
   onRedo: () => void;
 }
 
-export default function Toolbar({ onBold, onItalic, onStrikethrough, onH1, onH2, onH3, onList, onOrderedList, onLink, onCode, onQuote, onTable, onImage, onUndo, onRedo }: ToolbarProps) {
+export default function Toolbar({
+  onBold,
+  onItalic,
+  onStrikethrough,
+  onH1,
+  onH2,
+  onH3,
+  onList,
+  onOrderedList,
+  onLink,
+  onCode,
+  onQuote,
+  onTable,
+  onImage,
+  onUndo,
+  onRedo,
+}: ToolbarProps) {
   const buttonClass =
-    "rounded-xl p-2 text-slate-500 transition-all duration-200 hover:bg-gradient-to-br hover:from-slate-100 hover:to-slate-50 hover:text-slate-900 hover:shadow-sm active:scale-90 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+    'rounded-xl p-2.5 text-slate-600 transition-all duration-200 hover:bg-gradient-to-br hover:from-sky-100 hover:via-sky-50 hover:to-blue-50 hover:text-sky-700 hover:shadow-md hover:scale-105 active:scale-90 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
 
   return (
-    <div className="flex flex-wrap items-center gap-1.5 rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white to-slate-50/50 p-2.5 shadow-[0_2px_8px_rgba(15,23,42,0.08)] backdrop-blur-sm animate-fade-in">
+    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/30 to-white p-3 shadow-[0_4px_12px_rgba(15,23,42,0.1)] backdrop-blur-sm animate-fade-in ring-1 ring-slate-100/50">
       {/* Undo/Redo Group */}
       <button type="button" onClick={onUndo} className={buttonClass} title="Undo">
         <Undo className="h-4 w-4" />
@@ -33,9 +65,9 @@ export default function Toolbar({ onBold, onItalic, onStrikethrough, onH1, onH2,
       <button type="button" onClick={onRedo} className={buttonClass} title="Redo">
         <Redo className="h-4 w-4" />
       </button>
-      
+
       <div className="mx-1 h-6 w-px bg-slate-200" />
-      
+
       {/* Text Formatting Group */}
       <button type="button" onClick={onBold} className={buttonClass} title="Bold">
         <Bold className="h-4 w-4" />
@@ -49,9 +81,9 @@ export default function Toolbar({ onBold, onItalic, onStrikethrough, onH1, onH2,
       <button type="button" onClick={onCode} className={buttonClass} title="Inline Code">
         <Code className="h-4 w-4" />
       </button>
-      
+
       <div className="mx-1 h-6 w-px bg-slate-200" />
-      
+
       {/* Headings Group */}
       <button type="button" onClick={onH1} className={buttonClass} title="Heading 1">
         <Heading1 className="h-4 w-4" />
@@ -62,9 +94,9 @@ export default function Toolbar({ onBold, onItalic, onStrikethrough, onH1, onH2,
       <button type="button" onClick={onH3} className={buttonClass} title="Heading 3">
         <Heading3 className="h-4 w-4" />
       </button>
-      
+
       <div className="mx-1 h-6 w-px bg-slate-200" />
-      
+
       {/* Lists and Structure Group */}
       <button type="button" onClick={onList} className={buttonClass} title="Bulleted List">
         <List className="h-4 w-4" />
@@ -75,9 +107,9 @@ export default function Toolbar({ onBold, onItalic, onStrikethrough, onH1, onH2,
       <button type="button" onClick={onQuote} className={buttonClass} title="Blockquote">
         <Quote className="h-4 w-4" />
       </button>
-      
+
       <div className="mx-1 h-6 w-px bg-slate-200" />
-      
+
       {/* Media and Links Group */}
       <button type="button" onClick={onLink} className={buttonClass} title="Link">
         <Link className="h-4 w-4" />

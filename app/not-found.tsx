@@ -1,14 +1,15 @@
-import { Metadata } from 'next'
-import Link from 'next/link'
+import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: '404 - Page Not Found | MD-View',
-  description: 'The page you are looking for could not be found. Return to MD-View markdown editor.',
+  description:
+    'The page you are looking for could not be found. Return to MD-View markdown editor.',
   robots: {
     index: false,
     follow: false,
   },
-}
+};
 
 export default function NotFound() {
   return (
@@ -41,5 +42,5 @@ export default function NotFound() {
         </div>
       </div>
     </div>
-  )
+  );
 }

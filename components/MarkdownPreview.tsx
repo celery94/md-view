@@ -78,7 +78,9 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
         </button>
       </div>
       <pre ref={preRef}>
-        <code className={className} {...props}>{children}</code>
+        <code className={className} {...props}>
+          {children}
+        </code>
       </pre>
     </div>
   );
@@ -160,148 +162,149 @@ const components: Components = {
   },
 };
 
-const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(
-  function MarkdownPreview(
-    {
-      content,
-      theme = 'default',
-      onScroll,
-      scrollToPercentage,
-      variant = 'app',
-      className,
-      contentClassName,
-    },
-    ref
-  ) {
-    const [hlPlugin, setHlPlugin] = useState<any>(null);
-    const currentTheme = getTheme(theme);
-    const internalRef = useRef<HTMLDivElement>(null);
-    const isScrollingSelfRef = useRef(false);
+const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(function MarkdownPreview(
+  {
+    content,
+    theme = 'default',
+    onScroll,
+    scrollToPercentage,
+    variant = 'app',
+    className,
+    contentClassName,
+  },
+  ref
+) {
+  const [hlPlugin, setHlPlugin] = useState<any>(null);
+  const currentTheme = getTheme(theme);
+  const internalRef = useRef<HTMLDivElement>(null);
+  const isScrollingSelfRef = useRef(false);
 
-    // Use the forwarded ref or the internal ref
-    const previewRef = (ref as React.RefObject<HTMLDivElement>) || internalRef;
+  // Use the forwarded ref or the internal ref
+  const previewRef = (ref as React.RefObject<HTMLDivElement>) || internalRef;
 
-    const handleScroll = useCallback((e: Event) => {
+  const handleScroll = useCallback(
+    (e: Event) => {
       if (isScrollingSelfRef.current) return;
-      
+
       const target = e.target as HTMLDivElement;
       const scrollTop = target.scrollTop;
       const scrollHeight = target.scrollHeight;
       const clientHeight = target.clientHeight;
-      
+
       if (scrollHeight <= clientHeight) return;
-      
+
       const scrollPercentage = scrollTop / (scrollHeight - clientHeight);
       onScroll?.(scrollPercentage);
-    }, [onScroll]);
+    },
+    [onScroll]
+  );
 
-    // Handle external scroll commands
-    useEffect(() => {
-      if (scrollToPercentage === undefined || !previewRef.current) return;
-      
-      const preview = previewRef.current;
-      const scrollHeight = preview.scrollHeight;
-      const clientHeight = preview.clientHeight;
-      
-      if (scrollHeight <= clientHeight) return;
-      
-      isScrollingSelfRef.current = true;
-      preview.scrollTop = scrollToPercentage * (scrollHeight - clientHeight);
-      
-      // Reset flag after a short delay
-      setTimeout(() => {
-        isScrollingSelfRef.current = false;
-      }, 100);
-    }, [scrollToPercentage, previewRef]);
+  // Handle external scroll commands
+  useEffect(() => {
+    if (scrollToPercentage === undefined || !previewRef.current) return;
 
-    // Add scroll event listener
-    useEffect(() => {
-      const preview = previewRef.current;
-      if (!preview || !onScroll) return;
-      
-      preview.addEventListener('scroll', handleScroll);
-      return () => preview.removeEventListener('scroll', handleScroll);
-    }, [handleScroll, onScroll, previewRef]);
+    const preview = previewRef.current;
+    const scrollHeight = preview.scrollHeight;
+    const clientHeight = preview.clientHeight;
 
-    useEffect(() => {
-      let active = true;
-      import('rehype-highlight').then((m) => {
-        if (active) setHlPlugin(() => (m as any).default ?? (m as any));
-      });
-      return () => { active = false };
-    }, []);
+    if (scrollHeight <= clientHeight) return;
 
-    const rehypePlugins = useMemo(() => (hlPlugin ? [hlPlugin] : []), [hlPlugin]);
+    isScrollingSelfRef.current = true;
+    preview.scrollTop = scrollToPercentage * (scrollHeight - clientHeight);
 
-    // Inject custom theme styles and syntax highlighting
-    useEffect(() => {
-      const styleId = 'theme-custom-styles';
-      let styleElement = document.getElementById(styleId) as HTMLStyleElement;
-      
-      if (!styleElement) {
-        styleElement = document.createElement('style');
-        styleElement.id = styleId;
-        document.head.appendChild(styleElement);
-      }
-      
-      // Load appropriate syntax highlighting theme
-      let syntaxTheme = '';
-      if (theme === 'dark' || theme === 'terminal') {
-        // Use dark syntax highlighting
-        syntaxTheme = `
+    // Reset flag after a short delay
+    setTimeout(() => {
+      isScrollingSelfRef.current = false;
+    }, 100);
+  }, [scrollToPercentage, previewRef]);
+
+  // Add scroll event listener
+  useEffect(() => {
+    const preview = previewRef.current;
+    if (!preview || !onScroll) return;
+
+    preview.addEventListener('scroll', handleScroll);
+    return () => preview.removeEventListener('scroll', handleScroll);
+  }, [handleScroll, onScroll, previewRef]);
+
+  useEffect(() => {
+    let active = true;
+    import('rehype-highlight').then((m) => {
+      if (active) setHlPlugin(() => (m as any).default ?? (m as any));
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const rehypePlugins = useMemo(() => (hlPlugin ? [hlPlugin] : []), [hlPlugin]);
+
+  // Inject custom theme styles and syntax highlighting
+  useEffect(() => {
+    const styleId = 'theme-custom-styles';
+    let styleElement = document.getElementById(styleId) as HTMLStyleElement;
+
+    if (!styleElement) {
+      styleElement = document.createElement('style');
+      styleElement.id = styleId;
+      document.head.appendChild(styleElement);
+    }
+
+    // Load appropriate syntax highlighting theme
+    let syntaxTheme = '';
+    if (theme === 'dark' || theme === 'terminal') {
+      // Use dark syntax highlighting
+      syntaxTheme = `
           @import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css');
         `;
-      } else {
-        // Use light syntax highlighting (default)
-        syntaxTheme = `
+    } else {
+      // Use light syntax highlighting (default)
+      syntaxTheme = `
           @import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css');
         `;
-      }
-      
-      styleElement.textContent = syntaxTheme + (currentTheme.customStyles || '');
-      
-      return () => {
-        // Keep the style element for theme switching, just update content
-      };
-    }, [currentTheme, theme]);
+    }
 
-    const containerClasses = [
-      'markdown-preview',
-      variant === 'app'
-        ? `${currentTheme.classes.container} flex-1 min-h-0 overflow-auto`
-        : 'document-preview w-full overflow-auto print:overflow-visible',
-      className,
-    ]
-      .filter(Boolean)
-      .join(' ');
+    styleElement.textContent = syntaxTheme + (currentTheme.customStyles || '');
 
-    const proseClasses = [currentTheme.classes.prose, contentClassName]
-      .filter(Boolean)
-      .join(' ');
+    return () => {
+      // Keep the style element for theme switching, just update content
+    };
+  }, [currentTheme, theme]);
 
-    return (
-      <div
-        ref={previewRef}
-        className={containerClasses}
-        role="region"
-        aria-label="Markdown preview area"
-        aria-live="polite"
-        aria-describedby="preview-description"
-        data-theme={theme}
-      >
-        <div className={proseClasses}>
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={rehypePlugins}
-            skipHtml
-            components={components}
-          >
-            {content}
-          </ReactMarkdown>
-        </div>
+  const containerClasses = [
+    'markdown-preview',
+    variant === 'app'
+      ? `${currentTheme.classes.container} flex-1 min-h-0 overflow-auto`
+      : 'document-preview w-full overflow-auto print:overflow-visible',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const proseClasses = [currentTheme.classes.prose, contentClassName].filter(Boolean).join(' ');
+
+  return (
+    <div
+      ref={previewRef}
+      className={containerClasses}
+      role="region"
+      aria-label="Markdown preview area"
+      aria-live="polite"
+      aria-describedby="preview-description"
+      data-theme={theme}
+    >
+      <div className={proseClasses}>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={rehypePlugins}
+          skipHtml
+          components={components}
+        >
+          {content}
+        </ReactMarkdown>
       </div>
-    );
-  }
-);
+    </div>
+  );
+});
 
 export default MarkdownPreview;

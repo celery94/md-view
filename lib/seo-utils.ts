@@ -20,20 +20,20 @@ export function generateMetaDescription(markdownContent: string): string {
   const excerpt = plainText.substring(0, 150);
   const lastSpace = excerpt.lastIndexOf(' ');
   const description = lastSpace > 100 ? excerpt.substring(0, lastSpace) : excerpt;
-  
+
   return `${description}... | Free markdown editor with live preview and syntax highlighting.`;
 }
 
 export function generatePageTitle(markdownContent: string): string {
   // Extract first heading as potential title
   const headingMatch = markdownContent.match(/^#{1,6}\s+(.+)$/m);
-  
+
   if (headingMatch && headingMatch[1]) {
     const title = headingMatch[1].trim();
     if (title.length > 0 && title.length < 60) {
       return `${title} | MD-View`;
     }
   }
-  
+
   return 'MD-View - Real-time Markdown Editor & Live Preview';
 }

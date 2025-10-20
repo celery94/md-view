@@ -12,7 +12,14 @@ interface ContextMenuProps {
   isFormatting?: boolean;
 }
 
-export default function ContextMenu({ x, y, onClose, onFormatDocument, isVisible, isFormatting = false }: ContextMenuProps) {
+export default function ContextMenu({
+  x,
+  y,
+  onClose,
+  onFormatDocument,
+  isVisible,
+  isFormatting = false,
+}: ContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

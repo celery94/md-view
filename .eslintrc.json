@@ -9,12 +9,5 @@
     "@next/next/no-img-element": "off",
     "react/jsx-key": "warn"
   },
-  "ignorePatterns": [
-    "node_modules/",
-    ".next/",
-    "dist/",
-    "build/",
-    "coverage/"
-  ]
+  "ignorePatterns": ["node_modules/", ".next/", "dist/", "build/", "coverage/"]
 }
-
