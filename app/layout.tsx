@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import Script from 'next/script';
 import Analytics from '../components/Analytics';
+import { GA_ID } from '../lib/gtag';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -195,7 +196,7 @@ export default function RootLayout({
         {/* Google tag (gtag.js) */}
         <Script
           id="gtag-src"
-          src={`https://www.googletagmanager.com/gtag/js?id=G-PQ0PJ2D7EN`}
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
         />
         <Script id="gtag-init" strategy="afterInteractive">
@@ -203,7 +204,7 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-PQ0PJ2D7EN');
+            gtag('config', '${GA_ID}');
           `}
         </Script>
 
