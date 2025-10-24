@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useId } from 'react';
 import {
   MoreHorizontal,
   Upload,
@@ -37,6 +37,9 @@ export default function QuickActionsMenu({
 }: QuickActionsMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuId = useId();
+  const triggerId = useId();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -49,6 +52,26 @@ export default function QuickActionsMenu({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setIsOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
+
   const handleAction = (action: () => void) => {
     action();
     setIsOpen(false);
@@ -58,9 +81,15 @@ export default function QuickActionsMenu({
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
+        type="button"
+        ref={triggerRef}
+        id={triggerId}
         className={`inline-flex items-center gap-2 rounded-xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/30 to-white p-2.5 text-slate-600 shadow-md transition-all duration-200 hover:bg-slate-100 hover:text-slate-900 hover:shadow-lg hover:scale-[1.02] active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${triggerClassName ?? ''}`}
         aria-label={triggerLabel ? `${triggerLabel} actions` : 'More actions'}
         title={triggerLabel ? `${triggerLabel} actions` : 'More actions'}
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        aria-controls={isOpen ? menuId : undefined}
       >
         <MoreHorizontal className="h-5 w-5" />
         {triggerLabel ? (
@@ -69,7 +98,12 @@ export default function QuickActionsMenu({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/20 to-white p-3 shadow-[0_12px_40px_rgba(15,23,42,0.15)] backdrop-blur-sm animate-scale-in ring-1 ring-slate-100/50">
+        <div
+          className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/20 to-white p-3 shadow-[0_12px_40px_rgba(15,23,42,0.15)] backdrop-blur-sm animate-scale-in ring-1 ring-slate-100/50"
+          role="menu"
+          id={menuId}
+          aria-labelledby={triggerId}
+        >
           <button
             onClick={() => handleAction(onImport)}
             className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-all duration-200 hover:bg-gradient-to-br hover:from-sky-100 hover:via-sky-50 hover:to-blue-50 hover:text-sky-700 hover:shadow-md hover:scale-[1.02] active:scale-95"

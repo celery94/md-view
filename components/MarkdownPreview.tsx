@@ -5,7 +5,7 @@ import { Check, Copy as CopyIcon } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { getNodeText, slugify } from '../lib/slugify';
+import { createSlugger, getNodeText } from '../lib/slugify';
 import { getTheme, type Theme } from '../lib/themes';
 
 interface MarkdownPreviewProps {
@@ -86,81 +86,22 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
   );
 }
 
-const components: Components = {
-  h1({ children, ...props }) {
+function createHeadingRenderer(
+  Tag: keyof JSX.IntrinsicElements,
+  slugger: (value: string) => string
+) {
+  return function Heading({ children, ...props }: { children: React.ReactNode } & Record<string, unknown>) {
     const text = getNodeText(children);
-    const id = slugify(text);
+    const id = slugger(text);
+    const HeadingTag = Tag;
+
     return (
-      <h1 id={id} {...(props as any)}>
+      <HeadingTag id={id} {...(props as any)}>
         {children}
-      </h1>
+      </HeadingTag>
     );
-  },
-  h2({ children, ...props }) {
-    const text = getNodeText(children);
-    const id = slugify(text);
-    return (
-      <h2 id={id} {...(props as any)}>
-        {children}
-      </h2>
-    );
-  },
-  h3({ children, ...props }) {
-    const text = getNodeText(children);
-    const id = slugify(text);
-    return (
-      <h3 id={id} {...(props as any)}>
-        {children}
-      </h3>
-    );
-  },
-  h4({ children, ...props }) {
-    const text = getNodeText(children);
-    const id = slugify(text);
-    return (
-      <h4 id={id} {...(props as any)}>
-        {children}
-      </h4>
-    );
-  },
-  h5({ children, ...props }) {
-    const text = getNodeText(children);
-    const id = slugify(text);
-    return (
-      <h5 id={id} {...(props as any)}>
-        {children}
-      </h5>
-    );
-  },
-  h6({ children, ...props }) {
-    const text = getNodeText(children);
-    const id = slugify(text);
-    return (
-      <h6 id={id} {...(props as any)}>
-        {children}
-      </h6>
-    );
-  },
-  code: CodeBlock,
-  img({ node, ...props }) {
-    const merged = [
-      'mx-auto my-4 max-w-[480px] w-full h-auto rounded-lg border border-gray-200 shadow-sm',
-      (props as any).className,
-    ]
-      .filter(Boolean)
-      .join(' ');
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        {...(props as any)}
-        className={merged}
-        loading="lazy"
-        decoding="async"
-        alt={(props as any).alt ?? ''}
-      />
-    );
-  },
-};
+  };
+}
 
 const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(function MarkdownPreview(
   {
@@ -238,6 +179,38 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
   }, []);
 
   const rehypePlugins = useMemo(() => (hlPlugin ? [hlPlugin] : []), [hlPlugin]);
+
+  const components = useMemo<Components>(() => {
+    const slugger = createSlugger();
+
+    return {
+      h1: createHeadingRenderer('h1', slugger),
+      h2: createHeadingRenderer('h2', slugger),
+      h3: createHeadingRenderer('h3', slugger),
+      h4: createHeadingRenderer('h4', slugger),
+      h5: createHeadingRenderer('h5', slugger),
+      h6: createHeadingRenderer('h6', slugger),
+      code: CodeBlock,
+      img({ node: _node, ...props }) {
+        const merged = [
+          'mx-auto my-4 max-w-[480px] w-full h-auto rounded-lg border border-gray-200 shadow-sm',
+          (props as any).className,
+        ]
+          .filter(Boolean)
+          .join(' ');
+        return (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            {...(props as any)}
+            className={merged}
+            loading="lazy"
+            decoding="async"
+            alt={(props as any).alt ?? ''}
+          />
+        );
+      },
+    } satisfies Components;
+  }, [content]);
 
   // Inject custom theme styles and syntax highlighting
   useEffect(() => {
