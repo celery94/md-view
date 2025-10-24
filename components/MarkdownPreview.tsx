@@ -87,16 +87,16 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
 }
 
 function createHeadingRenderer(
-  Tag: keyof JSX.IntrinsicElements,
+  Tag: React.ElementType,
   slugger: (value: string) => string
 ) {
-  return function Heading({ children, ...props }: { children: React.ReactNode } & Record<string, unknown>) {
+  return function Heading({ children, ...props }: any) {
     const text = getNodeText(children);
     const id = slugger(text);
     const HeadingTag = Tag;
 
     return (
-      <HeadingTag id={id} {...(props as any)}>
+      <HeadingTag id={id} {...props}>
         {children}
       </HeadingTag>
     );
