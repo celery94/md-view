@@ -199,7 +199,6 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
           .filter(Boolean)
           .join(' ');
         return (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             {...(props as any)}
             className={merged}
@@ -210,7 +209,7 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
         );
       },
     } satisfies Components;
-  }, [content]);
+  }, []);
 
   // Inject custom theme styles and syntax highlighting
   useEffect(() => {

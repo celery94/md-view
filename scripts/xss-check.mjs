@@ -11,12 +11,15 @@ import rehypeHighlight from 'rehype-highlight';
 const md = `Hello\n\n<img src=x onerror=alert(1)>\n\n\`\`\`js\nconsole.log('safe');\n\`\`\``;
 
 const html = renderToStaticMarkup(
-  React.createElement(ReactMarkdown, {
-    children: md,
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [rehypeHighlight],
-    skipHtml: true,
-  })
+  React.createElement(
+    ReactMarkdown,
+    {
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [rehypeHighlight],
+      skipHtml: true,
+    },
+    md
+  )
 );
 
 const hasImgTag = /<img\b/i.test(html);
