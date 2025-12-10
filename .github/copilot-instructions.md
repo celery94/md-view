@@ -1,47 +1,39 @@
 # Copilot Instructions for md-view
 
-Fast orientation for AI agents working on this Next.js 15 + React 19 markdown editor.
+Fast orientation for AI agents working on this Next.js 15 + React 19 Markdown editor. Keep guidance concise and specific to this repo.
 
-## Architecture snapshot
+## Architecture map
 
-- `app/page.tsx` owns global state (view mode, drag ratio, theme, debounce, localStorage `mdv:*` keys) and wires imports/exports, copy-to-clipboard, DocumentView overlay, mobile QuickActions, and floating ToC.
-- `components/RichMarkdownEditor.tsx` wraps `<MarkdownEditor>` with toolbar actions, a 500 ms undo/redo history, and line-aware heading/quote transforms.
-- `components/MarkdownEditor.tsx` is the controlled `<textarea>`; it reports scroll %, mirrors external scroll commands, shows a custom context menu, and runs `formatMarkdown` on Shift+Alt+F.
-- `components/MarkdownPreview.tsx` renders markdown via `react-markdown` + `remark-gfm`, lazy-loads `rehype-highlight`, injects theme CSS into the `<style id="theme-custom-styles">` tag, and builds slug IDs with `slugify(getNodeText(...))` for ToC/deep links.
-- Supporting surfaces: `DocumentView` (print/PDF panel using `MarkdownPreview` variant), `TableOfContents` (active heading tracking), `QuickActionsMenu` (mobile utilities), `ViewModeSelector`, `ThemeSelector`/`CompactThemeSelector`.
-- Theme definitions live in `lib/themes.ts`; analytics wiring sits in `components/Analytics.tsx` + `lib/gtag.ts`.
+- `app/page.tsx` is the orchestrator: owns global state (view mode, drag ratio, theme, debounce, `mdv:*` localStorage), wires import/export/download, clipboard copy, DocumentView overlay, mobile QuickActions, ToC toggle, and scroll sync.
+- Editor stack: `RichMarkdownEditor` wraps `MarkdownEditor` (controlled `<textarea>` with custom context menu, scroll reporting, external scroll commands, Shift+Alt+F → `formatMarkdown`). Toolbar logic lives in `components/Toolbar.tsx`.
+- Preview stack: `MarkdownPreview` renders via `react-markdown` + `remark-gfm`, lazy-loads `rehype-highlight`, injects theme CSS into `<style id="theme-custom-styles">`, and slugifies headings with `lib/slugify` for ToC/deep links.
+- Surfaces: `DocumentView` (print/PDF overlay using preview variant), `TableOfContents` (active heading tracking), `QuickActionsMenu` (mobile utility sheet), `ViewModeSelector`, `ThemeSelector`/`CompactThemeSelector`, `Footer`, `Analytics` (gtag wiring).
+- Themes and prose classes live in `lib/themes.ts`; SEO/structured data in `components/JsonLd.tsx` and `app/layout.tsx`.
 
-## Interaction & state invariants
+## Invariants & interaction contracts
 
-- Preserve localStorage keys (`mdv:content`, `mdv:ratio`, `mdv:theme`, `mdv:viewMode`) and mobile logic that avoids split mode by default.
-- Scroll sync relies on each pane emitting percentages while guarding with `isScrollingSelfRef` flags; resetting view mode clears queued percentages.
-- Split layout depends on `flex-1 min-h-0` wrappers and the drag handle clamping ratios between 0.2–0.8; don't break the `isDraggingRef` lifecycle.
-- Table of contents stays hidden until headings exist and the user toggles it; active heading updates come from preview scroll events and `requestAnimationFrame`.
-- Document view adds a `document-view-open` class to `<body>`, locks scrolling, and closes on Escape/backdrop clicks.
+- Persisted keys: `mdv:content`, `mdv:ratio` (clamped 0.2–0.8), `mdv:theme`, `mdv:viewMode`. On mobile, default away from split view.
+- Scroll sync: each pane emits scroll %, guarded by `isScrollingSelfRef`; switching view modes resets pending percentages.
+- Layout stability: keep `flex-1 min-h-0` wrappers around panes; drag handle relies on `isDraggingRef` lifecycle and ratio clamps.
+- ToC visibility: hidden until headings exist and the user toggles it; active heading updates via preview scroll + `requestAnimationFrame`.
+- DocumentView: adds `document-view-open` on `<body>`, locks scroll, closes on Escape/backdrop; strip `[data-no-export]` elements during export/clipboard copy.
+- Safety: `MarkdownPreview` uses `skipHtml`; if enabling raw HTML, also add `rehype-raw` + sanitization (see `AGENTS.md`).
 
-## Editing experience
+## Markdown pipeline & styling
 
-- Toolbar actions in `RichMarkdownEditor` mutate the current selection/line; keep selection restoration logic when extending styles.
-- The context menu (`ContextMenu.tsx`) is positioned at click coordinates and closes on outside click/Escape; formatting guard `isFormatting` prevents concurrent jobs.
-- `lib/formatter.ts` is a lightweight markdown formatter (not Prettier) that skips code fences, normalizes lists/headings, and wraps long paragraphs.
-
-## Markdown rendering, export, and safety
-
-- `MarkdownPreview` sets `skipHtml`; if you ever enable raw HTML, also wire `rehype-raw` + sanitize (see `AGENTS.md`).
-- Code block UI in `MarkdownPreview` adds copy buttons/language badges flagged with `data-no-export` so exports strip them.
-- `getSerializablePreview` (in `app/page.tsx`) clones the preview DOM, removes `[data-no-export]`, combines inline defaults with theme custom CSS, and feeds exports, clipboard copy, and DocumentView.
-- Theme switching swaps highlight.js CDN styles (`github.min.css` vs `github-dark.min.css`) depending on the active theme name.
+- Code blocks get copy buttons and language badges flagged with `data-no-export`; syntax highlighting theme switches via highlight.js CDN CSS (github vs github-dark) based on current theme.
+- `getSerializablePreview` (in `app/page.tsx`) clones preview DOM, merges inline export styles with theme custom CSS, and feeds exports/clipboard/DocumentView.
+- `lib/formatter.ts` is a lightweight formatter (skips code fences, normalizes lists/headings, wraps long paragraphs); keep selection restoration in toolbar actions.
 
 ## Developer workflows
 
-- Use `npm ci` for installs; Turbopack powers `npm run dev`/`npm run build`, and `npm run start` serves the production build.
-- Quality gates: `npm run lint`, `npm run typecheck`, `npm run format` or `npm run format:check`.
-- `scripts/xss-check.mjs` is available for optional sanitization spot-checks when touching markdown rendering.
+- Node 18.18+ (or 20+). Install with `npm ci`; Turbopack backs `npm run dev`/`npm run build`; `npm run start` serves prod build.
+- Quality gates: `npm run lint`, `npm run typecheck`, `npm run format` or `npm run format:check`. Optional: `node scripts/xss-check.mjs` when touching rendering/sanitization.
 
-## Key references
+## Conventions & references
 
-- Keyboard view-mode shortcuts: see global keydown handler in `app/page.tsx`.
-- Toolbar wiring lives in `components/Toolbar.tsx`; markdown tips live in `app/guide/page.tsx`.
-- Table of contents item type exported as `TocHeading` from `components/TableOfContents.tsx` for reuse in new features.
+- TypeScript, 2-space indent, PascalCase components, `useX` hooks; Tailwind utilities + `@tailwindcss/typography` prose classes.
+- Keep `[data-no-export]` on UI-only preview adornments; preserve slug generation for headings; respect `mdv:*` persistence contract.
+- Keyboard shortcuts (Cmd/Ctrl+1/2/3) live in `app/page.tsx`; markdown tips in `app/guide/page.tsx`; ToC type `TocHeading` exported from `components/TableOfContents.tsx`.
 
-When extending the app, keep scroll sync intact, maintain `[data-no-export]` on UI-only markup, respect the `mdv:*` persistence contract, and leave `skipHtml` safeguards in place.
+When extending features, prefer reusing `MarkdownPreview`/`RichMarkdownEditor` plumbing, keep scroll sync intact, and leave `skipHtml` safeguards unless adding proper sanitization.

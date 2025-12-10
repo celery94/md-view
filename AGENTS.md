@@ -25,6 +25,8 @@
 - Hooks: camelCase starting with `use` (e.g., `useXyz.ts`).
 - Indentation: 2 spaces; order imports external → internal.
 - Styling: Tailwind CSS; prefer utilities; use `prose` for markdown content.
+- Layout: keep pages full-width (avoid global `max-w-*` wrappers unless scoped to a specific component).
+- Performance: keep syntax highlighting CSS local (no CDN fetches) and lazy-load highlight plugins.
 
 ## Testing Guidelines
 
