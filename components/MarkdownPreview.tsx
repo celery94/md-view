@@ -117,6 +117,7 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
 ) {
   const [hlPlugin, setHlPlugin] = useState<any>(null);
   const currentTheme = getTheme(theme);
+  const needsHighlight = useMemo(() => /```|~~~|`[^`]+`/.test(content), [content]);
   const internalRef = useRef<HTMLDivElement>(null);
   const isScrollingSelfRef = useRef(false);
 
@@ -169,6 +170,10 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
   }, [handleScroll, onScroll, previewRef]);
 
   useEffect(() => {
+    if (!needsHighlight || hlPlugin) {
+      return;
+    }
+
     let active = true;
     import('rehype-highlight').then((m) => {
       if (active) setHlPlugin(() => (m as any).default ?? (m as any));
@@ -176,9 +181,12 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
     return () => {
       active = false;
     };
-  }, []);
+  }, [needsHighlight, hlPlugin]);
 
-  const rehypePlugins = useMemo(() => (hlPlugin ? [hlPlugin] : []), [hlPlugin]);
+  const rehypePlugins = useMemo(
+    () => (needsHighlight && hlPlugin ? [hlPlugin] : []),
+    [hlPlugin, needsHighlight]
+  );
 
   const components = useMemo<Components>(() => {
     const slugger = createSlugger();
@@ -222,26 +230,12 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
       document.head.appendChild(styleElement);
     }
 
-    // Load appropriate syntax highlighting theme
-    let syntaxTheme = '';
-    if (theme === 'dark' || theme === 'terminal') {
-      // Use dark syntax highlighting
-      syntaxTheme = `
-          @import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css');
-        `;
-    } else {
-      // Use light syntax highlighting (default)
-      syntaxTheme = `
-          @import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css');
-        `;
-    }
-
-    styleElement.textContent = syntaxTheme + (currentTheme.customStyles || '');
+    styleElement.textContent = currentTheme.customStyles || '';
 
     return () => {
       // Keep the style element for theme switching, just update content
     };
-  }, [currentTheme, theme]);
+  }, [currentTheme]);
 
   const containerClasses = [
     'markdown-preview',

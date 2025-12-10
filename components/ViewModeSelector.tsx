@@ -105,7 +105,7 @@ export default function ViewModeSelector({
                   : 'hidden'
               }
             >
-              ⌘{mode.shortcut}
+              Ctrl/Cmd+{mode.shortcut}
             </kbd>
           </button>
         );

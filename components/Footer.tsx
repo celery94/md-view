@@ -5,10 +5,10 @@ export default function Footer() {
 
   return (
     <footer className="relative mt-auto bg-gradient-to-br from-slate-50 via-white to-slate-50 border-t border-slate-200/60">
-      <div className="mx-auto max-w-7xl px-6 py-8 sm:px-8 lg:px-10">
+      <div className="w-full px-6 py-8 sm:px-8 lg:px-10">
         <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
           <div className="text-sm font-semibold text-slate-700">
-            © {currentYear}{' '}
+            (c) {currentYear}{' '}
             <span className="bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
               MD-View
             </span>

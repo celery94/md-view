@@ -227,6 +227,80 @@ body {
   background: transparent !important;
 }
 
+/* Inline highlight styling (local, no CDN fetch) */
+.markdown-preview .hljs {
+  background: transparent;
+  color: #0f172a;
+}
+.markdown-preview .hljs-comment,
+.markdown-preview .hljs-quote {
+  color: #94a3b8;
+  font-style: italic;
+}
+.markdown-preview .hljs-keyword,
+.markdown-preview .hljs-selector-tag,
+.markdown-preview .hljs-subst,
+.markdown-preview .hljs-meta {
+  color: #0ea5e9;
+  font-weight: 700;
+}
+.markdown-preview .hljs-number,
+.markdown-preview .hljs-literal,
+.markdown-preview .hljs-symbol,
+.markdown-preview .hljs-bullet {
+  color: #f59e0b;
+}
+.markdown-preview .hljs-string,
+.markdown-preview .hljs-doctag,
+.markdown-preview .hljs-addition,
+.markdown-preview .hljs-attribute,
+.markdown-preview .hljs-built_in {
+  color: #0f766e;
+}
+.markdown-preview .hljs-title,
+.markdown-preview .hljs-section,
+.markdown-preview .hljs-selector-id,
+.markdown-preview .hljs-selector-class {
+  color: #2563eb;
+}
+.markdown-preview .hljs-emphasis {
+  font-style: italic;
+}
+.markdown-preview .hljs-strong {
+  font-weight: 700;
+}
+.markdown-preview[data-theme='dark'] .hljs,
+.markdown-preview[data-theme='terminal'] .hljs {
+  color: #e2e8f0;
+}
+.markdown-preview[data-theme='dark'] .hljs-keyword,
+.markdown-preview[data-theme='terminal'] .hljs-keyword,
+.markdown-preview[data-theme='dark'] .hljs-selector-tag,
+.markdown-preview[data-theme='terminal'] .hljs-selector-tag {
+  color: #38bdf8;
+}
+.markdown-preview[data-theme='dark'] .hljs-string,
+.markdown-preview[data-theme='terminal'] .hljs-string,
+.markdown-preview[data-theme='dark'] .hljs-addition,
+.markdown-preview[data-theme='terminal'] .hljs-addition {
+  color: #4ade80;
+}
+.markdown-preview[data-theme='dark'] .hljs-number,
+.markdown-preview[data-theme='terminal'] .hljs-number,
+.markdown-preview[data-theme='dark'] .hljs-literal,
+.markdown-preview[data-theme='terminal'] .hljs-literal {
+  color: #fbbf24;
+}
+.markdown-preview[data-theme='dark'] .hljs-comment,
+.markdown-preview[data-theme='terminal'] .hljs-comment,
+.markdown-preview[data-theme='dark'] .hljs-quote,
+.markdown-preview[data-theme='terminal'] .hljs-quote {
+  color: #cbd5f5;
+}
+.markdown-preview[data-theme='terminal'] .hljs {
+  color: #e2e8f0;
+}
+
 .prose h1,
 .prose h2,
 .prose h3,
