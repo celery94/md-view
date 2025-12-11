@@ -100,7 +100,7 @@ export default function ViewModeSelector({
             {isActive && (
               <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-sky-400/20 to-indigo-400/20 blur-sm" />
             )}
-            <Icon className={`relative h-3.5 w-3.5 ${isActive ? 'drop-shadow-sm' : ''}`} aria-hidden="true" />
+            <Icon className={`relative flex-shrink-0 h-3.5 w-3.5 ${isActive ? 'drop-shadow-sm' : ''}`} aria-hidden="true" />
             <span className={`relative ${showLabels ? 'hidden sm:inline' : 'sr-only'}`}>{mode.label}</span>
             <kbd
               className={
