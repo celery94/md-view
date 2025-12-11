@@ -105,25 +105,32 @@ export default function Home() {
   const navRowRef = useRef<HTMLDivElement | null>(null);
 
 
+  // Premium button styles with enhanced gradients and effects
   const primaryActionButton =
-    'inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 px-3 py-2 text-xs font-semibold text-white shadow-[0_4px_16px_rgba(14,165,233,0.35)] transition-all duration-200 hover:shadow-[0_8px_24px_rgba(14,165,233,0.45)] hover:scale-[1.02] hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-4 md:py-2 md:text-sm';
+    'shimmer-btn inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 px-3 py-2 text-xs font-semibold text-white shadow-[0_4px_20px_rgba(14,165,233,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(14,165,233,0.5)] hover:scale-[1.03] hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-4 md:py-2.5 md:text-sm';
+  
   const secondaryActionButton =
-    'inline-flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-xs font-medium text-slate-600 transition-all duration-200 hover:text-slate-900 hover:bg-gradient-to-br hover:from-slate-100 hover:via-slate-50 hover:to-white hover:shadow-md hover:scale-[1.02] active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm';
+    'inline-flex items-center gap-1.5 rounded-xl border border-slate-200/50 px-2.5 py-2 text-xs font-medium text-slate-600 bg-white/50 backdrop-blur-sm transition-all duration-300 hover:text-slate-900 hover:bg-gradient-to-br hover:from-white hover:via-slate-50 hover:to-slate-100 hover:shadow-[0_4px_12px_rgba(15,23,42,0.1)] hover:scale-[1.03] hover:border-slate-300/80 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm';
+  
   const quietNavButton =
-    'inline-flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-xs font-medium text-slate-600 transition-all duration-200 hover:text-slate-900 hover:bg-gradient-to-br hover:from-slate-100 hover:via-slate-50 hover:to-white hover:shadow-md hover:scale-[1.02] active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm';
+    'inline-flex items-center justify-center gap-1.5 rounded-xl p-2.5 text-xs font-medium text-slate-500 transition-all duration-300 hover:text-sky-600 hover:bg-sky-50/80 hover:shadow-[0_2px_8px_rgba(14,165,233,0.15)] hover:scale-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:p-2.5';
+  
   const statPillClass =
-    'hidden xl:flex items-center gap-2.5 rounded-full border border-slate-200/60 bg-white/70 px-5 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-600 shadow-[0_2px_12px_rgba(15,23,42,0.1)] backdrop-blur-sm ring-1 ring-slate-100/50';
+    'hidden xl:flex items-center gap-3 rounded-full border border-slate-200/40 bg-gradient-to-r from-white/90 via-slate-50/50 to-white/90 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 shadow-[0_2px_16px_rgba(15,23,42,0.08)] backdrop-blur-md ring-1 ring-white/60';
+  
   const wordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
   const lineCount = markdown.split('\n').length;
   const fileSizeKb = Math.max(1, Math.round(new Blob([markdown]).size / 1024));
+  
   const mobileActionButton =
-    'inline-flex flex-none items-center gap-2 rounded-xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50/50 to-white px-4 py-3 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-lg hover:scale-[1.02] hover:border-slate-300/80 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
+    'inline-flex flex-none items-center gap-2 rounded-xl border border-slate-200/60 bg-gradient-to-br from-white via-slate-50/30 to-white px-4 py-3 text-xs font-semibold text-slate-700 shadow-[0_2px_10px_rgba(15,23,42,0.06)] backdrop-blur-md transition-all duration-300 hover:shadow-[0_8px_20px_rgba(15,23,42,0.12)] hover:scale-[1.03] hover:border-slate-300/80 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
 
-
+  // Premium panel styling with glassmorphism
   const panelClass =
-    'relative flex w-full flex-1 min-h-0 flex-col overflow-hidden rounded-3xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/60 to-white p-5 sm:p-7 lg:p-8 shadow-[0_16px_40px_rgba(15,23,42,0.08),0_4px_12px_rgba(15,23,42,0.04)] backdrop-blur-md ring-1 ring-slate-100/70';
+    'relative flex w-full flex-1 min-h-0 flex-col overflow-hidden rounded-[28px] border border-white/60 bg-gradient-to-br from-white/95 via-white/80 to-slate-50/90 p-5 sm:p-7 lg:p-8 shadow-[0_20px_50px_rgba(15,23,42,0.1),0_8px_20px_rgba(15,23,42,0.05),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-xl ring-1 ring-slate-200/30';
+  
   const infoTileClass =
-    'flex items-center gap-3 rounded-2xl border border-slate-200/70 bg-white/80 px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur';
+    'flex items-center gap-3 rounded-2xl border border-slate-200/50 bg-gradient-to-br from-white/90 to-slate-50/80 px-4 py-3 text-sm font-semibold text-slate-700 shadow-[0_8px_24px_rgba(15,23,42,0.06)] backdrop-blur-lg';
 
 
 
@@ -433,45 +440,63 @@ export default function Home() {
   return (
     <>
       <div
-        className={`relative min-h-screen flex flex-col overflow-hidden bg-slate-50 text-slate-900 ${isDocumentViewOpen ? 'print:hidden' : ''}`}
+        className={`relative min-h-screen flex flex-col overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100 text-slate-900 ${isDocumentViewOpen ? 'print:hidden' : ''}`}
       >
+        {/* Premium animated background */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+          {/* Animated gradient orbs */}
           <div
-            className="absolute left-[-18%] top-[-12%] h-72 w-72 rounded-full bg-sky-200/50 blur-3xl"
+            className="absolute left-[-15%] top-[-10%] h-[500px] w-[500px] rounded-full bg-gradient-to-br from-sky-200/60 via-blue-200/40 to-indigo-200/30 blur-[80px] animate-pulse-slow"
             aria-hidden="true"
           />
           <div
-            className="absolute right-[-12%] top-1/4 h-96 w-96 rounded-full bg-indigo-200/40 blur-[100px]"
+            className="absolute right-[-10%] top-[20%] h-[600px] w-[600px] rounded-full bg-gradient-to-br from-violet-200/40 via-purple-200/30 to-fuchsia-200/20 blur-[100px] animate-float"
             aria-hidden="true"
           />
           <div
-            className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(14,165,233,0.08),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(99,102,241,0.08),transparent_35%)]"
+            className="absolute left-[30%] bottom-[-20%] h-[400px] w-[400px] rounded-full bg-gradient-to-br from-cyan-200/30 via-teal-200/20 to-emerald-200/10 blur-[80px] animate-pulse-slow"
+            style={{ animationDelay: '1s' }}
+            aria-hidden="true"
+          />
+          {/* Mesh grid overlay */}
+          <div
+            className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.03)_1px,transparent_1px)] bg-[size:60px_60px]"
+            aria-hidden="true"
+          />
+          {/* Radial gradients */}
+          <div
+            className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(14,165,233,0.08),transparent_40%),radial-gradient(circle_at_85%_20%,rgba(139,92,246,0.08),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(6,182,212,0.06),transparent_40%)]"
             aria-hidden="true"
           />
         </div>
-        <header className="sticky top-0 z-30 border-b border-slate-200/60 bg-white/85 shadow-[0_1px_0_rgba(148,163,184,0.12),0_24px_60px_-28px_rgba(15,23,42,0.28)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/80">
+        
+        {/* Premium Header */}
+        <header className="sticky top-0 z-30 border-b border-white/50 bg-white/70 shadow-[0_1px_0_rgba(148,163,184,0.1),0_20px_50px_-20px_rgba(15,23,42,0.2)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/60">
           <div className="flex w-full flex-col gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:px-10 xl:px-12 animate-fade-in">
             <div
               ref={navRowRef}
               className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-3"
             >
-              <div className="flex items-center gap-2 md:gap-3">
+              <div className="flex items-center gap-2 md:gap-4">
                 <Link
                   href="/"
-                  className="group flex items-center gap-2.5 rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/30 to-white px-4 py-2.5 shadow-[0_4px_12px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-300 hover:shadow-[0_6px_20px_rgba(15,23,42,0.14)] hover:scale-[1.02] hover:border-slate-300/70 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="group flex items-center gap-3 rounded-2xl border border-white/60 bg-gradient-to-br from-white/90 via-white/70 to-slate-50/80 px-4 py-2.5 shadow-[0_4px_16px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-xl transition-all duration-300 hover:shadow-[0_8px_24px_rgba(14,165,233,0.15)] hover:scale-[1.02] hover:border-sky-200/50 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   aria-label="MD-View Home"
                   title="MD-View Home"
                 >
-                  <img
-                    src="/md-view-icon.svg"
-                    alt="MD-View logo"
-                    className="h-9 w-9 rounded-xl bg-gradient-to-br from-slate-100 via-slate-50 to-white p-2 ring-1 ring-slate-200/80 shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-lg"
-                  />
+                  <div className="relative">
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 opacity-20 blur-md group-hover:opacity-40 transition-opacity duration-300" />
+                    <img
+                      src="/md-view-icon.svg"
+                      alt="MD-View logo"
+                      className="relative h-9 w-9 rounded-xl bg-gradient-to-br from-white via-slate-50 to-white p-2 ring-1 ring-slate-200/50 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-[0_4px_12px_rgba(14,165,233,0.3)]"
+                    />
+                  </div>
                   <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
-                    <h1 className="text-lg font-bold leading-tight tracking-tight text-slate-900">
+                    <h1 className="text-lg font-bold leading-tight tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent">
                       MD-View
                     </h1>
-                    <p className="text-xs font-semibold text-slate-500">Markdown Editor</p>
+                    <p className="text-[11px] font-semibold text-slate-400 tracking-wide">Markdown Editor</p>
                   </div>
                 </Link>
 
@@ -485,17 +510,20 @@ export default function Home() {
 
                 {!isNavCompact && (
                   <div className={statPillClass}>
-                    <span>{wordCount} words</span>
-                    <span className="text-slate-300">|</span>
-                    <span>{lineCount} lines</span>
-                    <span className="text-slate-300">|</span>
-                    <span>{fileSizeKb} KB</span>
+                    <span className="text-sky-600">{wordCount}</span>
+                    <span className="text-slate-300">words</span>
+                    <span className="mx-1 h-3 w-px bg-slate-200/60" />
+                    <span className="text-indigo-600">{lineCount}</span>
+                    <span className="text-slate-300">lines</span>
+                    <span className="mx-1 h-3 w-px bg-slate-200/60" />
+                    <span className="text-violet-600">{fileSizeKb}</span>
+                    <span className="text-slate-300">KB</span>
                   </div>
                 )}
               </div>
 
-              <div className="hidden md:flex items-center gap-2">
-                <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-white/80 p-1 shadow-sm">
+              <div className="hidden md:flex items-center gap-3">
+                <div className="flex items-center gap-1.5 rounded-2xl border border-white/60 bg-gradient-to-br from-white/80 via-white/60 to-slate-50/70 p-1.5 shadow-[0_2px_12px_rgba(15,23,42,0.06)] backdrop-blur-xl">
                   <button
                     onClick={onPickFile}
                     className={primaryActionButton}
@@ -627,16 +655,21 @@ export default function Home() {
                   onDragOver={onDragOver}
                   aria-label="Markdown editor section"
                 >
+                  {/* Animated top gradient bar */}
                   <div
-                    className="pointer-events-none absolute inset-x-4 top-0 h-1 rounded-full bg-gradient-to-r from-sky-200 via-blue-300/80 to-indigo-200"
+                    className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-sky-400 to-transparent opacity-60"
+                    aria-hidden="true"
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-x-4 top-0 h-1 rounded-full bg-gradient-to-r from-sky-300/60 via-blue-400/80 to-indigo-300/60 shadow-[0_0_10px_rgba(14,165,233,0.3)]"
                     aria-hidden="true"
                   />
                   <div className="mb-5 flex flex-shrink-0 items-start justify-between gap-3">
                     <div>
-                      <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+                      <h2 className="text-xl font-bold tracking-tight bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
                         Markdown Editor
                       </h2>
-                      <p className="text-sm text-slate-600 mt-1 font-medium">
+                      <p className="text-sm text-slate-500 mt-1 font-medium">
                         Type your markdown or drop a .md file to load it instantly
                       </p>
                     </div>
@@ -657,17 +690,17 @@ export default function Home() {
               {viewMode === 'split' && (
                 <div
                   onMouseDown={startDrag}
-                  className="group hidden md:flex w-px cursor-col-resize select-none items-stretch justify-center"
+                  className="group hidden md:flex w-3 cursor-col-resize select-none items-stretch justify-center hover:w-4 transition-all duration-300"
                   aria-label="Resize editor and preview panels"
                   role="separator"
                   aria-orientation="vertical"
                   tabIndex={0}
                   title="Drag to resize panels"
                 >
-                  <div className="relative my-4 flex h-full w-full items-center">
-                    <span className="mx-auto h-full w-px bg-slate-200" aria-hidden="true" />
+                  <div className="relative flex h-full w-full items-center justify-center">
+                    <span className="h-full w-px bg-gradient-to-b from-transparent via-slate-200 to-transparent" aria-hidden="true" />
                     <span
-                      className="absolute left-1/2 top-1/2 h-12 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-300 transition-colors duration-200 group-hover:bg-sky-400/60"
+                      className="absolute left-1/2 top-1/2 h-16 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-200 transition-all duration-300 group-hover:bg-gradient-to-b group-hover:from-sky-400 group-hover:via-blue-400 group-hover:to-indigo-400 group-hover:shadow-[0_0_12px_rgba(14,165,233,0.4)] group-hover:h-20 group-hover:w-2"
                       aria-hidden="true"
                     />
                   </div>
@@ -684,16 +717,21 @@ export default function Home() {
                   }
                   aria-label="Markdown preview section"
                 >
+                  {/* Animated top gradient bar */}
                   <div
-                    className="pointer-events-none absolute inset-x-4 top-0 h-1 rounded-full bg-gradient-to-r from-indigo-200 via-blue-200 to-sky-200"
+                    className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-violet-400 to-transparent opacity-60"
+                    aria-hidden="true"
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-x-4 top-0 h-1 rounded-full bg-gradient-to-r from-violet-300/60 via-purple-400/80 to-fuchsia-300/60 shadow-[0_0_10px_rgba(139,92,246,0.3)]"
                     aria-hidden="true"
                   />
                   <div className="mb-5 flex flex-shrink-0 items-center justify-between gap-3">
                     <div>
-                      <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+                      <h2 className="text-xl font-bold tracking-tight bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent">
                         Live Preview
                       </h2>
-                      <p className="text-sm text-slate-600 mt-1 font-medium">
+                      <p className="text-sm text-slate-500 mt-1 font-medium">
                         See the rendered markdown with your chosen theme
                       </p>
                     </div>

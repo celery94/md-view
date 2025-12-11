@@ -74,38 +74,42 @@ export default function ViewModeSelector({
 
   return (
     <div
-      className="flex items-center gap-1 md:gap-1.5 rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/20 to-white p-1.5 shadow-[0_4px_12px_rgba(15,23,42,0.1)] backdrop-blur-sm ring-1 ring-slate-100/50"
+      className="flex items-center gap-1 md:gap-1.5 rounded-2xl border border-white/60 bg-gradient-to-br from-white/80 via-white/50 to-slate-50/60 p-1.5 shadow-[0_4px_16px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-xl ring-1 ring-slate-200/30"
       role="group"
       aria-label="View mode selector"
     >
       {modes.map((mode) => {
         const Icon = mode.icon;
+        const isActive = currentMode === mode.id;
         return (
           <button
             key={mode.id}
             onClick={() => onModeChange(mode.id)}
             className={`
-              inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2.5 text-xs font-semibold rounded-xl transition-all duration-200
+              relative inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300
               ${
-                currentMode === mode.id
-                  ? 'bg-gradient-to-br from-sky-100 via-sky-50 to-blue-50 text-sky-700 shadow-[0_4px_12px_rgba(14,165,233,0.25)] scale-[1.02] ring-1 ring-sky-200/50'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-gradient-to-br hover:from-slate-100 hover:via-slate-50 hover:to-white hover:shadow-md hover:scale-[1.02] active:scale-95'
+                isActive
+                  ? 'bg-gradient-to-br from-sky-500 via-blue-500 to-indigo-500 text-white shadow-[0_4px_16px_rgba(14,165,233,0.35),inset_0_1px_0_rgba(255,255,255,0.2)] scale-[1.02]'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-gradient-to-br hover:from-white hover:via-slate-50 hover:to-slate-100 hover:shadow-[0_2px_8px_rgba(15,23,42,0.08)] hover:scale-[1.02] active:scale-95'
               }
               ${mode.id === 'split' ? 'view-mode-split' : ''}
             `}
             title={mode.description}
             aria-label={mode.label}
           >
-            <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-            <span className={showLabels ? 'hidden sm:inline' : 'sr-only'}>{mode.label}</span>
+            {isActive && (
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-sky-400/20 to-indigo-400/20 blur-sm" />
+            )}
+            <Icon className={`relative h-3.5 w-3.5 ${isActive ? 'drop-shadow-sm' : ''}`} aria-hidden="true" />
+            <span className={`relative ${showLabels ? 'hidden sm:inline' : 'sr-only'}`}>{mode.label}</span>
             <kbd
               className={
                 showLabels
-                  ? 'hidden lg:inline-block ml-1 px-1.5 py-0.5 text-[10px] rounded border border-slate-200 bg-slate-100 text-slate-500'
+                  ? `hidden lg:inline-block ml-1 px-1.5 py-0.5 text-[10px] rounded border ${isActive ? 'border-white/30 bg-white/10 text-white/80' : 'border-slate-200 bg-slate-100 text-slate-400'}`
                   : 'hidden'
               }
             >
-              Ctrl/Cmd+{mode.shortcut}
+              ⌘{mode.shortcut}
             </kbd>
           </button>
         );
