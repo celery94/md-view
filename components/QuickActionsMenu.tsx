@@ -9,14 +9,14 @@ import {
   RotateCw,
   BookOpen,
   Github,
-  Copy,
+
 } from 'lucide-react';
 
 interface QuickActionsMenuProps {
   onImport: () => void;
   onExportMarkdown: () => void;
   onExportHtml: () => void;
-  onCopyPreview: () => void;
+
   onReset: () => void;
   onGuide: () => void;
   onGithub: () => void;
@@ -28,7 +28,7 @@ export default function QuickActionsMenu({
   onImport,
   onExportMarkdown,
   onExportHtml,
-  onCopyPreview,
+
   onReset,
   onGuide,
   onGithub,
@@ -125,13 +125,7 @@ export default function QuickActionsMenu({
             <FileCode className="h-4 w-4" />
             Export as HTML
           </button>
-          <button
-            onClick={() => handleAction(onCopyPreview)}
-            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-all duration-200 hover:bg-gradient-to-br hover:from-sky-100 hover:via-sky-50 hover:to-blue-50 hover:text-sky-700 hover:shadow-md hover:scale-[1.02] active:scale-95"
-          >
-            <Copy className="h-4 w-4" />
-            Copy preview HTML
-          </button>
+
           <hr className="my-3 border-slate-200/70" />
           <button
             onClick={() => handleAction(onGuide)}

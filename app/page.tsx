@@ -11,7 +11,7 @@ import ViewModeSelector from '../components/ViewModeSelector';
 import QuickActionsMenu from '../components/QuickActionsMenu';
 import Footer from '../components/Footer';
 import DocumentView from '../components/DocumentView';
-import TableOfContents, { type TocHeading } from '../components/TableOfContents';
+
 import { themes, getTheme } from '../lib/themes';
 import {
   Upload,
@@ -20,15 +20,12 @@ import {
   RotateCw,
   BookOpen,
   Github,
-  Copy,
-  Check,
-  AlertCircle,
+
   Printer,
-  ListTree,
 } from 'lucide-react';
 
 type ViewMode = 'split' | 'editor' | 'preview';
-type CopyStatus = 'idle' | 'styled' | 'plain' | 'error';
+
 
 const initialMarkdown = `# MD-View: Focused Markdown workspace
 
@@ -97,20 +94,16 @@ export default function Home() {
   const [previewScrollPercentage, setPreviewScrollPercentage] = useState<number | undefined>(
     undefined
   );
-  const [copyStatus, setCopyStatus] = useState<CopyStatus>('idle');
+
   const [isDocumentViewOpen, setIsDocumentViewOpen] = useState(false);
-  const [tableOfContents, setTableOfContents] = useState<TocHeading[]>([]);
-  const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
-  const [isTocVisible, setIsTocVisible] = useState(false);
+
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const previewRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
   const navRowRef = useRef<HTMLDivElement | null>(null);
-  const copyStatusResetRef = useRef<number | null>(null);
-  const activeHeadingRef = useRef<string | null>(null);
-  const hasUserToggledTocRef = useRef(false);
+
 
   const primaryActionButton =
     'inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 px-3 py-2 text-xs font-semibold text-white shadow-[0_4px_16px_rgba(14,165,233,0.35)] transition-all duration-200 hover:shadow-[0_8px_24px_rgba(14,165,233,0.45)] hover:scale-[1.02] hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-4 md:py-2 md:text-sm';
@@ -123,181 +116,16 @@ export default function Home() {
   const wordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
   const lineCount = markdown.split('\n').length;
   const fileSizeKb = Math.max(1, Math.round(new Blob([markdown]).size / 1024));
-  const previewCopyButtonClass = [
-    'inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium transition-all duration-200 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm',
-    'hover:bg-gradient-to-br hover:from-slate-50 hover:to-slate-100 hover:shadow-sm active:scale-95',
-    copyStatus === 'styled'
-      ? 'text-green-600 hover:text-green-600 bg-green-50/50'
-      : copyStatus === 'plain'
-        ? 'text-amber-600 hover:text-amber-600 bg-amber-50/50'
-        : copyStatus === 'error'
-          ? 'text-red-600 hover:text-red-600 bg-red-50/50'
-          : 'text-slate-600 hover:text-slate-900',
-  ].join(' ');
-  const mobilePrimaryActionButton =
-    'inline-flex flex-none items-center gap-2 rounded-xl bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 px-4 py-3 text-xs font-bold text-white shadow-[0_4px_16px_rgba(14,165,233,0.35)] transition-all duration-200 hover:shadow-[0_6px_24px_rgba(14,165,233,0.45)] hover:scale-[1.02] hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
   const mobileActionButton =
     'inline-flex flex-none items-center gap-2 rounded-xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50/50 to-white px-4 py-3 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-lg hover:scale-[1.02] hover:border-slate-300/80 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
-  const mobileCopyButtonClass = [
-    mobileActionButton,
-    copyStatus === 'styled'
-      ? 'border-green-500/70 text-green-600 hover:bg-green-50'
-      : copyStatus === 'plain'
-        ? 'border-amber-500/70 text-amber-600 hover:bg-amber-50'
-        : copyStatus === 'error'
-          ? 'border-red-500/70 text-red-600 hover:bg-red-50'
-          : '',
-  ]
-    .filter(Boolean)
-    .join(' ');
-  const hasHeadings = tableOfContents.length > 0;
-  const tocReopenButtonClass =
-    'fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 px-5 py-3 text-sm font-bold text-white shadow-[0_8px_32px_rgba(14,165,233,0.4)] transition-all duration-200 hover:shadow-[0_12px_40px_rgba(14,165,233,0.5)] hover:scale-105 hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
+
+
   const panelClass =
     'relative flex w-full flex-1 min-h-0 flex-col overflow-hidden rounded-3xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/60 to-white p-5 sm:p-7 lg:p-8 shadow-[0_16px_40px_rgba(15,23,42,0.08),0_4px_12px_rgba(15,23,42,0.04)] backdrop-blur-md ring-1 ring-slate-100/70';
   const infoTileClass =
     'flex items-center gap-3 rounded-2xl border border-slate-200/70 bg-white/80 px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur';
 
-  useEffect(() => {
-    activeHeadingRef.current = activeHeadingId;
-  }, [activeHeadingId]);
 
-  const updateActiveHeading = useCallback(() => {
-    const preview = previewRef.current;
-    if (!preview) {
-      if (activeHeadingRef.current !== null) {
-        activeHeadingRef.current = null;
-        setActiveHeadingId(null);
-      }
-      return;
-    }
-
-    const headingElements = preview.querySelectorAll<HTMLElement>('h1, h2, h3, h4, h5, h6');
-    if (headingElements.length === 0) {
-      if (activeHeadingRef.current !== null) {
-        activeHeadingRef.current = null;
-        setActiveHeadingId(null);
-      }
-      return;
-    }
-
-    const scrollTop = preview.scrollTop;
-    const offset = 56;
-    const containerTop = preview.getBoundingClientRect().top;
-
-    let currentId = headingElements[0].id || null;
-
-    for (let i = 0; i < headingElements.length; i += 1) {
-      const heading = headingElements[i];
-      if (!heading.id) continue;
-      const elementTop = heading.getBoundingClientRect().top - containerTop + scrollTop;
-      if (elementTop <= scrollTop + offset) {
-        currentId = heading.id;
-      } else {
-        break;
-      }
-    }
-
-    if (currentId && activeHeadingRef.current !== currentId) {
-      activeHeadingRef.current = currentId;
-      setActiveHeadingId(currentId);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const collectHeadings = () => {
-      const preview = previewRef.current;
-      if (!preview) {
-        setTableOfContents([]);
-        if (activeHeadingRef.current !== null) {
-          activeHeadingRef.current = null;
-          setActiveHeadingId(null);
-        }
-        return;
-      }
-
-      const headingElements = Array.from(
-        preview.querySelectorAll<HTMLElement>('h1, h2, h3, h4, h5, h6')
-      );
-
-      if (headingElements.length === 0) {
-        setTableOfContents([]);
-        if (activeHeadingRef.current !== null) {
-          activeHeadingRef.current = null;
-          setActiveHeadingId(null);
-        }
-        return;
-      }
-
-      const items: TocHeading[] = headingElements
-        .map((heading) => ({
-          id: heading.id,
-          title: heading.textContent?.trim() ?? '',
-          level: Number(heading.tagName.slice(1)),
-        }))
-        .filter((item) => Boolean(item.id) && Boolean(item.title));
-
-      setTableOfContents(items);
-
-      if (items.length > 0) {
-        const existingActive = items.find((item) => item.id === activeHeadingRef.current);
-        if (!existingActive) {
-          const nextId = items[0]?.id ?? null;
-          activeHeadingRef.current = nextId;
-          setActiveHeadingId(nextId);
-        }
-      }
-
-      updateActiveHeading();
-    };
-
-    const frame = window.requestAnimationFrame(collectHeadings);
-    return () => window.cancelAnimationFrame(frame);
-  }, [debouncedMarkdown, updateActiveHeading, viewMode]);
-
-  useEffect(() => {
-    if (!hasHeadings) {
-      setIsTocVisible(false);
-      return;
-    }
-
-    if (typeof window !== 'undefined') {
-      const isMd = window.matchMedia('(min-width: 768px)').matches;
-      if (!isMd) {
-        setIsTocVisible(false);
-        return;
-      }
-    }
-
-    // ToC remains hidden by default - only show if user explicitly toggles it
-  }, [hasHeadings]);
-
-  const updateCopyStatus = useCallback(
-    (status: CopyStatus) => {
-      if (copyStatusResetRef.current) {
-        window.clearTimeout(copyStatusResetRef.current);
-        copyStatusResetRef.current = null;
-      }
-
-      setCopyStatus(status);
-
-      if (status === 'idle') {
-        return;
-      }
-
-      const delay = status === 'error' ? 2500 : 1800;
-
-      copyStatusResetRef.current = window.setTimeout(() => {
-        setCopyStatus('idle');
-        copyStatusResetRef.current = null;
-      }, delay);
-    },
-    [copyStatusResetRef]
-  );
 
   const getSerializablePreview = useCallback(() => {
     const theme = getTheme(currentTheme);
@@ -551,42 +379,7 @@ export default function Home() {
     download('document.html', doc, 'text/html;charset=utf-8');
   }, [download, getSerializablePreview]);
 
-  const copyPreviewToClipboard = useCallback(async () => {
-    if (typeof navigator === 'undefined') {
-      updateCopyStatus('error');
-      return;
-    }
 
-    try {
-      const { theme, htmlContent, plainText, styles } = getSerializablePreview();
-      const htmlDocument = `<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>Markdown Preview</title><style>${styles}</style></head><body><main class=\"${theme.classes.prose}\">${htmlContent}</main></body></html>`;
-
-      const clipboard = navigator.clipboard;
-
-      if (clipboard && 'write' in clipboard && typeof ClipboardItem !== 'undefined') {
-        const htmlBlob = new Blob([htmlDocument], { type: 'text/html' });
-        const textBlob = new Blob([plainText], { type: 'text/plain' });
-        await clipboard.write([
-          new ClipboardItem({
-            'text/html': htmlBlob,
-            'text/plain': textBlob,
-          }),
-        ]);
-        updateCopyStatus('styled');
-        return;
-      }
-
-      if (clipboard && 'writeText' in clipboard) {
-        await clipboard.writeText(plainText);
-        updateCopyStatus('plain');
-        return;
-      }
-
-      updateCopyStatus('error');
-    } catch {
-      updateCopyStatus('error');
-    }
-  }, [getSerializablePreview, updateCopyStatus]);
 
   const openGuide = useCallback(() => {
     if (typeof window === 'undefined') {
@@ -610,54 +403,6 @@ export default function Home() {
     setIsDocumentViewOpen(false);
   }, []);
 
-  const hideToc = useCallback(() => {
-    hasUserToggledTocRef.current = true;
-    setIsTocVisible(false);
-  }, []);
-
-  const showToc = useCallback(() => {
-    if (!hasHeadings) {
-      return;
-    }
-    if (typeof window !== 'undefined') {
-      const isMd = window.matchMedia('(min-width: 768px)').matches;
-      if (!isMd) {
-        return;
-      }
-    }
-    hasUserToggledTocRef.current = true;
-    setIsTocVisible(true);
-  }, [hasHeadings]);
-
-  const scrollToHeading = useCallback(
-    (headingId: string) => {
-      const preview = previewRef.current;
-      if (!preview) {
-        return;
-      }
-
-      const escapeSelector = (value: string) =>
-        value.replace(/([!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g, '\\$1');
-
-      const target = preview.querySelector<HTMLElement>(`#${escapeSelector(headingId)}`);
-      if (!target) {
-        return;
-      }
-
-      target.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-
-      activeHeadingRef.current = headingId;
-      setActiveHeadingId(headingId);
-
-      if (typeof window !== 'undefined') {
-        window.requestAnimationFrame(() => {
-          updateActiveHeading();
-        });
-      }
-    },
-    [updateActiveHeading]
-  );
-
   // Scroll synchronization handlers
   const handleEditorScroll = useCallback(
     (scrollPercentage: number) => {
@@ -673,21 +418,9 @@ export default function Home() {
       if (viewMode === 'split') {
         setEditorScrollPercentage(scrollPercentage);
       }
-      updateActiveHeading();
     },
-    [updateActiveHeading, viewMode]
+    [viewMode]
   );
-
-  useEffect(() => {
-    if (previewScrollPercentage === undefined) {
-      return;
-    }
-    if (typeof window === 'undefined') {
-      return;
-    }
-    const frame = window.requestAnimationFrame(() => updateActiveHeading());
-    return () => window.cancelAnimationFrame(frame);
-  }, [previewScrollPercentage, updateActiveHeading]);
 
   // Reset scroll sync when switching view modes
   useEffect(() => {
@@ -695,13 +428,7 @@ export default function Home() {
     setPreviewScrollPercentage(undefined);
   }, [viewMode]);
 
-  useEffect(() => {
-    return () => {
-      if (copyStatusResetRef.current) {
-        window.clearTimeout(copyStatusResetRef.current);
-      }
-    };
-  }, []);
+
 
   return (
     <>
@@ -854,41 +581,13 @@ export default function Home() {
                   <Printer className="h-4 w-4" aria-hidden="true" />
                   <span>Document</span>
                 </button>
-                <button
-                  type="button"
-                  onClick={copyPreviewToClipboard}
-                  className={mobileCopyButtonClass}
-                  aria-label="Copy preview HTML to clipboard"
-                  title="Copy preview HTML to clipboard"
-                >
-                  {copyStatus === 'styled' ? (
-                    <>
-                      <Check className="h-4 w-4" aria-hidden="true" />
-                      <span>Copied</span>
-                    </>
-                  ) : copyStatus === 'plain' ? (
-                    <>
-                      <Check className="h-4 w-4" aria-hidden="true" />
-                      <span>Text only</span>
-                    </>
-                  ) : copyStatus === 'error' ? (
-                    <>
-                      <AlertCircle className="h-4 w-4" aria-hidden="true" />
-                      <span>Failed</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-4 w-4" aria-hidden="true" />
-                      <span>Copy HTML</span>
-                    </>
-                  )}
-                </button>
+
               </div>
               <QuickActionsMenu
                 onImport={onPickFile}
                 onExportMarkdown={exportMarkdown}
                 onExportHtml={exportHtml}
-                onCopyPreview={copyPreviewToClipboard}
+
                 onReset={resetSample}
                 onGuide={openGuide}
                 onGithub={openGithub}
@@ -999,35 +698,7 @@ export default function Home() {
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={copyPreviewToClipboard}
-                        className={previewCopyButtonClass}
-                        aria-label="Copy preview HTML to clipboard"
-                        title="Copy preview HTML to clipboard"
-                      >
-                        {copyStatus === 'styled' ? (
-                          <>
-                            <Check className="h-4 w-4" aria-hidden="true" />
-                            <span>Copied</span>
-                          </>
-                        ) : copyStatus === 'plain' ? (
-                          <>
-                            <Check className="h-4 w-4" aria-hidden="true" />
-                            <span>Copied text</span>
-                          </>
-                        ) : copyStatus === 'error' ? (
-                          <>
-                            <AlertCircle className="h-4 w-4" aria-hidden="true" />
-                            <span>Copy failed</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="h-4 w-4" aria-hidden="true" />
-                            <span>Copy HTML</span>
-                          </>
-                        )}
-                      </button>
+
                       <div className="hidden lg:block">
                         <CompactThemeSelector
                           currentTheme={currentTheme}
@@ -1060,35 +731,7 @@ export default function Home() {
 
         <Footer />
       </div>
-      {hasHeadings && isTocVisible && !isDocumentViewOpen ? (
-        <div
-          className="fixed bottom-6 right-4 z-30 hidden md:block w-[min(70vw,18rem)] drop-shadow-xl"
-          role="complementary"
-          aria-label="Floating table of contents"
-        >
-          <TableOfContents
-            headings={tableOfContents}
-            activeId={activeHeadingId}
-            onNavigate={scrollToHeading}
-            onClose={hideToc}
-            className="h-full overflow-y-auto"
-            style={{ maxHeight: 'calc(100vh - 8rem)' }}
-            emptyHint="Add headings (e.g. # Title) to generate a table of contents."
-          />
-        </div>
-      ) : null}
-      {hasHeadings && !isTocVisible && !isDocumentViewOpen ? (
-        <button
-          type="button"
-          onClick={showToc}
-          className={`${tocReopenButtonClass} hidden md:inline-flex`}
-          aria-label="Show table of contents"
-          title="Show table of contents"
-        >
-          <ListTree className="h-4 w-4" aria-hidden="true" />
-          <span>Show ToC</span>
-        </button>
-      ) : null}
+
       {isDocumentViewOpen ? (
         <DocumentView
           content={debouncedMarkdown}
