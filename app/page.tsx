@@ -463,11 +463,13 @@ export default function Home() {
                 >
                   <div className="relative">
                     <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 opacity-20 blur-md group-hover:opacity-40 transition-opacity duration-300" />
-                    <img
-                      src="/md-view-icon.svg"
-                      alt="MD-View logo"
-                      className="relative h-9 w-9 rounded-xl bg-gradient-to-br from-white via-slate-50 to-white p-2 ring-1 ring-slate-200/50 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-[0_4px_12px_rgba(14,165,233,0.3)]"
-                    />
+                    <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-white via-slate-50 to-white ring-1 ring-slate-200/50 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-[0_4px_12px_rgba(14,165,233,0.3)]">
+                      <img
+                        src="/md-view-icon.svg"
+                        alt="MD-View logo"
+                        className="h-5 w-5"
+                      />
+                    </div>
                   </div>
                   <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
                     <h1 className="text-lg font-bold leading-tight tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent">
