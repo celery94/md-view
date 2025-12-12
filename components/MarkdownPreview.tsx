@@ -7,6 +7,7 @@ import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { createSlugger, getNodeText } from '../lib/slugify';
 import { getTheme, type Theme } from '../lib/themes';
+import { ui } from '../lib/ui-classes';
 
 interface MarkdownPreviewProps {
   content: string;
@@ -47,21 +48,21 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
   }
 
   return (
-    <div className="relative group mdv-code">
+    <div className={ui.preview.code.wrapper}>
       {/* Top-right controls */}
       <div
-        className="absolute right-3 top-3 z-10 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200"
+        className={ui.preview.code.controls}
         data-no-export="true"
       >
         {language ? (
-          <span className="language-badge select-none rounded-full border border-sky-200/80 bg-gradient-to-br from-sky-50 to-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-700 shadow-[0_2px_8px_rgba(14,165,233,0.15)] backdrop-blur-sm">
+          <span className={ui.preview.code.languageBadge}>
             {language}
           </span>
         ) : null}
         <button
           type="button"
           onClick={onCopy}
-          className="copy-button inline-flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-gradient-to-br from-white to-slate-50/50 px-3 py-1.5 text-xs font-medium text-slate-700 shadow-[0_2px_8px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(15,23,42,0.12)] hover:scale-105 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          className={ui.preview.code.copyButton}
           aria-label="Copy code"
         >
           {copied ? (

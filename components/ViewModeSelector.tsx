@@ -86,7 +86,7 @@ export default function ViewModeSelector({
             key={mode.id}
             onClick={() => onModeChange(mode.id)}
             className={`
-              relative flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300
+              relative flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-2.5 text-xs font-semibold leading-none rounded-xl transition-all duration-300
               ${
                 isActive
                   ? 'bg-gradient-to-br from-sky-500 via-blue-500 to-indigo-500 text-white shadow-[0_4px_16px_rgba(14,165,233,0.35),inset_0_1px_0_rgba(255,255,255,0.2)] scale-[1.02]'
@@ -100,7 +100,10 @@ export default function ViewModeSelector({
             {isActive && (
               <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-sky-400/20 to-indigo-400/20 blur-sm" />
             )}
-            <Icon className={`relative flex-shrink-0 h-3.5 w-3.5 -translate-y-[0.5px] ${isActive ? 'drop-shadow-sm' : ''}`} aria-hidden="true" />
+            <Icon
+              className={`relative block flex-shrink-0 h-3.5 w-3.5 ${isActive ? 'drop-shadow-sm' : ''}`}
+              aria-hidden="true"
+            />
             <span className={`relative ${showLabels ? 'hidden sm:inline' : 'sr-only'}`}>{mode.label}</span>
             <kbd
               className={

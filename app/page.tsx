@@ -13,6 +13,8 @@ import Footer from '../components/Footer';
 import DocumentView from '../components/DocumentView';
 
 import { themes, getTheme } from '../lib/themes';
+import { cn } from '../lib/cn';
+import { ui } from '../lib/ui-classes';
 import {
   Upload,
   FileText,
@@ -104,34 +106,9 @@ export default function Home() {
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
   const navRowRef = useRef<HTMLDivElement | null>(null);
 
-
-  // Premium button styles with enhanced gradients and effects
-  const primaryActionButton =
-    'shimmer-btn inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 px-3 py-2 text-xs font-semibold text-white shadow-[0_4px_20px_rgba(14,165,233,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(14,165,233,0.5)] hover:scale-[1.03] hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-4 md:py-2.5 md:text-sm';
-  
-  const secondaryActionButton =
-    'inline-flex items-center gap-1.5 rounded-xl border border-slate-200/50 px-2.5 py-2 text-xs font-medium text-slate-600 bg-white/50 backdrop-blur-sm transition-all duration-300 hover:text-slate-900 hover:bg-gradient-to-br hover:from-white hover:via-slate-50 hover:to-slate-100 hover:shadow-[0_4px_12px_rgba(15,23,42,0.1)] hover:scale-[1.03] hover:border-slate-300/80 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm';
-  
-  const quietNavButton =
-    'inline-flex items-center justify-center gap-1.5 rounded-xl p-2.5 text-xs font-medium text-slate-500 transition-all duration-300 hover:text-sky-600 hover:bg-sky-50/80 hover:shadow-[0_2px_8px_rgba(14,165,233,0.15)] hover:scale-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:p-2.5';
-  
-  const statPillClass =
-    'hidden xl:flex items-center gap-3 rounded-full border border-slate-200/40 bg-gradient-to-r from-white/90 via-slate-50/50 to-white/90 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 shadow-[0_2px_16px_rgba(15,23,42,0.08)] backdrop-blur-md ring-1 ring-white/60';
-  
   const wordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
   const lineCount = markdown.split('\n').length;
   const fileSizeKb = Math.max(1, Math.round(new Blob([markdown]).size / 1024));
-  
-  const mobileActionButton =
-    'inline-flex flex-none items-center gap-2 rounded-xl border border-slate-200/60 bg-gradient-to-br from-white via-slate-50/30 to-white px-4 py-3 text-xs font-semibold text-slate-700 shadow-[0_2px_10px_rgba(15,23,42,0.06)] backdrop-blur-md transition-all duration-300 hover:shadow-[0_8px_20px_rgba(15,23,42,0.12)] hover:scale-[1.03] hover:border-slate-300/80 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
-
-  // Premium panel styling with glassmorphism
-  const panelClass =
-    'relative flex w-full flex-1 min-h-0 flex-col overflow-hidden rounded-[28px] border border-white/60 bg-gradient-to-br from-white/95 via-white/80 to-slate-50/90 p-5 sm:p-7 lg:p-8 shadow-[0_20px_50px_rgba(15,23,42,0.1),0_8px_20px_rgba(15,23,42,0.05),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-xl ring-1 ring-slate-200/30';
-  
-  const infoTileClass =
-    'flex items-center gap-3 rounded-2xl border border-slate-200/50 bg-gradient-to-br from-white/90 to-slate-50/80 px-4 py-3 text-sm font-semibold text-slate-700 shadow-[0_8px_24px_rgba(15,23,42,0.06)] backdrop-blur-lg';
-
 
 
   const getSerializablePreview = useCallback(() => {
@@ -440,7 +417,7 @@ export default function Home() {
   return (
     <>
       <div
-        className={`relative min-h-screen flex flex-col overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100 text-slate-900 ${isDocumentViewOpen ? 'print:hidden' : ''}`}
+        className={cn(ui.home.root, { 'print:hidden': isDocumentViewOpen })}
       >
         {/* Premium animated background */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
@@ -471,16 +448,16 @@ export default function Home() {
         </div>
         
         {/* Premium Header */}
-        <header className="sticky top-0 z-30 border-b border-white/50 bg-white/70 shadow-[0_1px_0_rgba(148,163,184,0.1),0_20px_50px_-20px_rgba(15,23,42,0.2)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/60">
-          <div className="flex w-full flex-col gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:px-10 xl:px-12 animate-fade-in">
+        <header className={ui.home.header}>
+          <div className={ui.home.headerInner}>
             <div
               ref={navRowRef}
-              className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-3"
+              className={ui.home.navRow}
             >
               <div className="flex items-center gap-2 md:gap-4">
                 <Link
                   href="/"
-                  className="group flex items-center gap-3 rounded-2xl border border-white/60 bg-gradient-to-br from-white/90 via-white/70 to-slate-50/80 px-4 py-2.5 shadow-[0_4px_16px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-xl transition-all duration-300 hover:shadow-[0_8px_24px_rgba(14,165,233,0.15)] hover:scale-[1.02] hover:border-sky-200/50 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className={ui.home.brandLink}
                   aria-label="MD-View Home"
                   title="MD-View Home"
                 >
@@ -509,7 +486,7 @@ export default function Home() {
                 </div>
 
                 {!isNavCompact && (
-                  <div className={statPillClass}>
+                  <div className={ui.home.statPill}>
                     <span className="text-sky-600">{wordCount}</span>
                     <span className="text-slate-300">words</span>
                     <span className="mx-1 h-3 w-px bg-slate-200/60" />
@@ -526,7 +503,7 @@ export default function Home() {
                 <div className="flex items-center gap-1.5 rounded-2xl border border-white/60 bg-gradient-to-br from-white/80 via-white/60 to-slate-50/70 p-1.5 shadow-[0_2px_12px_rgba(15,23,42,0.06)] backdrop-blur-xl">
                   <button
                     onClick={onPickFile}
-                    className={primaryActionButton}
+                    className={ui.home.buttons.primary}
                     aria-label="Import markdown file"
                     title="Import .md file"
                   >
@@ -537,7 +514,7 @@ export default function Home() {
                   </button>
                   <button
                     onClick={exportMarkdown}
-                    className={secondaryActionButton}
+                    className={ui.home.buttons.secondary}
                     aria-label="Export as markdown file"
                     title="Export as .md file"
                   >
@@ -548,7 +525,7 @@ export default function Home() {
                   </button>
                   <button
                     onClick={exportHtml}
-                    className={secondaryActionButton}
+                    className={ui.home.buttons.secondary}
                     aria-label="Export as HTML file"
                     title="Export as .html file"
                   >
@@ -559,7 +536,7 @@ export default function Home() {
                   </button>
                   <button
                     onClick={openDocumentView}
-                    className={secondaryActionButton}
+                    className={ui.home.buttons.secondary}
                     aria-label="Open document view"
                     title="Open print-friendly document view"
                   >
@@ -571,7 +548,7 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <Link href="/guide" className={quietNavButton} title="Markdown guide and tips">
+                  <Link href="/guide" className={ui.home.buttons.quietNav} title="Markdown guide and tips">
                     <BookOpen className="h-4 w-4" aria-hidden="true" />
                     <span className="sr-only">Guide</span>
                   </Link>
@@ -579,7 +556,7 @@ export default function Home() {
                     href="https://github.com/celery94/md-view"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={quietNavButton}
+                    className={ui.home.buttons.quietNav}
                     aria-label="GitHub repository"
                     title="Open GitHub repository"
                   >
@@ -588,7 +565,7 @@ export default function Home() {
                   </a>
                   <button
                     onClick={resetSample}
-                    className={quietNavButton}
+                    className={ui.home.buttons.quietNav}
                     aria-label="Reset to sample content"
                     title="Reset to sample markdown"
                   >
@@ -602,7 +579,7 @@ export default function Home() {
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={openDocumentView}
-                  className={mobileActionButton}
+                  className={ui.home.mobileActionButton}
                   aria-label="Open document view"
                   title="Open print-friendly document view"
                 >
@@ -619,7 +596,7 @@ export default function Home() {
                 onReset={resetSample}
                 onGuide={openGuide}
                 onGithub={openGithub}
-                triggerClassName={`${mobileActionButton} flex-none`}
+                triggerClassName={cn(ui.home.mobileActionButton, 'flex-none')}
                 triggerLabel="More"
               />
             </div>
@@ -635,17 +612,17 @@ export default function Home() {
           </div>
         </header>
 
-        <main className="relative flex flex-1 min-h-0 flex-col py-6 sm:py-8 lg:py-12" role="main">
+        <main className={ui.home.main} role="main">
           <div className="flex w-full flex-1 flex-col">
             <div
               ref={containerRef}
-              className={`relative flex w-full flex-1 flex-col gap-5 px-4 sm:px-6 lg:px-10 xl:px-12 min-h-0 ${
-                viewMode === 'split' ? 'md:flex-row md:items-stretch md:gap-8' : ''
-              }`}
+              className={cn(ui.home.container, {
+                'md:flex-row md:items-stretch md:gap-8': viewMode === 'split',
+              })}
             >
               {(viewMode === 'editor' || viewMode === 'split') && (
                 <section
-                  className={`${panelClass} animate-scale-in`}
+                  className={cn(ui.home.panel, 'animate-scale-in')}
                   style={
                     viewMode === 'split'
                       ? { width: '100%', flexBasis: `${ratio * 100}%` }
@@ -709,7 +686,7 @@ export default function Home() {
 
               {(viewMode === 'preview' || viewMode === 'split') && (
                 <section
-                  className={`${panelClass} animate-scale-in`}
+                  className={cn(ui.home.panel, 'animate-scale-in')}
                   style={
                     viewMode === 'split'
                       ? { width: '100%', flexBasis: `${(1 - ratio) * 100}%` }
