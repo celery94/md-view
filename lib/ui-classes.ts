@@ -7,7 +7,7 @@ export const ui = {
       'sticky top-0 z-30 border-b border-white/50 bg-white/70 shadow-[0_1px_0_rgba(148,163,184,0.1),0_20px_50px_-20px_rgba(15,23,42,0.2)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/60',
 
     headerInner:
-      'flex w-full flex-col gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:px-10 xl:px-12 animate-fade-in',
+      'flex w-full flex-col gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:px-10 xl:px-12',
 
     navRow: 'flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-3',
 
@@ -30,7 +30,7 @@ export const ui = {
 
     buttons: {
       primary:
-        'shimmer-btn inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 px-3 py-2 text-xs font-semibold text-white shadow-[0_4px_20px_rgba(14,165,233,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(14,165,233,0.5)] hover:scale-[1.03] hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-4 md:py-2.5 md:text-sm',
+        'inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 px-3 py-2 text-xs font-semibold text-white shadow-[0_4px_20px_rgba(14,165,233,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(14,165,233,0.5)] hover:scale-[1.03] hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-4 md:py-2.5 md:text-sm',
 
       secondary:
         'inline-flex items-center gap-1.5 rounded-xl border border-slate-200/50 px-2.5 py-2 text-xs font-medium text-slate-600 bg-white/50 backdrop-blur-sm transition-all duration-300 hover:text-slate-900 hover:bg-gradient-to-br hover:from-white hover:via-slate-50 hover:to-slate-100 hover:shadow-[0_4px_12px_rgba(15,23,42,0.1)] hover:scale-[1.03] hover:border-slate-300/80 active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:px-3 md:text-sm',

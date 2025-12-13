@@ -419,20 +419,19 @@ export default function Home() {
       <div
         className={cn(ui.home.root, { 'print:hidden': isDocumentViewOpen })}
       >
-        {/* Premium animated background */}
+        {/* Static background gradients */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          {/* Animated gradient orbs */}
+          {/* Static gradient orbs */}
           <div
-            className="absolute left-[-15%] top-[-10%] h-[500px] w-[500px] rounded-full bg-gradient-to-br from-sky-200/60 via-blue-200/40 to-indigo-200/30 blur-[80px] animate-pulse-slow"
+            className="absolute left-[-15%] top-[-10%] h-[500px] w-[500px] rounded-full bg-gradient-to-br from-sky-200/60 via-blue-200/40 to-indigo-200/30 blur-[80px]"
             aria-hidden="true"
           />
           <div
-            className="absolute right-[-10%] top-[20%] h-[600px] w-[600px] rounded-full bg-gradient-to-br from-violet-200/40 via-purple-200/30 to-fuchsia-200/20 blur-[100px] animate-float"
+            className="absolute right-[-10%] top-[20%] h-[600px] w-[600px] rounded-full bg-gradient-to-br from-violet-200/40 via-purple-200/30 to-fuchsia-200/20 blur-[100px]"
             aria-hidden="true"
           />
           <div
-            className="absolute left-[30%] bottom-[-20%] h-[400px] w-[400px] rounded-full bg-gradient-to-br from-cyan-200/30 via-teal-200/20 to-emerald-200/10 blur-[80px] animate-pulse-slow"
-            style={{ animationDelay: '1s' }}
+            className="absolute left-[30%] bottom-[-20%] h-[400px] w-[400px] rounded-full bg-gradient-to-br from-cyan-200/30 via-teal-200/20 to-emerald-200/10 blur-[80px]"
             aria-hidden="true"
           />
           {/* Mesh grid overlay */}
@@ -624,7 +623,7 @@ export default function Home() {
             >
               {(viewMode === 'editor' || viewMode === 'split') && (
                 <section
-                  className={cn(ui.home.panel, 'animate-scale-in')}
+                  className={ui.home.panel}
                   style={
                     viewMode === 'split'
                       ? { width: '100%', flexBasis: `${ratio * 100}%` }
@@ -688,7 +687,7 @@ export default function Home() {
 
               {(viewMode === 'preview' || viewMode === 'split') && (
                 <section
-                  className={cn(ui.home.panel, 'animate-scale-in')}
+                  className={ui.home.panel}
                   style={
                     viewMode === 'split'
                       ? { width: '100%', flexBasis: `${(1 - ratio) * 100}%` }

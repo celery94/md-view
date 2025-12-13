@@ -17,7 +17,7 @@ export default function Footer() {
           <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
             <span className="text-slate-400">©</span>
             <span>{currentYear}</span>
-            <span className="bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 bg-clip-text text-transparent font-bold animate-gradient-shift" style={{ backgroundSize: '200% 200%' }}>
+            <span className="bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 bg-clip-text text-transparent font-bold">
               MD-View
             </span>
             <span className="text-slate-400">•</span>
