@@ -6,17 +6,17 @@ import {
   Upload,
   FileText,
   FileCode,
+  Image,
   RotateCw,
   BookOpen,
   Github,
-
 } from 'lucide-react';
 
 interface QuickActionsMenuProps {
   onImport: () => void;
   onExportMarkdown: () => void;
   onExportHtml: () => void;
-
+  onExportImage: () => void;
   onReset: () => void;
   onGuide: () => void;
   onGithub: () => void;
@@ -28,7 +28,7 @@ export default function QuickActionsMenu({
   onImport,
   onExportMarkdown,
   onExportHtml,
-
+  onExportImage,
   onReset,
   onGuide,
   onGithub,
@@ -132,6 +132,15 @@ export default function QuickActionsMenu({
                 <FileCode className="h-4 w-4" />
               </div>
               <span>Export as HTML</span>
+            </button>
+            <button
+              onClick={() => handleAction(onExportImage)}
+              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-teal-50 hover:text-emerald-700"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100/80 text-emerald-600 transition-all duration-200 group-hover:bg-emerald-500 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(16,185,129,0.3)]">
+                <Image className="h-4 w-4" />
+              </div>
+              <span>Export as Image</span>
             </button>
           </div>
 

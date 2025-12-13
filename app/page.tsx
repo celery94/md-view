@@ -22,7 +22,7 @@ import {
   RotateCw,
   BookOpen,
   Github,
-
+  Image,
   Printer,
 } from 'lucide-react';
 
@@ -363,6 +363,23 @@ export default function Home() {
     download('document.html', doc, 'text/html;charset=utf-8');
   }, [download, getSerializablePreview]);
 
+  const exportImage = useCallback(async () => {
+    const previewElement = previewRef.current;
+    if (!previewElement) return;
+
+    try {
+      const { snapdom } = await import('@zumer/snapdom');
+      const result = await snapdom(previewElement);
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+      await result.download({
+        type: 'png',
+        filename: `document-${timestamp}`,
+      });
+    } catch (error) {
+      console.error('Failed to export image:', error);
+    }
+  }, []);
+
 
 
   const openGuide = useCallback(() => {
@@ -536,6 +553,17 @@ export default function Home() {
                     </span>
                   </button>
                   <button
+                    onClick={exportImage}
+                    className={ui.home.buttons.secondary}
+                    aria-label="Export as image"
+                    title="Export as PNG image"
+                  >
+                    <Image className="h-4 w-4" aria-hidden="true" />
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
+                      Export Image
+                    </span>
+                  </button>
+                  <button
                     onClick={openDocumentView}
                     className={ui.home.buttons.secondary}
                     aria-label="Open document view"
@@ -593,7 +621,7 @@ export default function Home() {
                 onImport={onPickFile}
                 onExportMarkdown={exportMarkdown}
                 onExportHtml={exportHtml}
-
+                onExportImage={exportImage}
                 onReset={resetSample}
                 onGuide={openGuide}
                 onGithub={openGithub}
