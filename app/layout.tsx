@@ -154,7 +154,6 @@ const webAppStructuredData = {
     'Syntax highlighting',
     'Import markdown files',
     'Export HTML',
-    'Print-ready document view',
     'Responsive interface',
   ],
   potentialAction: [

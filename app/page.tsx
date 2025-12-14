@@ -10,7 +10,6 @@ import CompactThemeSelector from '../components/CompactThemeSelector';
 import ViewModeSelector from '../components/ViewModeSelector';
 import QuickActionsMenu from '../components/QuickActionsMenu';
 import Footer from '../components/Footer';
-import DocumentView from '../components/DocumentView';
 
 import { themes, getTheme } from '../lib/themes';
 import { cn } from '../lib/cn';
@@ -23,7 +22,6 @@ import {
   BookOpen,
   Github,
   Image,
-  Printer,
 } from 'lucide-react';
 
 type ViewMode = 'split' | 'editor' | 'preview';
@@ -78,8 +76,6 @@ export function Example() {
 | Themes | Dark, GitHub, Notion, Paper |
 | Shortcuts | Ctrl/Cmd + 1 / 2 / 3 |
 
-> Tip: Try the document view before printing to PDF.
-
 ![Preview](/image.png)
 `;
 export default function Home() {
@@ -97,7 +93,7 @@ export default function Home() {
     undefined
   );
 
-  const [isDocumentViewOpen, setIsDocumentViewOpen] = useState(false);
+
 
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -396,13 +392,7 @@ export default function Home() {
     window.open('https://github.com/celery94/md-view', '_blank', 'noopener,noreferrer');
   }, []);
 
-  const openDocumentView = useCallback(() => {
-    setIsDocumentViewOpen(true);
-  }, []);
 
-  const closeDocumentView = useCallback(() => {
-    setIsDocumentViewOpen(false);
-  }, []);
 
   // Scroll synchronization handlers
   const handleEditorScroll = useCallback(
@@ -434,7 +424,7 @@ export default function Home() {
   return (
     <>
       <div
-        className={cn(ui.home.root, { 'print:hidden': isDocumentViewOpen })}
+        className={ui.home.root}
       >
         {/* Static background gradients */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
@@ -563,17 +553,7 @@ export default function Home() {
                       Export Image
                     </span>
                   </button>
-                  <button
-                    onClick={openDocumentView}
-                    className={ui.home.buttons.secondary}
-                    aria-label="Open document view"
-                    title="Open print-friendly document view"
-                  >
-                    <Printer className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
-                      Document view
-                    </span>
-                  </button>
+
                 </div>
 
                 <div className="flex items-center gap-1.5">
@@ -606,17 +586,6 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap items-center justify-between gap-2 pt-1 md:hidden">
               <div className="flex flex-wrap items-center gap-2">
-                <button
-                  onClick={openDocumentView}
-                  className={ui.home.mobileActionButton}
-                  aria-label="Open document view"
-                  title="Open print-friendly document view"
-                >
-                  <Printer className="h-4 w-4" aria-hidden="true" />
-                  <span>Document</span>
-                </button>
-
-              </div>
               <QuickActionsMenu
                 onImport={onPickFile}
                 onExportMarkdown={exportMarkdown}
@@ -628,6 +597,7 @@ export default function Home() {
                 triggerClassName={cn(ui.home.mobileActionButton, 'flex-none')}
                 triggerLabel="More"
               />
+              </div>
             </div>
 
             <input
@@ -776,14 +746,7 @@ export default function Home() {
         <Footer />
       </div>
 
-      {isDocumentViewOpen ? (
-        <DocumentView
-          content={debouncedMarkdown}
-          theme={currentTheme}
-          onThemeChange={setCurrentTheme}
-          onClose={closeDocumentView}
-        />
-      ) : null}
+
     </>
   );
 }
