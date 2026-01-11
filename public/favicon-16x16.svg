@@ -1,16 +1,17 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="16" height="16" rx="2" fill="#1e293b"/>
+  <defs>
+    <linearGradient id="favGradient" x1="0" y1="0" x2="16" y2="16" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
   
-  <!-- Simplified 'M' for small size -->
-  <path d="M2 4h1.5l1 2.5 1-2.5H7v6H6V6.5L5.5 8h-1L4 6.5V10H2V4z" fill="#60a5fa"/>
+  <rect width="16" height="16" rx="4" fill="url(#favGradient)" />
   
-  <!-- Eye icon -->
-  <circle cx="12" cy="6" r="1.5" fill="none" stroke="#60a5fa" stroke-width="0.75"/>
-  <circle cx="12" cy="6" r="0.75" fill="#60a5fa"/>
+  <!-- Stylized M -->
+  <path d="M3 5H5L8 9L11 5H13V12H11V8L8 11L5 8V12H3V5Z" fill="white" />
   
-  <!-- Lines -->
-  <rect x="10" y="9" width="4" height="0.5" fill="#60a5fa" opacity="0.7"/>
-  <rect x="10" y="10" width="3" height="0.5" fill="#60a5fa" opacity="0.7"/>
-  <rect x="10" y="11" width="3.5" height="0.5" fill="#60a5fa" opacity="0.7"/>
+  <!-- Tiny dot for the 'view' aspect -->
+  <circle cx="13" cy="13" r="2" fill="white" />
+  <circle cx="13" cy="13" r="0.8" fill="#4f46e5" />
 </svg>

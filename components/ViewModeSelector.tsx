@@ -74,7 +74,7 @@ export default function ViewModeSelector({
 
   return (
     <div
-      className="flex items-center gap-1 md:gap-1.5 rounded-2xl border border-white/60 bg-gradient-to-br from-white/80 via-white/50 to-slate-50/60 p-1.5 shadow-[0_4px_16px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-xl ring-1 ring-slate-200/30"
+      className="flex items-center gap-1 md:gap-1.5 rounded-2xl border border-slate-200/50 bg-white/40 p-1.5 shadow-[0_2px_10px_-2px_rgba(0,0,0,0.03)] backdrop-blur-md ring-1 ring-white/50"
       role="group"
       aria-label="View mode selector"
     >
@@ -89,8 +89,8 @@ export default function ViewModeSelector({
               relative flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-2.5 text-xs font-semibold leading-none rounded-xl transition-all duration-300
               ${
                 isActive
-                  ? 'bg-gradient-to-br from-sky-500 via-blue-500 to-indigo-500 text-white shadow-[0_4px_16px_rgba(14,165,233,0.35),inset_0_1px_0_rgba(255,255,255,0.2)] scale-[1.02]'
-                  : 'text-slate-500 hover:text-slate-700 hover:bg-gradient-to-br hover:from-white hover:via-slate-50 hover:to-slate-100 hover:shadow-[0_2px_8px_rgba(15,23,42,0.08)] hover:scale-[1.02] active:scale-95'
+                  ? 'bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 text-white shadow-[0_4px_16px_-4px_rgba(14,165,233,0.3)] scale-[1.02]'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-white/70 hover:shadow-sm hover:scale-[1.02] active:scale-95'
               }
               ${mode.id === 'split' ? 'view-mode-split' : ''}
             `}

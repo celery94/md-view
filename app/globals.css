@@ -1,13 +1,13 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
+  --background: #f8fafc;
+  --foreground: #0b1324;
   --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --border: #e2e8f0;
-  --accent: #f8fafc;
-  --accent-foreground: #0f172a;
+  --muted-foreground: #5b6b80;
+  --border: #e5e7eb;
+  --accent: #eef2f7;
+  --accent-foreground: #0b1324;
 
   /* Brand Colors */
   --brand-50: #f0f9ff;
@@ -21,7 +21,7 @@
 
   /* Accent Gradient Colors */
   --accent-gradient-start: #0ea5e9;
-  --accent-gradient-mid: #8b5cf6;
+  --accent-gradient-mid: #6366f1;
   --accent-gradient-end: #ec4899;
 
   /* Premium Shadows */

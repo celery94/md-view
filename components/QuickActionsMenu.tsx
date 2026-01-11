@@ -84,7 +84,7 @@ export default function QuickActionsMenu({
         type="button"
         ref={triggerRef}
         id={triggerId}
-        className={`inline-flex items-center gap-2 rounded-xl border border-white/60 bg-gradient-to-br from-white/90 via-white/70 to-slate-50/80 p-2.5 text-slate-500 shadow-[0_2px_10px_rgba(15,23,42,0.06)] backdrop-blur-xl transition-all duration-300 hover:bg-white hover:text-slate-700 hover:shadow-[0_4px_16px_rgba(15,23,42,0.1)] hover:scale-[1.03] active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${triggerClassName ?? ''}`}
+        className={`inline-flex items-center gap-2 rounded-xl border border-slate-200/50 bg-white/50 p-2.5 text-slate-500 shadow-[0_2px_8px_-2px_rgba(15,23,42,0.05)] backdrop-blur-md transition-all duration-300 hover:bg-white/80 hover:text-slate-900 hover:shadow-[0_8px_20px_-4px_rgba(15,23,42,0.1)] hover:scale-[1.03] active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${triggerClassName ?? ''}`}
         aria-label={triggerLabel ? `${triggerLabel} actions` : 'More actions'}
         title={triggerLabel ? `${triggerLabel} actions` : 'More actions'}
         aria-haspopup="menu"
@@ -99,7 +99,7 @@ export default function QuickActionsMenu({
 
       {isOpen && (
         <div
-          className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-white/60 bg-white/95 p-2 shadow-[0_20px_50px_rgba(15,23,42,0.2),0_8px_20px_rgba(15,23,42,0.1)] backdrop-blur-2xl animate-scale-in ring-1 ring-slate-200/30"
+          className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-slate-200/50 bg-white/80 p-2 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] backdrop-blur-xl animate-scale-in ring-1 ring-white/50"
           role="menu"
           id={menuId}
           aria-labelledby={triggerId}

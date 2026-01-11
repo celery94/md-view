@@ -14,18 +14,9 @@ import Footer from '../components/Footer';
 import { themes, getTheme } from '../lib/themes';
 import { cn } from '../lib/cn';
 import { ui } from '../lib/ui-classes';
-import {
-  Upload,
-  FileText,
-  FileCode,
-  RotateCw,
-  BookOpen,
-  Github,
-  Image,
-} from 'lucide-react';
+import { Upload, FileText, FileCode, RotateCw, BookOpen, Github, Image } from 'lucide-react';
 
 type ViewMode = 'split' | 'editor' | 'preview';
-
 
 const initialMarkdown = `# MD-View: Focused Markdown workspace
 
@@ -93,8 +84,6 @@ export default function Home() {
     undefined
   );
 
-
-
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -105,7 +94,6 @@ export default function Home() {
   const wordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
   const lineCount = markdown.split('\n').length;
   const fileSizeKb = Math.max(1, Math.round(new Blob([markdown]).size / 1024));
-
 
   const getSerializablePreview = useCallback(() => {
     const theme = getTheme(currentTheme);
@@ -376,8 +364,6 @@ export default function Home() {
     }
   }, []);
 
-
-
   const openGuide = useCallback(() => {
     if (typeof window === 'undefined') {
       return;
@@ -391,8 +377,6 @@ export default function Home() {
     }
     window.open('https://github.com/celery94/md-view', '_blank', 'noopener,noreferrer');
   }, []);
-
-
 
   // Scroll synchronization handlers
   const handleEditorScroll = useCallback(
@@ -419,47 +403,40 @@ export default function Home() {
     setPreviewScrollPercentage(undefined);
   }, [viewMode]);
 
-
-
   return (
     <>
-      <div
-        className={ui.home.root}
-      >
+      <div className={ui.home.root}>
         {/* Static background gradients */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           {/* Static gradient orbs */}
           <div
-            className="absolute left-[-15%] top-[-10%] h-[500px] w-[500px] rounded-full bg-gradient-to-br from-sky-200/60 via-blue-200/40 to-indigo-200/30 blur-[80px]"
+            className="absolute left-[-15%] top-[-12%] h-[520px] w-[520px] rounded-full bg-gradient-to-br from-sky-200/50 via-blue-200/30 to-indigo-200/20 blur-[90px]"
             aria-hidden="true"
           />
           <div
-            className="absolute right-[-10%] top-[20%] h-[600px] w-[600px] rounded-full bg-gradient-to-br from-violet-200/40 via-purple-200/30 to-fuchsia-200/20 blur-[100px]"
+            className="absolute right-[-10%] top-[18%] h-[620px] w-[620px] rounded-full bg-gradient-to-br from-violet-200/35 via-purple-200/25 to-fuchsia-200/20 blur-[110px]"
             aria-hidden="true"
           />
           <div
-            className="absolute left-[30%] bottom-[-20%] h-[400px] w-[400px] rounded-full bg-gradient-to-br from-cyan-200/30 via-teal-200/20 to-emerald-200/10 blur-[80px]"
+            className="absolute left-[30%] bottom-[-22%] h-[420px] w-[420px] rounded-full bg-gradient-to-br from-cyan-200/25 via-teal-200/18 to-emerald-200/10 blur-[90px]"
             aria-hidden="true"
           />
           {/* Mesh grid overlay */}
           <div
-            className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.03)_1px,transparent_1px)] bg-[size:60px_60px]"
+            className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"
             aria-hidden="true"
           />
           {/* Radial gradients */}
           <div
-            className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(14,165,233,0.08),transparent_40%),radial-gradient(circle_at_85%_20%,rgba(139,92,246,0.08),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(6,182,212,0.06),transparent_40%)]"
+            className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(14,165,233,0.07),transparent_40%),radial-gradient(circle_at_85%_20%,rgba(139,92,246,0.07),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(6,182,212,0.05),transparent_40%)]"
             aria-hidden="true"
           />
         </div>
-        
+
         {/* Premium Header */}
         <header className={ui.home.header}>
           <div className={ui.home.headerInner}>
-            <div
-              ref={navRowRef}
-              className={ui.home.navRow}
-            >
+            <div ref={navRowRef} className={ui.home.navRow}>
               <div className="flex items-center gap-2 md:gap-4">
                 <Link
                   href="/"
@@ -470,18 +447,16 @@ export default function Home() {
                   <div className="relative">
                     <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 opacity-20 blur-md group-hover:opacity-40 transition-opacity duration-300" />
                     <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-white via-slate-50 to-white ring-1 ring-slate-200/50 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-[0_4px_12px_rgba(14,165,233,0.3)]">
-                      <img
-                        src="/md-view-icon.svg"
-                        alt="MD-View logo"
-                        className="h-5 w-5"
-                      />
+                      <img src="/md-view-icon.svg" alt="MD-View logo" className="h-5 w-5" />
                     </div>
                   </div>
                   <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
                     <h1 className="text-lg font-bold leading-tight tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent">
                       MD-View
                     </h1>
-                    <p className="text-[11px] font-semibold text-slate-400 tracking-wide">Markdown Editor</p>
+                    <p className="text-[11px] font-semibold text-slate-400 tracking-wide">
+                      Markdown Editor
+                    </p>
                   </div>
                 </Link>
 
@@ -553,11 +528,14 @@ export default function Home() {
                       Export Image
                     </span>
                   </button>
-
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <Link href="/guide" className={ui.home.buttons.quietNav} title="Markdown guide and tips">
+                  <Link
+                    href="/guide"
+                    className={ui.home.buttons.quietNav}
+                    title="Markdown guide and tips"
+                  >
                     <BookOpen className="h-4 w-4" aria-hidden="true" />
                     <span className="sr-only">Guide</span>
                   </Link>
@@ -586,17 +564,17 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap items-center justify-between gap-2 pt-1 md:hidden">
               <div className="flex flex-wrap items-center gap-2">
-              <QuickActionsMenu
-                onImport={onPickFile}
-                onExportMarkdown={exportMarkdown}
-                onExportHtml={exportHtml}
-                onExportImage={exportImage}
-                onReset={resetSample}
-                onGuide={openGuide}
-                onGithub={openGithub}
-                triggerClassName={cn(ui.home.mobileActionButton, 'flex-none')}
-                triggerLabel="More"
-              />
+                <QuickActionsMenu
+                  onImport={onPickFile}
+                  onExportMarkdown={exportMarkdown}
+                  onExportHtml={exportHtml}
+                  onExportImage={exportImage}
+                  onReset={resetSample}
+                  onGuide={openGuide}
+                  onGithub={openGithub}
+                  triggerClassName={cn(ui.home.mobileActionButton, 'flex-none')}
+                  triggerLabel="More"
+                />
               </div>
             </div>
 
@@ -674,7 +652,10 @@ export default function Home() {
                   title="Drag to resize panels"
                 >
                   <div className="relative flex h-full w-full items-center justify-center">
-                    <span className="h-full w-px bg-gradient-to-b from-transparent via-slate-200 to-transparent" aria-hidden="true" />
+                    <span
+                      className="h-full w-px bg-gradient-to-b from-transparent via-slate-200 to-transparent"
+                      aria-hidden="true"
+                    />
                     <span
                       className="absolute left-1/2 top-1/2 h-16 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-200 transition-all duration-300 group-hover:bg-gradient-to-b group-hover:from-sky-400 group-hover:via-blue-400 group-hover:to-indigo-400 group-hover:shadow-[0_0_12px_rgba(14,165,233,0.4)] group-hover:h-20 group-hover:w-2"
                       aria-hidden="true"
@@ -712,7 +693,6 @@ export default function Home() {
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-
                       <div className="hidden lg:block">
                         <CompactThemeSelector
                           currentTheme={currentTheme}
@@ -745,8 +725,6 @@ export default function Home() {
 
         <Footer />
       </div>
-
-
     </>
   );
 }

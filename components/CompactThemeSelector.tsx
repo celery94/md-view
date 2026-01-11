@@ -20,7 +20,7 @@ export default function CompactThemeSelector({
       <select
         value={currentTheme}
         onChange={(e) => onThemeChange(e.target.value)}
-        className="appearance-none min-w-[120px] cursor-pointer rounded-xl border border-white/60 bg-gradient-to-br from-white/90 via-white/70 to-slate-50/80 py-2.5 pl-10 pr-9 text-sm font-semibold text-slate-700 shadow-[0_4px_16px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-xl transition-all duration-300 hover:shadow-[0_6px_20px_rgba(139,92,246,0.15)] hover:scale-[1.02] hover:border-violet-200/60 focus-visible:outline focus-visible:ring-2 focus-visible:ring-violet-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+        className="appearance-none min-w-[120px] cursor-pointer rounded-xl border border-slate-200/50 bg-white/50 py-2.5 pl-10 pr-9 text-sm font-semibold text-slate-700 shadow-[0_2px_8px_-2px_rgba(15,23,42,0.05)] backdrop-blur-md transition-all duration-300 hover:bg-white/80 hover:shadow-[0_8px_20px_-4px_rgba(139,92,246,0.15)] hover:scale-[1.02] hover:border-violet-200/50 focus-visible:outline focus-visible:ring-2 focus-visible:ring-violet-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
         aria-label="Select preview theme"
         title={`Current theme: ${currentThemeObj.displayName}`}
       >

@@ -1,16 +1,25 @@
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="32" height="32" rx="4" fill="#1e293b"/>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#4f46e5"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="64" height="64" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.2"/>
+    </filter>
+  </defs>
   
-  <!-- Markdown 'M' with better contrast -->
-  <path d="M4 8h3.5l2.5 5 2.5-5H16v12h-2.5v-7l-1.5 3h-2l-1.5-3v7H4V8z" fill="#60a5fa" stroke="#3b82f6" stroke-width="0.5"/>
+  <!-- Outer shell -->
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#logoGradient)" />
   
-  <!-- Preview eye icon -->
-  <circle cx="24" cy="12" r="3" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
-  <circle cx="24" cy="12" r="1.5" fill="#60a5fa"/>
+  <!-- Subtle glass overlay -->
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="white" fill-opacity="0.1" />
+
+  <!-- The 'M' symbol -->
+  <path d="M16 22H22L32 36L42 22H48V44H41V29L32 42L23 29V44H16V22Z" fill="white" />
   
-  <!-- Document lines -->
-  <rect x="20" y="18" width="8" height="1" rx="0.5" fill="#60a5fa" opacity="0.7"/>
-  <rect x="20" y="20" width="6" height="1" rx="0.5" fill="#60a5fa" opacity="0.7"/>
-  <rect x="20" y="22" width="7" height="1" rx="0.5" fill="#60a5fa" opacity="0.7"/>
+  <!-- Eye/View indicator at bottom right -->
+  <circle cx="48" cy="48" r="8" fill="white" />
+  <circle cx="48" cy="48" r="3.5" fill="url(#logoGradient)" />
+  <circle cx="50" cy="46" r="1" fill="white" fill-opacity="0.8" />
 </svg>
