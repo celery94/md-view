@@ -74,7 +74,7 @@ export default function ViewModeSelector({
 
   return (
     <div
-      className="flex items-center gap-1 md:gap-1.5 rounded-2xl border border-slate-200/50 bg-white/40 p-1.5 shadow-[0_2px_10px_-2px_rgba(0,0,0,0.03)] backdrop-blur-md ring-1 ring-white/50"
+      className="flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-100/50 p-1"
       role="group"
       aria-label="View mode selector"
     >
@@ -86,34 +86,22 @@ export default function ViewModeSelector({
             key={mode.id}
             onClick={() => onModeChange(mode.id)}
             className={`
-              relative flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-2.5 text-xs font-semibold leading-none rounded-xl transition-all duration-300
+              relative flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-medium leading-none rounded-md transition-all duration-200
               ${
                 isActive
-                  ? 'bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 text-white shadow-[0_4px_16px_-4px_rgba(14,165,233,0.3)] scale-[1.02]'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-white/70 hover:shadow-sm hover:scale-[1.02] active:scale-95'
+                  ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-200/50'
               }
               ${mode.id === 'split' ? 'view-mode-split' : ''}
             `}
             title={mode.description}
             aria-label={mode.label}
           >
-            {isActive && (
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-sky-400/20 to-indigo-400/20 blur-sm" />
-            )}
             <Icon
-              className={`relative block flex-shrink-0 h-3.5 w-3.5 ${isActive ? 'drop-shadow-sm' : ''}`}
+              className="relative block flex-shrink-0 h-3.5 w-3.5"
               aria-hidden="true"
             />
             <span className={`relative ${showLabels ? 'hidden sm:inline' : 'sr-only'}`}>{mode.label}</span>
-            <kbd
-              className={
-                showLabels
-                  ? `hidden lg:inline-block ml-1 px-1.5 py-0.5 text-[10px] rounded border ${isActive ? 'border-white/30 bg-white/10 text-white/80' : 'border-slate-200 bg-slate-100 text-slate-400'}`
-                  : 'hidden'
-              }
-            >
-              ⌘{mode.shortcut}
-            </kbd>
           </button>
         );
       })}

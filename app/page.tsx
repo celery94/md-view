@@ -406,33 +406,6 @@ export default function Home() {
   return (
     <>
       <div className={ui.home.root}>
-        {/* Static background gradients */}
-        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          {/* Static gradient orbs */}
-          <div
-            className="absolute left-[-15%] top-[-12%] h-[520px] w-[520px] rounded-full bg-gradient-to-br from-sky-200/50 via-blue-200/30 to-indigo-200/20 blur-[90px]"
-            aria-hidden="true"
-          />
-          <div
-            className="absolute right-[-10%] top-[18%] h-[620px] w-[620px] rounded-full bg-gradient-to-br from-violet-200/35 via-purple-200/25 to-fuchsia-200/20 blur-[110px]"
-            aria-hidden="true"
-          />
-          <div
-            className="absolute left-[30%] bottom-[-22%] h-[420px] w-[420px] rounded-full bg-gradient-to-br from-cyan-200/25 via-teal-200/18 to-emerald-200/10 blur-[90px]"
-            aria-hidden="true"
-          />
-          {/* Mesh grid overlay */}
-          <div
-            className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"
-            aria-hidden="true"
-          />
-          {/* Radial gradients */}
-          <div
-            className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(14,165,233,0.07),transparent_40%),radial-gradient(circle_at_85%_20%,rgba(139,92,246,0.07),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(6,182,212,0.05),transparent_40%)]"
-            aria-hidden="true"
-          />
-        </div>
-
         {/* Premium Header */}
         <header className={ui.home.header}>
           <div className={ui.home.headerInner}>
@@ -444,19 +417,13 @@ export default function Home() {
                   aria-label="MD-View Home"
                   title="MD-View Home"
                 >
-                  <div className="relative">
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 opacity-20 blur-md group-hover:opacity-40 transition-opacity duration-300" />
-                    <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-white via-slate-50 to-white ring-1 ring-slate-200/50 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-[0_4px_12px_rgba(14,165,233,0.3)]">
-                      <img src="/md-view-icon.svg" alt="MD-View logo" className="h-5 w-5" />
-                    </div>
+                  <div className="flex items-center justify-center">
+                    <img src="/md-view-icon.svg" alt="MD-View logo" className="h-6 w-6" />
                   </div>
                   <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
-                    <h1 className="text-lg font-bold leading-tight tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent">
+                    <h1 className="text-lg font-bold leading-tight tracking-tight text-slate-900">
                       MD-View
                     </h1>
-                    <p className="text-[11px] font-semibold text-slate-400 tracking-wide">
-                      Markdown Editor
-                    </p>
                   </div>
                 </Link>
 
@@ -609,23 +576,11 @@ export default function Home() {
                   onDragOver={onDragOver}
                   aria-label="Markdown editor section"
                 >
-                  {/* Animated top gradient bar */}
-                  <div
-                    className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-sky-400 to-transparent opacity-60"
-                    aria-hidden="true"
-                  />
-                  <div
-                    className="pointer-events-none absolute inset-x-4 top-0 h-1 rounded-full bg-gradient-to-r from-sky-300/60 via-blue-400/80 to-indigo-300/60 shadow-[0_0_10px_rgba(14,165,233,0.3)]"
-                    aria-hidden="true"
-                  />
-                  <div className="mb-5 flex flex-shrink-0 items-start justify-between gap-3">
+                  <div className="flex flex-shrink-0 items-start justify-between gap-3 p-4 border-b border-slate-100 hidden">
                     <div>
-                      <h2 className="text-xl font-bold tracking-tight bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                        Markdown Editor
+                      <h2 className="text-sm font-semibold tracking-tight text-slate-900">
+                        Editor
                       </h2>
-                      <p className="text-sm text-slate-500 mt-1 font-medium">
-                        Type your markdown or drop a .md file to load it instantly
-                      </p>
                     </div>
                   </div>
                   {/* Wrapper must be a flex container so nested editor (with flex-1) can stretch to available height. */}
@@ -644,23 +599,14 @@ export default function Home() {
               {viewMode === 'split' && (
                 <div
                   onMouseDown={startDrag}
-                  className="group hidden md:flex w-3 cursor-col-resize select-none items-stretch justify-center hover:w-4 transition-all duration-300"
+                  className="group hidden md:flex w-1 cursor-col-resize select-none items-stretch justify-center hover:bg-slate-200 transition-colors"
                   aria-label="Resize editor and preview panels"
                   role="separator"
                   aria-orientation="vertical"
                   tabIndex={0}
                   title="Drag to resize panels"
                 >
-                  <div className="relative flex h-full w-full items-center justify-center">
-                    <span
-                      className="h-full w-px bg-gradient-to-b from-transparent via-slate-200 to-transparent"
-                      aria-hidden="true"
-                    />
-                    <span
-                      className="absolute left-1/2 top-1/2 h-16 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-200 transition-all duration-300 group-hover:bg-gradient-to-b group-hover:from-sky-400 group-hover:via-blue-400 group-hover:to-indigo-400 group-hover:shadow-[0_0_12px_rgba(14,165,233,0.4)] group-hover:h-20 group-hover:w-2"
-                      aria-hidden="true"
-                    />
-                  </div>
+                  <div className="h-full w-px bg-slate-200" aria-hidden="true" />
                 </div>
               )}
 
@@ -674,23 +620,11 @@ export default function Home() {
                   }
                   aria-label="Markdown preview section"
                 >
-                  {/* Animated top gradient bar */}
-                  <div
-                    className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-violet-400 to-transparent opacity-60"
-                    aria-hidden="true"
-                  />
-                  <div
-                    className="pointer-events-none absolute inset-x-4 top-0 h-1 rounded-full bg-gradient-to-r from-violet-300/60 via-purple-400/80 to-fuchsia-300/60 shadow-[0_0_10px_rgba(139,92,246,0.3)]"
-                    aria-hidden="true"
-                  />
-                  <div className="mb-5 flex flex-shrink-0 items-center justify-between gap-3">
+                  <div className="flex flex-shrink-0 items-center justify-between gap-3 p-4 border-b border-slate-100">
                     <div>
-                      <h2 className="text-xl font-bold tracking-tight bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent">
-                        Live Preview
+                      <h2 className="text-sm font-semibold tracking-tight text-slate-900">
+                        Preview
                       </h2>
-                      <p className="text-sm text-slate-500 mt-1 font-medium">
-                        See the rendered markdown with your chosen theme
-                      </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="hidden lg:block">

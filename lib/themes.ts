@@ -13,11 +13,11 @@ export const themes: Theme[] = [
   {
     name: 'default',
     displayName: 'Default',
-    description: 'Clean and minimal design',
+    description: 'Clean and detailed design',
     classes: {
       container:
-        'h-full overflow-auto rounded-3xl border border-slate-200/70 bg-white/90 p-4 sm:p-6 shadow-sm backdrop-blur',
-      prose: 'prose prose-slate max-w-none',
+        'h-full overflow-auto bg-white p-8 sm:p-12',
+      prose: 'prose prose-slate max-w-none prose-h1:text-3xl prose-h1:font-bold prose-h2:text-2xl prose-h2:font-semibold prose-h3:text-xl prose-p:text-slate-600 prose-p:leading-relaxed prose-code:text-rose-500 prose-code:bg-rose-50 prose-code:px-1 prose-code:rounded prose-pre:bg-slate-50 prose-pre:border prose-pre:border-slate-100',
     },
   },
   {
@@ -26,7 +26,7 @@ export const themes: Theme[] = [
     description: 'Dark theme for low-light environments',
     classes: {
       container:
-        'h-full overflow-auto rounded-3xl border border-slate-700/60 bg-slate-950/75 p-4 sm:p-6 shadow-sm backdrop-blur',
+        'h-full overflow-auto bg-[#1e1e1e] p-8 sm:p-12',
       prose: 'prose prose-invert max-w-none dark-theme',
     },
     customStyles: `

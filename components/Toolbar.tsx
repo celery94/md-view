@@ -54,10 +54,10 @@ export default function Toolbar({
   onRedo,
 }: ToolbarProps) {
   const buttonClass =
-    'rounded-xl p-2.5 text-slate-600 transition-all duration-200 hover:bg-gradient-to-br hover:from-sky-100 hover:via-sky-50 hover:to-blue-50 hover:text-sky-700 hover:shadow-md hover:scale-105 active:scale-90 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
+    'rounded-md p-2 text-slate-500 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2';
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-50/30 to-white p-3 shadow-[0_4px_12px_rgba(15,23,42,0.1)] backdrop-blur-sm animate-fade-in ring-1 ring-slate-100/50">
+    <div className="flex flex-wrap items-center gap-1 rounded-lg border border-slate-200 bg-white p-2 shadow-sm">
       {/* Undo/Redo Group */}
       <button type="button" onClick={onUndo} className={buttonClass} title="Undo">
         <Undo className="h-4 w-4" />

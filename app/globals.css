@@ -47,59 +47,6 @@
   scroll-behavior: smooth;
 }
 
-/* Glass card utility classes */
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.glass-card-dark {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Text gradient utilities */
-.text-gradient {
-  background: linear-gradient(
-    135deg,
-    var(--accent-gradient-start) 0%,
-    var(--accent-gradient-mid) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.text-gradient-brand {
-  background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #8b5cf6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Shadow utilities */
-.shadow-premium {
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.03),
-    0 2px 4px rgba(0, 0, 0, 0.05),
-    0 12px 24px rgba(0, 0, 0, 0.05);
-}
-
-.shadow-premium-hover {
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.03),
-    0 4px 8px rgba(0, 0, 0, 0.08),
-    0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-.shadow-glow-brand {
-  box-shadow: 0 0 30px rgba(14, 165, 233, 0.25);
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
@@ -114,13 +61,13 @@ body {
   --mdv-border: var(--border);
   --mdv-accent: var(--accent);
   --mdv-accent-foreground: var(--accent-foreground);
-  --mdv-link: #2563eb;
-  --mdv-link-hover: #1d4ed8;
+  --mdv-link: #000;
+  --mdv-link-hover: #333;
   --mdv-marker: #94a3b8;
 }
 
 .markdown-preview[data-theme='dark'] {
-  --mdv-background: rgba(15, 23, 42, 0.8);
+  --mdv-background: #1e1e1e;
   --mdv-foreground: #e2e8f0;
   --mdv-muted: rgba(148, 163, 184, 0.18);
   --mdv-muted-foreground: #cbd5f5;
@@ -134,55 +81,38 @@ body {
 
 /* Custom scrollbar styles - Modern and refined */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: linear-gradient(to bottom, rgba(241, 245, 249, 0.4), rgba(226, 232, 240, 0.4));
-  border-radius: 12px;
-  margin: 6px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(148, 163, 184, 0.7), rgba(100, 116, 139, 0.8));
-  border-radius: 12px;
-  border: 3px solid rgba(255, 255, 255, 0.6);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
+  background: #cbd5e1;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(100, 116, 139, 0.9), rgba(71, 85, 105, 1));
-  border-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
-}
-
-::-webkit-scrollbar-thumb:active {
-  background: linear-gradient(180deg, rgba(71, 85, 105, 1), rgba(51, 65, 85, 1));
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+  background: #94a3b8;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 /* Custom styles for markdown preview */
 .prose pre {
-  background: linear-gradient(to bottom right, var(--mdv-muted), rgba(241, 245, 249, 0.5));
+  background: #f8fafc;
   padding: 1.5rem;
-  border-radius: 1rem;
+  border-radius: 6px;
   overflow-x: auto;
   border: 1px solid var(--mdv-border);
   position: relative;
-  box-shadow:
-    0 4px 12px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .prose pre:hover {
-  box-shadow:
-    0 6px 20px rgba(15, 23, 42, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  border-color: rgba(148, 163, 184, 0.5);
-  transform: translateY(-1px);
 }
 
 /* Inline code chips - Enhanced design */
@@ -191,26 +121,15 @@ body {
   font-family:
     var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
-  background: linear-gradient(135deg, rgba(241, 245, 249, 1), rgba(226, 232, 240, 0.95));
-  color: var(--mdv-foreground);
+  background: #f1f5f9;
+  color: #334155;
   padding: 0.2rem 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(148, 163, 184, 0.3);
-  box-shadow:
-    0 2px 4px rgba(15, 23, 42, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  font-weight: 600;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 4px;
 }
 
 .prose :not(pre) > code:hover {
-  background: linear-gradient(135deg, rgba(226, 232, 240, 1), rgba(203, 213, 225, 1));
-  border-color: rgba(148, 163, 184, 0.4);
-  box-shadow:
-    0 3px 6px rgba(15, 23, 42, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  transform: translateY(-1px);
 }
+
 
 /* Remove duplication inside fenced blocks */
 .prose pre code {
