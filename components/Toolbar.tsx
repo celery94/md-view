@@ -57,7 +57,7 @@ export default function Toolbar({
     'rounded-md p-2 text-slate-500 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2';
 
   return (
-    <div className="flex flex-wrap items-center gap-1 rounded-lg border border-slate-200 bg-white p-2 shadow-sm">
+    <div className="flex flex-wrap items-center gap-1 border-b border-slate-200/80 bg-white/70 p-2.5">
       {/* Undo/Redo Group */}
       <button type="button" onClick={onUndo} className={buttonClass} title="Undo">
         <Undo className="h-4 w-4" />
