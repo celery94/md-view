@@ -40,7 +40,7 @@ export const ui = {
 
   preview: {
     code: {
-      wrapper: 'relative group mdv-code rounded-xl overflow-hidden',
+      wrapper: 'relative group mdv-code overflow-hidden',
       controls:
         'absolute right-2.5 top-2.5 z-10 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200',
       languageBadge:

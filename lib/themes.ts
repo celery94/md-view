@@ -109,7 +109,7 @@ export const themes: Theme[] = [
     description: 'GitHub-like styling',
     classes: {
       container:
-        'h-full overflow-auto rounded-3xl border border-slate-200/70 bg-white/90 p-4 sm:p-6 shadow-sm backdrop-blur',
+        'h-full overflow-auto border border-slate-200/70 bg-white/90 p-4 sm:p-6 shadow-sm backdrop-blur',
       prose: 'prose prose-slate max-w-none github-theme',
     },
     customStyles: `
@@ -165,7 +165,7 @@ export const themes: Theme[] = [
     description: 'Notion-inspired design',
     classes: {
       container:
-        'h-full overflow-auto rounded-3xl border border-slate-200/70 bg-white/90 p-4 sm:p-6 backdrop-blur',
+        'h-full overflow-auto border border-slate-200/70 bg-white/90 p-4 sm:p-6 backdrop-blur',
       prose: 'prose prose-slate max-w-none notion-theme',
     },
     customStyles: `
@@ -213,7 +213,7 @@ export const themes: Theme[] = [
     description: 'Medium.com-style typography',
     classes: {
       container:
-        'h-full overflow-auto rounded-3xl border border-slate-200/70 bg-white/90 p-4 sm:p-8 backdrop-blur',
+        'h-full overflow-auto border border-slate-200/70 bg-white/90 p-4 sm:p-8 backdrop-blur',
       prose: 'prose prose-slate max-w-none medium-theme',
     },
     customStyles: `
@@ -290,7 +290,7 @@ export const themes: Theme[] = [
     description: 'Academic paper style',
     classes: {
       container:
-        'h-full overflow-auto rounded-3xl border border-slate-200/70 bg-white/90 p-5 sm:p-10 xl:p-12 shadow-lg backdrop-blur',
+        'h-full overflow-auto border border-slate-200/70 bg-white/90 p-5 sm:p-10 xl:p-12 shadow-lg backdrop-blur',
       prose: 'prose prose-slate max-w-none paper-theme',
     },
     customStyles: `
@@ -366,7 +366,7 @@ export const themes: Theme[] = [
     description: 'Ultra-clean minimal design',
     classes: {
       container:
-        'h-full overflow-auto rounded-3xl border border-slate-200/70 bg-slate-100/85 p-4 sm:p-6 backdrop-blur',
+        'h-full overflow-auto border border-slate-200/70 bg-slate-100/85 p-4 sm:p-6 backdrop-blur',
       prose: 'prose prose-gray max-w-none minimal-theme',
     },
     customStyles: `
@@ -438,7 +438,7 @@ export const themes: Theme[] = [
     description: 'Retro terminal/console style',
     classes: {
       container:
-        'h-full overflow-auto rounded-3xl border border-emerald-500/70 bg-black/90 p-4 sm:p-6 shadow-lg',
+        'h-full overflow-auto border border-emerald-500/70 bg-black/90 p-4 sm:p-6 shadow-lg',
       prose: 'prose prose-invert max-w-none terminal-theme',
     },
     customStyles: `

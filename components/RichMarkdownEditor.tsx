@@ -180,7 +180,7 @@ const RichMarkdownEditor = forwardRef<HTMLTextAreaElement, RichMarkdownEditorPro
     };
 
     return (
-      <div className="flex w-full flex-1 flex-col min-h-0 rounded-2xl border border-slate-200/60 bg-white shadow-sm overflow-hidden">
+      <div className="flex w-full flex-1 flex-col min-h-0 border border-slate-200/60 bg-white shadow-sm overflow-hidden">
         <Toolbar
           onBold={() => applyStyle('bold')}
           onItalic={() => applyStyle('italic')}

@@ -202,7 +202,7 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
       code: CodeBlock,
       img({ node: _node, ...props }) {
         const merged = [
-          'mx-auto my-4 max-w-[480px] w-full h-auto rounded-lg border border-gray-200 shadow-sm',
+          'mx-auto my-4 max-w-[480px] w-full h-auto border border-gray-200 shadow-sm',
           (props as any).className,
         ]
           .filter(Boolean)

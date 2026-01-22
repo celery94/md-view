@@ -598,7 +598,7 @@ export default function Home() {
             <div
               ref={containerRef}
               className={cn(ui.home.container, {
-                'md:flex-row md:items-stretch md:gap-8': viewMode === 'split',
+                'md:flex-row md:items-stretch md:gap-0': viewMode === 'split',
               })}
             >
               {(viewMode === 'editor' || viewMode === 'split') && (
