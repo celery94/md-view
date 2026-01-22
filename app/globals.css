@@ -1,15 +1,15 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0b1324;
+  --background: #fafbfc;
+  --foreground: #0f172a;
   --muted: #f1f5f9;
-  --muted-foreground: #5b6b80;
-  --border: #e5e7eb;
-  --accent: #eef2f7;
-  --accent-foreground: #0b1324;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
 
-  /* Brand Colors */
+  /* Brand Colors - Refined palette */
   --brand-50: #f0f9ff;
   --brand-100: #e0f2fe;
   --brand-200: #bae6fd;
@@ -19,19 +19,38 @@
   --brand-600: #0284c7;
   --brand-700: #0369a1;
 
-  /* Accent Gradient Colors */
-  --accent-gradient-start: #0ea5e9;
-  --accent-gradient-mid: #6366f1;
-  --accent-gradient-end: #ec4899;
+  /* Premium Gradient System */
+  --gradient-brand: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #8b5cf6 100%);
+  --gradient-subtle: linear-gradient(180deg, rgba(14, 165, 233, 0.03) 0%, transparent 100%);
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+  --gradient-glow: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.12), transparent);
 
-  /* Premium Shadows */
-  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-glow: 0 0 20px rgba(14, 165, 233, 0.15);
-  --shadow-glow-strong: 0 0 40px rgba(14, 165, 233, 0.25);
+  /* Premium Shadows - Refined depth system */
+  --shadow-xs: 0 1px 2px rgb(15 23 42 / 0.04);
+  --shadow-sm: 0 1px 3px rgb(15 23 42 / 0.06), 0 1px 2px rgb(15 23 42 / 0.04);
+  --shadow-md: 0 4px 8px -2px rgb(15 23 42 / 0.08), 0 2px 4px -2px rgb(15 23 42 / 0.04);
+  --shadow-lg: 0 12px 24px -4px rgb(15 23 42 / 0.1), 0 4px 8px -2px rgb(15 23 42 / 0.04);
+  --shadow-xl: 0 24px 48px -8px rgb(15 23 42 / 0.12), 0 8px 16px -4px rgb(15 23 42 / 0.06);
+  --shadow-glow: 0 0 24px rgba(14, 165, 233, 0.12), 0 0 48px rgba(14, 165, 233, 0.06);
+  --shadow-glow-strong: 0 0 32px rgba(14, 165, 233, 0.2), 0 0 64px rgba(14, 165, 233, 0.1);
+  --shadow-inner: inset 0 2px 4px rgb(15 23 42 / 0.04);
+  --shadow-ring: 0 0 0 3px rgba(14, 165, 233, 0.15);
+
+  /* Animation Timing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+
+  /* Border Radius System */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 9999px;
 
   /* Fallbacks when next/font is unavailable (e.g., offline builds) */
   --font-geist-sans:
@@ -79,55 +98,73 @@ body {
   --mdv-marker: #cbd5f5;
 }
 
-/* Custom scrollbar styles - Modern and refined */
+/* Custom scrollbar styles - Ultra-refined minimal design */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
   background: transparent;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 5px;
+  background: linear-gradient(180deg, #d1d5db 0%, #cbd5e1 100%);
+  border-radius: 4px;
   border: 2px solid transparent;
-  background-clip: content-box;
+  background-clip: padding-box;
+  transition: background var(--duration-fast) ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: linear-gradient(180deg, #9ca3af 0%, #94a3b8 100%);
   border: 2px solid transparent;
-  background-clip: content-box;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
 }
 
 /* Custom styles for markdown preview */
 .prose pre {
-  background: #f8fafc;
-  padding: 1.5rem;
-  border-radius: 6px;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-lg);
   overflow-x: auto;
   border: 1px solid var(--mdv-border);
   position: relative;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--duration-normal) var(--ease-out-expo);
 }
 
 .prose pre:hover {
+  box-shadow: var(--shadow-sm);
 }
 
 /* Inline code chips - Enhanced design */
 .prose :not(pre) > code {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-family:
     var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
-  background: #f1f5f9;
-  color: #334155;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
+  color: #1e293b;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  font-weight: 500;
 }
 
 .prose :not(pre) > code:hover {
+  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
 }
 
 
@@ -248,31 +285,35 @@ body {
 }
 
 .prose blockquote {
-  border-left: 5px solid #3b82f6;
+  border-left: 4px solid;
+  border-image: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%) 1;
   background: linear-gradient(
-    to right,
-    rgba(59, 130, 246, 0.1),
-    rgba(59, 130, 246, 0.05),
-    var(--mdv-accent)
+    135deg,
+    rgba(59, 130, 246, 0.06) 0%,
+    rgba(99, 102, 241, 0.03) 50%,
+    transparent 100%
   );
-  padding: 1.5rem 2rem;
+  padding: 1.25rem 1.75rem;
   font-style: italic;
-  margin: 2rem 0;
-  border-radius: 0 1rem 1rem 0;
+  margin: 1.75rem 0;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   color: var(--mdv-foreground);
-  box-shadow:
-    0 4px 12px rgba(59, 130, 246, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-sm);
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--duration-normal) var(--ease-out-expo);
+  backdrop-filter: blur(8px);
 }
 
 .prose blockquote:hover {
-  box-shadow:
-    0 6px 20px rgba(59, 130, 246, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  transform: translateX(2px);
+  box-shadow: var(--shadow-md);
+  transform: translateX(3px);
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.08) 0%,
+    rgba(99, 102, 241, 0.04) 50%,
+    transparent 100%
+  );
 }
 
 .prose blockquote::before {
@@ -281,53 +322,55 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: linear-gradient(to right, transparent, rgba(59, 130, 246, 0.3), transparent);
+  height: 1px;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.1), transparent);
 }
 
 .prose table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  margin: 2rem 0;
+  margin: 1.75rem 0;
   background-color: var(--mdv-background);
-  border-radius: 1rem;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow:
-    0 4px 16px rgba(15, 23, 42, 0.1),
-    0 0 0 1px var(--mdv-border);
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--mdv-border);
+  transition: box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.prose table:hover {
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--mdv-border);
 }
 
 .prose th,
 .prose td {
   border: none;
   border-bottom: 1px solid var(--mdv-border);
-  padding: 1rem 1.25rem;
+  padding: 0.875rem 1.125rem;
   text-align: left;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--duration-fast) ease;
 }
 
 .prose th {
-  background: linear-gradient(to bottom, var(--mdv-accent), rgba(241, 245, 249, 0.6));
-  font-weight: 700;
+  background: linear-gradient(180deg, var(--mdv-accent), rgba(241, 245, 249, 0.4));
+  font-weight: 600;
   color: var(--mdv-accent-foreground);
-  font-size: 0.875rem;
-  letter-spacing: 0.05em;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  border-bottom: 2px solid var(--mdv-border);
+  border-bottom: 1px solid var(--mdv-border);
 }
 
 .prose tbody tr {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color var(--duration-fast) ease;
 }
 
 .prose tbody tr:nth-child(even) {
-  background-color: var(--mdv-muted);
+  background-color: rgba(241, 245, 249, 0.4);
 }
 
 .prose tbody tr:hover {
-  background-color: rgba(59, 130, 246, 0.08) !important;
-  transform: scale(1.01);
+  background-color: rgba(14, 165, 233, 0.05) !important;
 }
 
 .prose tbody tr:last-child td {

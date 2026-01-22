@@ -450,7 +450,7 @@ export default function Home() {
               </div>
 
               <div className="hidden md:flex items-center gap-3">
-                <div className="flex items-center gap-1.5 rounded-2xl border border-white/60 bg-gradient-to-br from-white/80 via-white/60 to-slate-50/70 p-1.5 shadow-[0_2px_12px_rgba(15,23,42,0.06)] backdrop-blur-xl">
+                <div className="flex items-center gap-1 rounded-2xl border border-slate-200/60 bg-gradient-to-b from-white/90 to-slate-50/80 p-1 shadow-sm backdrop-blur-xl">
                   <button
                     onClick={onPickFile}
                     className={ui.home.buttons.primary}
@@ -620,9 +620,10 @@ export default function Home() {
                   }
                   aria-label="Markdown preview section"
                 >
-                  <div className="flex flex-shrink-0 items-center justify-between gap-3 p-4 border-b border-slate-100">
-                    <div>
-                      <h2 className="text-sm font-semibold tracking-tight text-slate-900">
+                  <div className="flex flex-shrink-0 items-center justify-between gap-3 px-5 py-3 border-b border-slate-100 bg-gradient-to-r from-slate-50/80 to-white">
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-500 shadow-sm shadow-emerald-500/30"></div>
+                      <h2 className="text-sm font-semibold tracking-tight text-slate-700">
                         Preview
                       </h2>
                     </div>

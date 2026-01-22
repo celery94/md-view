@@ -54,10 +54,12 @@ export default function Toolbar({
   onRedo,
 }: ToolbarProps) {
   const buttonClass =
-    'rounded-md p-2 text-slate-500 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2';
+    'rounded-lg p-2 text-slate-400 transition-all duration-200 hover:bg-gradient-to-b hover:from-slate-50 hover:to-slate-100/80 hover:text-slate-700 active:scale-[0.95] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/50 focus-visible:ring-offset-1';
+
+  const dividerClass = 'mx-1.5 h-5 w-px bg-gradient-to-b from-transparent via-slate-200 to-transparent';
 
   return (
-    <div className="flex flex-wrap items-center gap-1 border-b border-slate-200/80 bg-white/70 p-2.5">
+    <div className="flex flex-wrap items-center gap-0.5 border-b border-slate-100 bg-gradient-to-b from-slate-50/80 to-white px-3 py-2">
       {/* Undo/Redo Group */}
       <button type="button" onClick={onUndo} className={buttonClass} title="Undo">
         <Undo className="h-4 w-4" />
@@ -66,7 +68,7 @@ export default function Toolbar({
         <Redo className="h-4 w-4" />
       </button>
 
-      <div className="mx-1 h-6 w-px bg-slate-200" />
+      <div className={dividerClass} />
 
       {/* Text Formatting Group */}
       <button type="button" onClick={onBold} className={buttonClass} title="Bold">
@@ -82,7 +84,7 @@ export default function Toolbar({
         <Code className="h-4 w-4" />
       </button>
 
-      <div className="mx-1 h-6 w-px bg-slate-200" />
+      <div className={dividerClass} />
 
       {/* Headings Group */}
       <button type="button" onClick={onH1} className={buttonClass} title="Heading 1">
@@ -95,7 +97,7 @@ export default function Toolbar({
         <Heading3 className="h-4 w-4" />
       </button>
 
-      <div className="mx-1 h-6 w-px bg-slate-200" />
+      <div className={dividerClass} />
 
       {/* Lists and Structure Group */}
       <button type="button" onClick={onList} className={buttonClass} title="Bulleted List">
@@ -108,7 +110,7 @@ export default function Toolbar({
         <Quote className="h-4 w-4" />
       </button>
 
-      <div className="mx-1 h-6 w-px bg-slate-200" />
+      <div className={dividerClass} />
 
       {/* Media and Links Group */}
       <button type="button" onClick={onLink} className={buttonClass} title="Link">
