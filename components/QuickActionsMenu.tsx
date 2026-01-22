@@ -7,6 +7,7 @@ import {
   FileText,
   FileCode,
   Image,
+  ClipboardCopy,
   RotateCw,
   BookOpen,
   Github,
@@ -17,6 +18,7 @@ interface QuickActionsMenuProps {
   onExportMarkdown: () => void;
   onExportHtml: () => void;
   onExportImage: () => void;
+  onCopyHtml: () => void;
   onReset: () => void;
   onGuide: () => void;
   onGithub: () => void;
@@ -29,6 +31,7 @@ export default function QuickActionsMenu({
   onExportMarkdown,
   onExportHtml,
   onExportImage,
+  onCopyHtml,
   onReset,
   onGuide,
   onGithub,
@@ -141,6 +144,15 @@ export default function QuickActionsMenu({
                 <Image className="h-4 w-4" />
               </div>
               <span>Export as Image</span>
+            </button>
+            <button
+              onClick={() => handleAction(onCopyHtml)}
+              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-rose-50 hover:to-pink-50 hover:text-rose-700"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-100/80 text-rose-600 transition-all duration-200 group-hover:bg-rose-500 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(244,63,94,0.3)]">
+                <ClipboardCopy className="h-4 w-4" />
+              </div>
+              <span>Copy HTML for Email/Word</span>
             </button>
           </div>
 

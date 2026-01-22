@@ -14,7 +14,7 @@ import Footer from '../components/Footer';
 import { themes, getTheme } from '../lib/themes';
 import { cn } from '../lib/cn';
 import { ui } from '../lib/ui-classes';
-import { Upload, FileText, FileCode, RotateCw, BookOpen, Github, Image } from 'lucide-react';
+import { Upload, FileText, FileCode, RotateCw, BookOpen, Github, Image, ClipboardCopy } from 'lucide-react';
 
 type ViewMode = 'split' | 'editor' | 'preview';
 
@@ -364,6 +364,31 @@ export default function Home() {
     }
   }, []);
 
+  const copyHtmlToClipboard = useCallback(async () => {
+    const { theme, htmlContent, styles } = getSerializablePreview();
+    if (!htmlContent) return;
+
+    // Build a complete HTML document for rich text pasting
+    const fullHtml = `<!doctype html><html><head><meta charset="utf-8"/><style>${styles}</style></head><body><main class="${theme.classes.prose}">${htmlContent}</main></body></html>`;
+
+    try {
+      // Use ClipboardItem API to write both HTML and plain text
+      const htmlBlob = new Blob([fullHtml], { type: 'text/html' });
+      const { plainText } = getSerializablePreview();
+      const textBlob = new Blob([plainText], { type: 'text/plain' });
+
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/html': htmlBlob,
+          'text/plain': textBlob,
+        }),
+      ]);
+    } catch {
+      // Fallback: copy as plain HTML string
+      await navigator.clipboard.writeText(fullHtml);
+    }
+  }, [getSerializablePreview]);
+
   const openGuide = useCallback(() => {
     if (typeof window === 'undefined') {
       return;
@@ -495,6 +520,17 @@ export default function Home() {
                       Export Image
                     </span>
                   </button>
+                  <button
+                    onClick={copyHtmlToClipboard}
+                    className={ui.home.buttons.secondary}
+                    aria-label="Copy HTML to clipboard"
+                    title="Copy formatted HTML for email or Word"
+                  >
+                    <ClipboardCopy className="h-4 w-4" aria-hidden="true" />
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
+                      Copy HTML
+                    </span>
+                  </button>
                 </div>
 
                 <div className="flex items-center gap-1.5">
@@ -536,6 +572,7 @@ export default function Home() {
                   onExportMarkdown={exportMarkdown}
                   onExportHtml={exportHtml}
                   onExportImage={exportImage}
+                  onCopyHtml={copyHtmlToClipboard}
                   onReset={resetSample}
                   onGuide={openGuide}
                   onGithub={openGithub}
