@@ -565,8 +565,8 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-1 md:hidden">
-              <div className="flex flex-wrap items-center gap-2">
+            <div className="md:hidden">
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-slate-200/80 bg-white/80 px-2.5 py-2 shadow-sm backdrop-blur">
                 <QuickActionsMenu
                   onImport={onPickFile}
                   onExportMarkdown={exportMarkdown}

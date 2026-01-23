@@ -3,11 +3,12 @@ export const ui = {
     root: 'relative min-h-screen flex flex-col overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50/80 text-slate-900',
 
     header:
-      'sticky top-0 z-30 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl shadow-[0_1px_3px_rgb(15_23_42/0.04)] transition-all duration-300',
+      'sticky top-0 z-30 border-b border-slate-200/60 bg-gradient-to-b from-white/95 via-white/90 to-slate-50/80 backdrop-blur-xl shadow-[0_1px_3px_rgb(15_23_42/0.04)] transition-all duration-300',
 
-    headerInner: 'flex w-full flex-col gap-3 px-4 py-2.5 sm:px-6 lg:px-8',
+    headerInner: 'flex w-full flex-col gap-2.5 px-4 pb-3 pt-3 sm:gap-3 sm:px-6 sm:py-3 lg:px-8',
 
-    navRow: 'flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-4',
+    navRow:
+      'flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-4',
 
     brandLink:
       'group flex items-center gap-2.5 rounded-xl border border-transparent px-2 py-1.5 transition-all duration-200 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100/80 hover:border-slate-200/60 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2',
