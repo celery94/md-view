@@ -1,9 +1,23 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import Script from 'next/script';
+import { Space_Grotesk, IBM_Plex_Mono } from 'next/font/google';
 import Analytics from '../components/Analytics';
 import { GA_ID } from '../lib/gtag';
 import './globals.css';
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-geist-sans',
+  display: 'swap',
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  variable: '--font-geist-mono',
+  weight: ['400', '500', '600'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.md-view.com/'),
@@ -191,7 +205,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`antialiased`}>
+      <body className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} antialiased`}>
         {/* Google tag (gtag.js) */}
         <Script
           id="gtag-src"

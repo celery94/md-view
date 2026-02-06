@@ -6,7 +6,7 @@ import {
   Upload,
   FileText,
   FileCode,
-  Image,
+  Image as ImageIcon,
   ClipboardCopy,
   RotateCw,
   BookOpen,
@@ -87,7 +87,7 @@ export default function QuickActionsMenu({
         type="button"
         ref={triggerRef}
         id={triggerId}
-        className={`inline-flex items-center gap-2 rounded-xl border border-slate-200/50 bg-white/50 p-2.5 text-slate-500 shadow-[0_2px_8px_-2px_rgba(15,23,42,0.05)] backdrop-blur-md transition-all duration-300 hover:bg-white/80 hover:text-slate-900 hover:shadow-[0_8px_20px_-4px_rgba(15,23,42,0.1)] hover:scale-[1.03] active:scale-95 focus-visible:outline focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${triggerClassName ?? ''}`}
+        className={`inline-flex items-center gap-2 rounded-xl border border-slate-300/60 bg-white/70 p-2.5 text-slate-600 shadow-[0_6px_16px_-12px_rgba(15,23,42,0.7)] backdrop-blur-md transition-all duration-300 hover:border-cyan-300/60 hover:bg-white hover:text-slate-900 hover:shadow-[0_10px_22px_-16px_rgba(8,145,178,0.75)] hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${triggerClassName ?? ''}`}
         aria-label={triggerLabel ? `${triggerLabel} actions` : 'More actions'}
         title={triggerLabel ? `${triggerLabel} actions` : 'More actions'}
         aria-haspopup="menu"
@@ -102,7 +102,7 @@ export default function QuickActionsMenu({
 
       {isOpen && (
         <div
-          className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-slate-200/50 bg-white/80 p-2 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] backdrop-blur-xl animate-scale-in ring-1 ring-white/50"
+          className="animate-scale-in absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-slate-300/65 bg-white/85 p-2 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.85)] backdrop-blur-xl ring-1 ring-white/60"
           role="menu"
           id={menuId}
           aria-labelledby={triggerId}
@@ -111,27 +111,27 @@ export default function QuickActionsMenu({
           <div className="space-y-0.5">
             <button
               onClick={() => handleAction(onImport)}
-              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-sky-50 hover:to-blue-50 hover:text-sky-700"
+              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-teal-50 hover:text-cyan-800"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-100/80 text-sky-600 transition-all duration-200 group-hover:bg-sky-500 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(14,165,233,0.3)]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-100/80 text-cyan-700 transition-all duration-200 group-hover:bg-cyan-600 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(8,145,178,0.3)]">
                 <Upload className="h-4 w-4" />
               </div>
               <span>Import .md file</span>
             </button>
             <button
               onClick={() => handleAction(onExportMarkdown)}
-              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-violet-50 hover:text-indigo-700"
+              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-teal-50 hover:to-cyan-50 hover:text-teal-800"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100/80 text-indigo-600 transition-all duration-200 group-hover:bg-indigo-500 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(99,102,241,0.3)]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-100/80 text-teal-700 transition-all duration-200 group-hover:bg-teal-600 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(13,148,136,0.3)]">
                 <FileText className="h-4 w-4" />
               </div>
               <span>Export as Markdown</span>
             </button>
             <button
               onClick={() => handleAction(onExportHtml)}
-              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-violet-50 hover:to-purple-50 hover:text-violet-700"
+              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 hover:text-amber-800"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100/80 text-violet-600 transition-all duration-200 group-hover:bg-violet-500 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(139,92,246,0.3)]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100/80 text-amber-700 transition-all duration-200 group-hover:bg-amber-500 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(245,158,11,0.3)]">
                 <FileCode className="h-4 w-4" />
               </div>
               <span>Export as HTML</span>
@@ -141,15 +141,15 @@ export default function QuickActionsMenu({
               className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-teal-50 hover:text-emerald-700"
             >
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100/80 text-emerald-600 transition-all duration-200 group-hover:bg-emerald-500 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(16,185,129,0.3)]">
-                <Image className="h-4 w-4" />
+                <ImageIcon className="h-4 w-4" />
               </div>
               <span>Export as Image</span>
             </button>
             <button
               onClick={() => handleAction(onCopyHtml)}
-              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-rose-50 hover:to-pink-50 hover:text-rose-700"
+              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-sky-50 hover:text-cyan-800"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-100/80 text-rose-600 transition-all duration-200 group-hover:bg-rose-500 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(244,63,94,0.3)]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-100/80 text-cyan-700 transition-all duration-200 group-hover:bg-cyan-600 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(8,145,178,0.3)]">
                 <ClipboardCopy className="h-4 w-4" />
               </div>
               <span>Copy HTML for Email/Word</span>

@@ -1,29 +1,33 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #fafbfc;
-  --foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --border: #e2e8f0;
-  --accent: #f1f5f9;
-  --accent-foreground: #0f172a;
+  --background: #f6f7f3;
+  --foreground: #12263a;
+  --muted: #edf2f6;
+  --muted-foreground: #5f7082;
+  --border: #d7e1e8;
+  --accent: #eaf0f4;
+  --accent-foreground: #12263a;
 
   /* Brand Colors - Refined palette */
-  --brand-50: #f0f9ff;
-  --brand-100: #e0f2fe;
-  --brand-200: #bae6fd;
-  --brand-300: #7dd3fc;
-  --brand-400: #38bdf8;
-  --brand-500: #0ea5e9;
-  --brand-600: #0284c7;
-  --brand-700: #0369a1;
+  --brand-50: #f0fdfa;
+  --brand-100: #ccfbf1;
+  --brand-200: #99f6e4;
+  --brand-300: #5eead4;
+  --brand-400: #2dd4bf;
+  --brand-500: #14b8a6;
+  --brand-600: #0d9488;
+  --brand-700: #0f766e;
 
   /* Premium Gradient System */
-  --gradient-brand: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #8b5cf6 100%);
-  --gradient-subtle: linear-gradient(180deg, rgba(14, 165, 233, 0.03) 0%, transparent 100%);
-  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
-  --gradient-glow: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.12), transparent);
+  --gradient-brand: linear-gradient(130deg, #0f766e 0%, #0891b2 58%, #f59e0b 100%);
+  --gradient-subtle: linear-gradient(180deg, rgba(8, 145, 178, 0.06) 0%, transparent 100%);
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%);
+  --gradient-glow: radial-gradient(
+    ellipse 80% 50% at 50% -20%,
+    rgba(8, 145, 178, 0.15),
+    transparent
+  );
 
   /* Premium Shadows - Refined depth system */
   --shadow-xs: 0 1px 2px rgb(15 23 42 / 0.04);
@@ -31,10 +35,10 @@
   --shadow-md: 0 4px 8px -2px rgb(15 23 42 / 0.08), 0 2px 4px -2px rgb(15 23 42 / 0.04);
   --shadow-lg: 0 12px 24px -4px rgb(15 23 42 / 0.1), 0 4px 8px -2px rgb(15 23 42 / 0.04);
   --shadow-xl: 0 24px 48px -8px rgb(15 23 42 / 0.12), 0 8px 16px -4px rgb(15 23 42 / 0.06);
-  --shadow-glow: 0 0 24px rgba(14, 165, 233, 0.12), 0 0 48px rgba(14, 165, 233, 0.06);
-  --shadow-glow-strong: 0 0 32px rgba(14, 165, 233, 0.2), 0 0 64px rgba(14, 165, 233, 0.1);
+  --shadow-glow: 0 0 24px rgba(8, 145, 178, 0.14), 0 0 48px rgba(8, 145, 178, 0.08);
+  --shadow-glow-strong: 0 0 32px rgba(8, 145, 178, 0.22), 0 0 64px rgba(8, 145, 178, 0.12);
   --shadow-inner: inset 0 2px 4px rgb(15 23 42 / 0.04);
-  --shadow-ring: 0 0 0 3px rgba(14, 165, 233, 0.15);
+  --shadow-ring: 0 0 0 3px rgba(8, 145, 178, 0.2);
 
   /* Animation Timing */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -54,11 +58,11 @@
 
   /* Fallbacks when next/font is unavailable (e.g., offline builds) */
   --font-geist-sans:
-    ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, Noto Sans, 'Liberation Sans',
-    sans-serif;
+    'Space Grotesk', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans,
+    'Liberation Sans', sans-serif;
   --font-geist-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-    monospace;
+    'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
 }
 
 /* Modern smooth scrolling */
@@ -67,9 +71,32 @@
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+  background-color: var(--background);
+  background-image:
+    radial-gradient(circle at 10% -10%, rgba(8, 145, 178, 0.22), transparent 48%),
+    radial-gradient(circle at 100% 8%, rgba(245, 158, 11, 0.16), transparent 44%),
+    linear-gradient(180deg, #f8fafb 0%, #f5f7f2 100%);
+  background-attachment: fixed;
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), 'Space Grotesk', Arial, Helvetica, sans-serif;
+  letter-spacing: 0.003em;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(15, 118, 110, 0.14), transparent 36%),
+    radial-gradient(circle at 88% 68%, rgba(8, 145, 178, 0.12), transparent 34%),
+    radial-gradient(circle at 50% 120%, rgba(245, 158, 11, 0.08), transparent 42%);
+  filter: blur(70px);
+  animation: drift-glow 18s var(--ease-in-out-expo) infinite alternate;
 }
 
 .markdown-preview {
@@ -80,8 +107,8 @@ body {
   --mdv-border: var(--border);
   --mdv-accent: var(--accent);
   --mdv-accent-foreground: var(--accent-foreground);
-  --mdv-link: #000;
-  --mdv-link-hover: #333;
+  --mdv-link: #0f766e;
+  --mdv-link-hover: #0f5f8c;
   --mdv-marker: #94a3b8;
 }
 
@@ -89,13 +116,13 @@ body {
   --mdv-background: #1e1e1e;
   --mdv-foreground: #e2e8f0;
   --mdv-muted: rgba(148, 163, 184, 0.18);
-  --mdv-muted-foreground: #cbd5f5;
+  --mdv-muted-foreground: #d1d5db;
   --mdv-border: rgba(148, 163, 184, 0.35);
   --mdv-accent: rgba(30, 41, 59, 0.78);
   --mdv-accent-foreground: #e2e8f0;
-  --mdv-link: #60a5fa;
-  --mdv-link-hover: #93c5fd;
-  --mdv-marker: #cbd5f5;
+  --mdv-link: #67e8f9;
+  --mdv-link-hover: #a5f3fc;
+  --mdv-marker: #cbd5e1;
 }
 
 /* Custom scrollbar styles - Ultra-refined minimal design */
@@ -110,7 +137,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #d1d5db 0%, #cbd5e1 100%);
+  background: linear-gradient(180deg, #c7d6dd 0%, #b7cbd4 100%);
   border-radius: 4px;
   border: 2px solid transparent;
   background-clip: padding-box;
@@ -118,7 +145,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #9ca3af 0%, #94a3b8 100%);
+  background: linear-gradient(180deg, #8fa8b3 0%, #7f98a6 100%);
   border: 2px solid transparent;
   background-clip: padding-box;
 }
@@ -130,7 +157,7 @@ body {
 /* Firefox scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-color: #b7cbd4 transparent;
 }
 
 /* Custom styles for markdown preview */
@@ -286,11 +313,11 @@ body {
 
 .prose blockquote {
   border-left: 4px solid;
-  border-image: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%) 1;
+  border-image: linear-gradient(180deg, #0f766e 0%, #0891b2 100%) 1;
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.06) 0%,
-    rgba(99, 102, 241, 0.03) 50%,
+    rgba(15, 118, 110, 0.08) 0%,
+    rgba(8, 145, 178, 0.05) 50%,
     transparent 100%
   );
   padding: 1.25rem 1.75rem;
@@ -310,8 +337,8 @@ body {
   transform: translateX(3px);
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.08) 0%,
-    rgba(99, 102, 241, 0.04) 50%,
+    rgba(15, 118, 110, 0.1) 0%,
+    rgba(8, 145, 178, 0.06) 50%,
     transparent 100%
   );
 }
@@ -323,7 +350,12 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    rgba(15, 118, 110, 0.24),
+    rgba(8, 145, 178, 0.14),
+    transparent
+  );
 }
 
 .prose table {
@@ -370,7 +402,7 @@ body {
 }
 
 .prose tbody tr:hover {
-  background-color: rgba(14, 165, 233, 0.05) !important;
+  background-color: rgba(15, 118, 110, 0.06) !important;
 }
 
 .prose tbody tr:last-child td {
@@ -409,7 +441,7 @@ body {
   height: 1rem;
   vertical-align: middle;
   margin-right: 0.5rem;
-  accent-color: #3b82f6; /* blue-500 */
+  accent-color: #0f766e;
 }
 
 /* Lists: spacing, markers, nesting */
@@ -479,6 +511,30 @@ body {
 }
 
 /* Removed - now handled in enhanced table section above */
+
+@keyframes drift-glow {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(2%, -1%, 0) scale(1.06);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 180ms var(--ease-out-expo);
+}
 
 /* Mobile-specific: Hide split mode button as additional safety measure */
 @media (max-width: 767px) {

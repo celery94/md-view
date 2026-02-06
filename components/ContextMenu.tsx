@@ -56,7 +56,7 @@ export default function ContextMenu({
   return (
     <div
       ref={menuRef}
-      className="fixed z-50 min-w-[180px] rounded-lg border border-slate-200 bg-white shadow-lg"
+      className="fixed z-50 min-w-[190px] rounded-xl border border-slate-300/65 bg-white/90 shadow-[0_16px_36px_-22px_rgba(15,23,42,0.8)] ring-1 ring-white/70 backdrop-blur"
       style={{
         left: `${x}px`,
         top: `${y}px`,
@@ -67,13 +67,13 @@ export default function ContextMenu({
           type="button"
           onClick={handleFormatClick}
           disabled={isFormatting}
-          className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-700 transition-colors hover:bg-cyan-50 focus:bg-cyan-50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
         >
           <div className="flex items-center gap-2">
             {isFormatting ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin text-cyan-700" />
             ) : (
-              <FileText className="h-4 w-4" />
+              <FileText className="h-4 w-4 text-cyan-700" />
             )}
             {isFormatting ? 'Formatting...' : 'Format Document'}
           </div>

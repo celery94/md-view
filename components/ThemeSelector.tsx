@@ -15,7 +15,7 @@ export default function ThemeSelector({ currentTheme, onThemeChange }: ThemeSele
       <select
         value={currentTheme}
         onChange={(e) => onThemeChange(e.target.value)}
-        className="appearance-none min-w-[130px] rounded-xl border border-slate-200/60 bg-white pl-9 pr-8 py-2 text-sm font-medium text-slate-600 shadow-sm transition-all duration-200 hover:bg-slate-50 hover:border-slate-300 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/50 focus-visible:ring-offset-1 cursor-pointer"
+        className="min-w-[130px] appearance-none cursor-pointer rounded-xl border border-slate-300/65 bg-white/90 py-2 pl-9 pr-8 text-sm font-medium text-slate-700 shadow-sm transition-all duration-200 hover:border-cyan-300/55 hover:bg-white hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-1"
         aria-label="Select preview theme"
         title="Choose preview theme"
       >
@@ -25,12 +25,12 @@ export default function ThemeSelector({ currentTheme, onThemeChange }: ThemeSele
           </option>
         ))}
       </select>
-      <div className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-400">
+      <div className="pointer-events-none absolute left-2.5 top-1/2 flex -translate-y-1/2 items-center justify-center text-cyan-700/70">
         <Palette className="h-4 w-4" aria-hidden="true" />
       </div>
       <div className="absolute right-2.5 top-1/2 transform -translate-y-1/2 pointer-events-none">
         <svg
-          className="h-4 w-4 text-slate-300"
+          className="h-4 w-4 text-slate-400"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -41,4 +41,3 @@ export default function ThemeSelector({ currentTheme, onThemeChange }: ThemeSele
     </div>
   );
 }
-

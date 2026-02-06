@@ -14,7 +14,16 @@ import Footer from '../components/Footer';
 import { themes, getTheme } from '../lib/themes';
 import { cn } from '../lib/cn';
 import { ui } from '../lib/ui-classes';
-import { Upload, FileText, FileCode, RotateCw, BookOpen, Github, Image, ClipboardCopy } from 'lucide-react';
+import {
+  Upload,
+  FileText,
+  FileCode,
+  RotateCw,
+  BookOpen,
+  Github,
+  Image as ImageIcon,
+  ClipboardCopy,
+} from 'lucide-react';
 
 type ViewMode = 'split' | 'editor' | 'preview';
 
@@ -446,7 +455,7 @@ export default function Home() {
                     <img src="/md-view-icon.svg" alt="MD-View logo" className="h-6 w-6" />
                   </div>
                   <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
-                    <h1 className="text-lg font-bold leading-tight tracking-tight text-slate-900">
+                    <h1 className="bg-gradient-to-r from-slate-900 via-cyan-800 to-slate-700 bg-clip-text text-lg font-bold leading-tight tracking-tight text-transparent">
                       MD-View
                     </h1>
                   </div>
@@ -462,20 +471,20 @@ export default function Home() {
 
                 {!isNavCompact && (
                   <div className={ui.home.statPill}>
-                    <span className="text-sky-600">{wordCount}</span>
-                    <span className="text-slate-300">words</span>
+                    <span className="text-cyan-700">{wordCount}</span>
+                    <span className="text-slate-400">words</span>
                     <span className="mx-1 h-3 w-px bg-slate-200/60" />
-                    <span className="text-indigo-600">{lineCount}</span>
-                    <span className="text-slate-300">lines</span>
+                    <span className="text-slate-700">{lineCount}</span>
+                    <span className="text-slate-400">lines</span>
                     <span className="mx-1 h-3 w-px bg-slate-200/60" />
-                    <span className="text-violet-600">{fileSizeKb}</span>
-                    <span className="text-slate-300">KB</span>
+                    <span className="text-amber-700">{fileSizeKb}</span>
+                    <span className="text-slate-400">KB</span>
                   </div>
                 )}
               </div>
 
               <div className="hidden md:flex items-center gap-3">
-                <div className="flex items-center gap-1 rounded-2xl border border-slate-200/60 bg-gradient-to-b from-white/90 to-slate-50/80 p-1 shadow-sm backdrop-blur-xl">
+                <div className="flex items-center gap-1 rounded-2xl border border-slate-300/55 bg-white/75 p-1 shadow-[0_8px_20px_-16px_rgba(15,23,42,0.6)] backdrop-blur-xl">
                   <button
                     onClick={onPickFile}
                     className={ui.home.buttons.primary}
@@ -515,7 +524,7 @@ export default function Home() {
                     aria-label="Export as image"
                     title="Export as PNG image"
                   >
-                    <Image className="h-4 w-4" aria-hidden="true" />
+                    <ImageIcon className="h-4 w-4" aria-hidden="true" />
                     <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
                       Export Image
                     </span>
@@ -566,7 +575,7 @@ export default function Home() {
               </div>
             </div>
             <div className="md:hidden">
-              <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-slate-200/80 bg-white/80 px-2.5 py-2 shadow-sm backdrop-blur">
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-slate-300/65 bg-white/75 px-2.5 py-2 shadow-sm backdrop-blur">
                 <QuickActionsMenu
                   onImport={onPickFile}
                   onExportMarkdown={exportMarkdown}
@@ -598,7 +607,7 @@ export default function Home() {
             <div
               ref={containerRef}
               className={cn(ui.home.container, {
-                'md:flex-row md:items-stretch md:gap-0': viewMode === 'split',
+                'md:flex-row md:items-stretch md:gap-2 lg:gap-3': viewMode === 'split',
               })}
             >
               {(viewMode === 'editor' || viewMode === 'split') && (
@@ -613,11 +622,13 @@ export default function Home() {
                   onDragOver={onDragOver}
                   aria-label="Markdown editor section"
                 >
-                  <div className="flex flex-shrink-0 items-start justify-between gap-3 p-4 border-b border-slate-100 hidden">
-                    <div>
-                      <h2 className="text-sm font-semibold tracking-tight text-slate-900">
-                        Editor
-                      </h2>
+                  <div className="flex flex-shrink-0 items-center justify-between gap-3 border-b border-slate-200/65 bg-gradient-to-r from-white to-slate-100/60 px-5 py-3">
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-gradient-to-br from-cyan-500 to-teal-500 shadow-sm shadow-cyan-500/30" />
+                      <h2 className="text-sm font-semibold tracking-tight text-slate-800">Editor</h2>
+                    </div>
+                    <div className="hidden lg:inline text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">
+                      Shift + Alt + F to format
                     </div>
                   </div>
                   {/* Wrapper must be a flex container so nested editor (with flex-1) can stretch to available height. */}
@@ -636,14 +647,17 @@ export default function Home() {
               {viewMode === 'split' && (
                 <div
                   onMouseDown={startDrag}
-                  className="group hidden md:flex w-1 cursor-col-resize select-none items-stretch justify-center hover:bg-slate-200 transition-colors"
+                  className="group hidden md:flex w-2 cursor-col-resize select-none items-stretch justify-center rounded-full transition-colors hover:bg-cyan-100/60"
                   aria-label="Resize editor and preview panels"
                   role="separator"
                   aria-orientation="vertical"
                   tabIndex={0}
                   title="Drag to resize panels"
                 >
-                  <div className="h-full w-px bg-slate-200" aria-hidden="true" />
+                  <div
+                    className="h-full w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent group-hover:via-cyan-400"
+                    aria-hidden="true"
+                  />
                 </div>
               )}
 
@@ -657,9 +671,9 @@ export default function Home() {
                   }
                   aria-label="Markdown preview section"
                 >
-                  <div className="flex flex-shrink-0 items-center justify-between gap-3 px-5 py-3 border-b border-slate-100 bg-gradient-to-r from-slate-50/80 to-white">
+                  <div className="flex flex-shrink-0 items-center justify-between gap-3 border-b border-slate-200/65 bg-gradient-to-r from-white to-slate-100/60 px-5 py-3">
                     <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-500 shadow-sm shadow-emerald-500/30"></div>
+                      <div className="h-2 w-2 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 shadow-sm shadow-amber-500/35"></div>
                       <h2 className="text-sm font-semibold tracking-tight text-slate-700">
                         Preview
                       </h2>

@@ -74,7 +74,7 @@ export default function ViewModeSelector({
 
   return (
     <div
-      className="flex items-center gap-0.5 rounded-xl border border-slate-200/60 bg-slate-100/50 p-1 backdrop-blur-sm"
+      className="flex items-center gap-0.5 rounded-xl border border-slate-300/60 bg-white/75 p-1 shadow-[0_4px_16px_-14px_rgba(15,23,42,0.65)] backdrop-blur-sm"
       role="group"
       aria-label="View mode selector"
     >
@@ -89,8 +89,8 @@ export default function ViewModeSelector({
               relative flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium leading-none rounded-lg transition-all duration-200
               ${
                 isActive
-                  ? 'bg-white text-slate-800 shadow-sm ring-1 ring-slate-200/60'
-                  : 'text-slate-400 hover:text-slate-600 hover:bg-white/50'
+                  ? 'bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-sm ring-1 ring-cyan-500/20'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-white'
               }
               ${mode.id === 'split' ? 'view-mode-split' : ''}
             `}
