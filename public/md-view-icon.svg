@@ -1,25 +1,39 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="logoGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#38bdf8"/>
-      <stop offset="1" stop-color="#4f46e5"/>
+    <linearGradient id="badgeGradient" x1="8" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E7490" />
+      <stop offset="1" stop-color="#1D4ED8" />
     </linearGradient>
-    <filter id="shadow" x="0" y="0" width="64" height="64" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.2"/>
+    <radialGradient id="badgeGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(20 14) rotate(37.5) scale(40 33)">
+      <stop stop-color="#67E8F9" stop-opacity="0.36" />
+      <stop offset="1" stop-color="#67E8F9" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="pageInk" x1="20" y1="22" x2="45" y2="46" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A" />
+      <stop offset="1" stop-color="#155E75" />
+    </linearGradient>
+    <linearGradient id="eyeGradient" x1="36.5" y1="46" x2="52.5" y2="46" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0FDFA" />
+      <stop offset="1" stop-color="#E0F2FE" />
+    </linearGradient>
+    <filter id="drop" x="7" y="7" width="50" height="50" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#0F172A" flood-opacity="0.18" />
     </filter>
   </defs>
-  
-  <!-- Outer shell -->
-  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#logoGradient)" />
-  
-  <!-- Subtle glass overlay -->
-  <rect x="4" y="4" width="56" height="56" rx="14" fill="white" fill-opacity="0.1" />
 
-  <!-- The 'M' symbol -->
-  <path d="M16 22H22L32 36L42 22H48V44H41V29L32 42L23 29V44H16V22Z" fill="white" />
-  
-  <!-- Eye/View indicator at bottom right -->
-  <circle cx="48" cy="48" r="8" fill="white" />
-  <circle cx="48" cy="48" r="3.5" fill="url(#logoGradient)" />
-  <circle cx="50" cy="46" r="1" fill="white" fill-opacity="0.8" />
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#badgeGradient)" />
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#badgeGlow)" />
+  <rect x="4.75" y="4.75" width="54.5" height="54.5" rx="15.25" stroke="#BAE6FD" stroke-opacity="0.35" stroke-width="1.5" />
+
+  <g filter="url(#drop)">
+    <path d="M18 14H39L48 23V46C48 48.2091 46.2091 50 44 50H18C15.7909 50 14 48.2091 14 46V18C14 15.7909 15.7909 14 18 14Z" fill="#F8FAFC" fill-opacity="0.95" />
+    <path d="M39 14V20C39 22.2091 40.7909 24 43 24H48L39 14Z" fill="#DBEAFE" />
+    <path d="M21 25H26.4L32 33.8L37.6 25H43V43H38.8V31.8L32 41.5L25.2 31.8V43H21V25Z" fill="url(#pageInk)" />
+  </g>
+
+  <ellipse cx="44.5" cy="46" rx="8" ry="5.6" fill="#0F172A" fill-opacity="0.14" />
+  <ellipse cx="44.5" cy="46" rx="8" ry="5.6" fill="url(#eyeGradient)" />
+  <circle cx="44.5" cy="46" r="2.8" fill="#0284C7" />
+  <circle cx="44.5" cy="46" r="1.2" fill="#075985" />
+  <circle cx="45.8" cy="44.6" r="0.9" fill="white" fill-opacity="0.85" />
 </svg>

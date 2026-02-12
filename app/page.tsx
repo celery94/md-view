@@ -444,20 +444,18 @@ export default function Home() {
         <header className={ui.home.header}>
           <div className={ui.home.headerInner}>
             <div ref={navRowRef} className={ui.home.navRow}>
-              <div className="flex items-center gap-2 md:gap-4">
+              <div className="flex min-w-0 items-center gap-2 md:gap-3">
                 <Link
                   href="/"
                   className={ui.home.brandLink}
                   aria-label="MD-View Home"
                   title="MD-View Home"
                 >
-                  <div className="flex items-center justify-center">
-                    <img src="/md-view-icon.svg" alt="MD-View logo" className="h-6 w-6" />
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white">
+                    <img src="/md-view-icon.svg" alt="MD-View logo" className="h-5 w-5" />
                   </div>
                   <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
-                    <h1 className="bg-gradient-to-r from-slate-900 via-cyan-800 to-slate-700 bg-clip-text text-lg font-bold leading-tight tracking-tight text-transparent">
-                      MD-View
-                    </h1>
+                    <h1 className="text-lg font-bold leading-tight tracking-tight text-slate-900">MD-View</h1>
                   </div>
                 </Link>
 
@@ -483,8 +481,8 @@ export default function Home() {
                 )}
               </div>
 
-              <div className="hidden md:flex items-center gap-3">
-                <div className="flex items-center gap-1 rounded-2xl border border-slate-300/55 bg-white/75 p-1 shadow-[0_8px_20px_-16px_rgba(15,23,42,0.6)] backdrop-blur-xl">
+              <div className="hidden md:flex items-center gap-2.5">
+                <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1.5">
                   <button
                     onClick={onPickFile}
                     className={ui.home.buttons.primary}
@@ -542,7 +540,7 @@ export default function Home() {
                   </button>
                 </div>
 
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white p-1">
                   <Link
                     href="/guide"
                     className={ui.home.buttons.quietNav}
@@ -575,7 +573,7 @@ export default function Home() {
               </div>
             </div>
             <div className="md:hidden">
-              <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-slate-300/65 bg-white/75 px-2.5 py-2 shadow-sm backdrop-blur">
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-2.5 py-2">
                 <QuickActionsMenu
                   onImport={onPickFile}
                   onExportMarkdown={exportMarkdown}
