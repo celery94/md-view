@@ -14,8 +14,14 @@ import Footer from '../components/Footer';
 import { themes, getTheme } from '../lib/themes';
 import { cn } from '../lib/cn';
 import { ui } from '../lib/ui-classes';
+import type {
+  UrlImportErrorResponse,
+  UrlImportSuccessResponse,
+} from '../lib/url-import-types';
 import {
   Upload,
+  Link2,
+  Loader2,
   FileText,
   FileCode,
   RotateCw,
@@ -92,6 +98,9 @@ export default function Home() {
   const [previewScrollPercentage, setPreviewScrollPercentage] = useState<number | undefined>(
     undefined
   );
+  const [urlToImport, setUrlToImport] = useState('');
+  const [isImportingUrl, setIsImportingUrl] = useState(false);
+  const [urlImportError, setUrlImportError] = useState<string | null>(null);
 
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -311,6 +320,7 @@ export default function Home() {
 
   const onFileChosen = useCallback((file?: File | null) => {
     if (!file) return;
+    setUrlImportError(null);
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === 'string') setMarkdown(reader.result);
@@ -332,6 +342,50 @@ export default function Home() {
   }, []);
 
   const resetSample = useCallback(() => setMarkdown(initialMarkdown), []);
+
+  const importFromUrl = useCallback(
+    async (rawUrl?: string) => {
+      const nextUrl = (rawUrl ?? urlToImport).trim();
+      if (!nextUrl) {
+        setUrlImportError('Please enter a URL to import.');
+        return;
+      }
+
+      setIsImportingUrl(true);
+      setUrlImportError(null);
+
+      try {
+        const response = await fetch('/api/import-url', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ url: nextUrl }),
+        });
+
+        const payload = (await response.json()) as UrlImportSuccessResponse | UrlImportErrorResponse;
+        if (!response.ok) {
+          const message =
+            'error' in payload ? payload.error.message : 'Failed to import URL content.';
+          setUrlImportError(message);
+          return;
+        }
+
+        if (!('markdown' in payload) || typeof payload.markdown !== 'string') {
+          setUrlImportError('Invalid response from server.');
+          return;
+        }
+
+        setMarkdown(payload.markdown);
+        setUrlToImport(payload.sourceUrl || nextUrl);
+      } catch {
+        setUrlImportError('Network error while importing URL.');
+      } finally {
+        setIsImportingUrl(false);
+      }
+    },
+    [urlToImport]
+  );
 
   const download = useCallback((name: string, content: string, type: string) => {
     const blob = new Blob([content], { type });
@@ -481,7 +535,40 @@ export default function Home() {
                 )}
               </div>
 
-              <div className="hidden md:flex items-center gap-2.5">
+              <div className="hidden md:flex items-center gap-3">
+                <div className="flex min-w-[18rem] max-w-[30rem] items-center gap-2 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5">
+                  <input
+                    type="url"
+                    value={urlToImport}
+                    onChange={(e) => setUrlToImport(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key !== 'Enter') return;
+                      e.preventDefault();
+                      void importFromUrl();
+                    }}
+                    placeholder="https://example.com/article"
+                    aria-label="URL to import as markdown"
+                    className="min-w-0 flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                    disabled={isImportingUrl}
+                  />
+                  <button
+                    onClick={() => void importFromUrl()}
+                    disabled={isImportingUrl}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-cyan-200/70 bg-cyan-50/90 px-2.5 py-1.5 text-xs font-semibold text-cyan-700 transition-all hover:border-cyan-300 hover:bg-cyan-100 disabled:cursor-not-allowed disabled:opacity-60"
+                    aria-label="Import URL content"
+                    title="Fetch URL content and convert to markdown"
+                  >
+                    {isImportingUrl ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                    ) : (
+                      <Link2 className="h-3.5 w-3.5" aria-hidden="true" />
+                    )}
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden lg:inline'}`}>
+                      Import URL
+                    </span>
+                  </button>
+                </div>
+
                 <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1.5">
                   <button
                     onClick={onPickFile}
@@ -574,8 +661,38 @@ export default function Home() {
             </div>
             <div className="md:hidden">
               <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-2.5 py-2">
+                <div className="flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-slate-200/70 bg-white px-2 py-1">
+                  <input
+                    type="url"
+                    value={urlToImport}
+                    onChange={(e) => setUrlToImport(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key !== 'Enter') return;
+                      e.preventDefault();
+                      void importFromUrl();
+                    }}
+                    placeholder="Paste URL"
+                    aria-label="URL to import as markdown"
+                    className="min-w-0 flex-1 bg-transparent text-xs text-slate-700 outline-none placeholder:text-slate-400"
+                    disabled={isImportingUrl}
+                  />
+                  <button
+                    onClick={() => void importFromUrl()}
+                    disabled={isImportingUrl}
+                    className="inline-flex items-center gap-1 rounded-lg border border-cyan-200 bg-cyan-50 px-2 py-1 text-[11px] font-semibold text-cyan-700 disabled:opacity-60"
+                    aria-label="Import URL"
+                  >
+                    {isImportingUrl ? (
+                      <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" />
+                    ) : (
+                      <Link2 className="h-3 w-3" aria-hidden="true" />
+                    )}
+                    URL
+                  </button>
+                </div>
                 <QuickActionsMenu
                   onImport={onPickFile}
+                  onImportUrl={() => void importFromUrl()}
                   onExportMarkdown={exportMarkdown}
                   onExportHtml={exportHtml}
                   onExportImage={exportImage}
@@ -588,6 +705,15 @@ export default function Home() {
                 />
               </div>
             </div>
+
+            {urlImportError && (
+              <p
+                className="mt-2 rounded-xl border border-rose-200/70 bg-rose-50/90 px-3 py-2 text-xs text-rose-700"
+                role="alert"
+              >
+                {urlImportError}
+              </p>
+            )}
 
             <input
               ref={fileInputRef}

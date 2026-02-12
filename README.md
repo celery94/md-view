@@ -17,6 +17,7 @@ A fast, free, and open‑source Markdown editor with a beautiful live preview. B
 - Syntax highlighting (highlight.js) with copy‑code buttons and language badges
 - GFM extras: tables, task lists, strikethrough, autolinks
 - Import `.md`, export `.md`/`.html` (print to PDF via browser)
+- Import public article URLs and convert page content to Markdown
 - View modes: Editor, Preview, or Split with draggable resize
 - Keyboard: Cmd/Ctrl+1/2/3 to switch view modes
 - Mobile‑friendly, accessible roles/labels, localStorage persistence
@@ -89,6 +90,13 @@ Requires Node 18.18+ (or 20+).
 - Raw HTML in markdown is disabled (`skipHtml: true`) to prevent XSS.
 - Code highlighting uses `rehype-highlight`; HTML injection is not allowed.
 - No external data collection; analytics (if enabled) is anonymized pageview only.
+
+## 🌐 URL Import Limits
+
+- URL import supports public `http(s)` HTML pages only.
+- Local/private hosts (for example `localhost`, `127.0.0.1`, private LAN ranges) are blocked.
+- Large pages are capped (3MB) and requests timeout after 12 seconds.
+- Some websites may still block automated fetching with anti-bot protections.
 
 ## 🎨 Styling & Markdown Details
 

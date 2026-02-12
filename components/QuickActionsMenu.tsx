@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useId } from 'react';
 import {
   MoreHorizontal,
   Upload,
+  Link2,
   FileText,
   FileCode,
   Image as ImageIcon,
@@ -15,6 +16,7 @@ import {
 
 interface QuickActionsMenuProps {
   onImport: () => void;
+  onImportUrl: () => void;
   onExportMarkdown: () => void;
   onExportHtml: () => void;
   onExportImage: () => void;
@@ -28,6 +30,7 @@ interface QuickActionsMenuProps {
 
 export default function QuickActionsMenu({
   onImport,
+  onImportUrl,
   onExportMarkdown,
   onExportHtml,
   onExportImage,
@@ -117,6 +120,15 @@ export default function QuickActionsMenu({
                 <Upload className="h-4 w-4" />
               </div>
               <span>Import .md file</span>
+            </button>
+            <button
+              onClick={() => handleAction(onImportUrl)}
+              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-teal-50 hover:text-cyan-700"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-100/80 text-cyan-600 transition-all duration-200 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(6,182,212,0.3)]">
+                <Link2 className="h-4 w-4" />
+              </div>
+              <span>Import from URL</span>
             </button>
             <button
               onClick={() => handleAction(onExportMarkdown)}
