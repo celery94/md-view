@@ -12,6 +12,7 @@ import QuickActionsMenu from '../components/QuickActionsMenu';
 import Footer from '../components/Footer';
 
 import { themes, getTheme } from '../lib/themes';
+import { buildInlineClipboardPayload } from '../lib/clipboard-inline-html';
 import { cn } from '../lib/cn';
 import { ui } from '../lib/ui-classes';
 import type {
@@ -428,17 +429,15 @@ export default function Home() {
   }, []);
 
   const copyHtmlToClipboard = useCallback(async () => {
-    const { theme, htmlContent, styles } = getSerializablePreview();
-    if (!htmlContent) return;
+    const previewElement = previewRef.current;
+    if (!previewElement) return;
 
-    // Build a complete HTML document for rich text pasting
-    const fullHtml = `<!doctype html><html><head><meta charset="utf-8"/><style>${styles}</style></head><body><main class="${theme.classes.prose}">${htmlContent}</main></body></html>`;
+    const payload = buildInlineClipboardPayload(previewElement, currentTheme);
+    if (!payload.html) return;
 
     try {
-      // Use ClipboardItem API to write both HTML and plain text
-      const htmlBlob = new Blob([fullHtml], { type: 'text/html' });
-      const { plainText } = getSerializablePreview();
-      const textBlob = new Blob([plainText], { type: 'text/plain' });
+      const htmlBlob = new Blob([payload.html], { type: 'text/html' });
+      const textBlob = new Blob([payload.plainText], { type: 'text/plain' });
 
       await navigator.clipboard.write([
         new ClipboardItem({
@@ -447,10 +446,9 @@ export default function Home() {
         }),
       ]);
     } catch {
-      // Fallback: copy as plain HTML string
-      await navigator.clipboard.writeText(fullHtml);
+      await navigator.clipboard.writeText(payload.html);
     }
-  }, [getSerializablePreview]);
+  }, [currentTheme]);
 
   const openGuide = useCallback(() => {
     if (typeof window === 'undefined') {
@@ -617,8 +615,8 @@ export default function Home() {
                   <button
                     onClick={copyHtmlToClipboard}
                     className={ui.home.buttons.secondary}
-                    aria-label="Copy HTML to clipboard"
-                    title="Copy formatted HTML for email or Word"
+                    aria-label="Copy inline HTML"
+                    title="Copy inline HTML for rich text editors"
                   >
                     <ClipboardCopy className="h-4 w-4" aria-hidden="true" />
                     <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>

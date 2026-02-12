@@ -164,7 +164,7 @@ export default function QuickActionsMenu({
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-100/80 text-cyan-700 transition-all duration-200 group-hover:bg-cyan-600 group-hover:text-white group-hover:shadow-[0_2px_8px_rgba(8,145,178,0.3)]">
                 <ClipboardCopy className="h-4 w-4" />
               </div>
-              <span>Copy HTML for Email/Word</span>
+              <span>Copy inline HTML</span>
             </button>
           </div>
 
