@@ -1,0 +1,26 @@
+Privacy Policy Template
+Privacy Policy for View as Markdown
+
+Last Updated: 2/12/2026
+
+1. No Data Collection
+We respect your privacy. View as Markdown does not collect, store, share, or transmit any of your personal data, browsing history, or website content to any external servers or third parties.
+
+2. How Your Data Is Handled
+All processing of web pages happens entirely locally on your device (client-side).
+
+Content Transformation: When you activate the extension, it reads the HTML of the current tab solely to convert it into Markdown format. This data never leaves your browser.
+
+Storage: The extension does not persistently store your data. Once you close the extension or the tab, the converted content is cleared from the extension's memory.
+
+3. Permissions
+We request the minimum permissions necessary for the extension to function:
+
+activeTab / scripting: Used strictly to access the content of the specific page you are currently viewing only when you click the extension icon, in order to generate the Markdown view.
+
+4. Third-Party Services
+This extension does not use any third-party analytics (like Google Analytics) or tracking tools.
+
+5. Contact
+If you have any questions about this Privacy Policy, please contact us at:
+liuct94@gmail.com
