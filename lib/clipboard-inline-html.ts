@@ -37,6 +37,18 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     tableBorder: '#d7e1e8',
     tableHeaderBackground: '#eaf0f4',
   },
+  'wechat-publish': {
+    text: '#3f3f3f',
+    background: '#ffffff',
+    link: '#0f766e',
+    blockquoteBorder: '#10b981',
+    blockquoteBackground: '#f0fdfa',
+    codeBackground: '#f8fafc',
+    codeText: '#0f172a',
+    codeBorder: '#d7e1e8',
+    tableBorder: '#d7e1e8',
+    tableHeaderBackground: '#f8fafc',
+  },
   dark: {
     text: '#e2e8f0',
     background: '#111827',
