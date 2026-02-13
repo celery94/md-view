@@ -138,6 +138,57 @@ export const themes: Theme[] = [
         border-color: rgba(148, 163, 184, 0.55);
         color: #334155;
       }
+      .default-theme .hljs {
+        color: #e2e8f0;
+      }
+      .default-theme .hljs-comment,
+      .default-theme .hljs-quote {
+        color: #94a3b8;
+      }
+      .default-theme .hljs-keyword,
+      .default-theme .hljs-selector-tag,
+      .default-theme .hljs-subst,
+      .default-theme .hljs-meta {
+        color: #38bdf8;
+      }
+      .default-theme .hljs-string,
+      .default-theme .hljs-doctag,
+      .default-theme .hljs-addition,
+      .default-theme .hljs-attribute,
+      .default-theme .hljs-built_in {
+        color: #5eead4;
+      }
+      .default-theme .hljs-number,
+      .default-theme .hljs-literal,
+      .default-theme .hljs-symbol,
+      .default-theme .hljs-bullet {
+        color: #fbbf24;
+      }
+      .default-theme .hljs-title,
+      .default-theme .hljs-section,
+      .default-theme .hljs-selector-id,
+      .default-theme .hljs-selector-class {
+        color: #93c5fd;
+      }
+      .default-theme .hljs-variable,
+      .default-theme .hljs-template-variable,
+      .default-theme .hljs-name {
+        color: #c4b5fd;
+      }
+      .default-theme .hljs-function .hljs-title,
+      .default-theme .hljs-title.function_,
+      .default-theme .hljs-title.class_ {
+        color: #bfdbfe;
+      }
+      .default-theme .hljs-params,
+      .default-theme .hljs-attr,
+      .default-theme .hljs-property {
+        color: #cbd5e1;
+      }
+      .default-theme .hljs-regexp,
+      .default-theme .hljs-deletion {
+        color: #fda4af;
+      }
     `,
   },
   {
@@ -146,110 +197,135 @@ export const themes: Theme[] = [
     description: 'Optimized for WeChat Official Account publishing',
     classes: {
       container:
-        'h-full overflow-auto border border-stone-200/80 bg-white p-6 sm:p-9 shadow-[0_12px_36px_-26px_rgba(15,23,42,0.35)]',
+        'h-full overflow-auto border border-emerald-100/80 bg-gradient-to-b from-white to-emerald-50/30 p-5 sm:p-8 shadow-[0_18px_40px_-30px_rgba(6,95,70,0.35)]',
       prose: `${lightProseClass} wechat-theme`,
     },
     customStyles: `
       .wechat-theme {
-        color: #3f3f3f;
+        color: #374151;
         font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Helvetica Neue", Arial, sans-serif;
-        font-size: 16px;
-        line-height: 1.82;
+        font-size: 16.5px;
+        line-height: 1.88;
         letter-spacing: 0.01em;
+        max-width: 760px;
+        margin: 0 auto;
       }
       .wechat-theme :where(h1, h2, h3, h4, h5, h6) {
         color: #1f2937;
-        line-height: 1.35;
-        margin-top: 2em;
-        margin-bottom: 0.75em;
+        line-height: 1.34;
+        margin-top: 1.95em;
+        margin-bottom: 0.72em;
         font-weight: 700;
       }
       .wechat-theme h1 {
         margin-top: 0;
-        font-size: 1.95rem;
+        margin-bottom: 1.35em;
+        font-size: 2rem;
         text-align: center;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.03em;
+        padding-bottom: 0.55rem;
+        border-bottom: 1px solid #d1fae5;
       }
       .wechat-theme h2 {
-        font-size: 1.42rem;
-        padding-left: 0.65rem;
+        font-size: 1.45rem;
+        padding: 0.14rem 0 0.14rem 0.7rem;
         border-left: 4px solid #10b981;
+        background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0));
+        border-radius: 0 0.35rem 0.35rem 0;
       }
       .wechat-theme h3 {
-        font-size: 1.18rem;
+        font-size: 1.2rem;
+        color: #065f46;
       }
       .wechat-theme p {
-        margin: 1em 0;
+        margin: 1.05em 0;
         text-align: justify;
       }
+      .wechat-theme strong {
+        color: #0f172a;
+        font-weight: 700;
+      }
+      .wechat-theme em {
+        color: #0f766e;
+        font-style: italic;
+      }
       .wechat-theme :where(ul, ol) {
-        margin: 0.8em 0 1.05em;
+        margin: 0.82em 0 1.08em;
         padding-left: 1.35rem;
       }
       .wechat-theme li {
-        margin: 0.24em 0;
+        margin: 0.28em 0;
       }
       .wechat-theme li::marker {
-        color: #6b7280;
+        color: #059669;
       }
       .wechat-theme a {
         color: #0f766e;
-        text-decoration: underline;
-        text-underline-offset: 2px;
-        text-decoration-thickness: 1.5px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(15, 118, 110, 0.45);
+        padding-bottom: 1px;
       }
       .wechat-theme a:hover {
-        color: #115e59;
+        color: #047857;
+        border-bottom-color: rgba(4, 120, 87, 0.65);
       }
       .wechat-theme :not(pre) > code {
         color: #0f172a;
-        background: #f1f5f9;
-        border: 1px solid #dbe3ec;
+        background: #f8fafc;
+        border: 1px solid #d7dee7;
         border-radius: 0.38rem;
-        padding: 0.11rem 0.38rem;
-        font-size: 0.84rem;
+        padding: 0.12rem 0.4rem;
+        font-size: 0.83rem;
       }
       .wechat-theme pre {
-        margin: 1.15em 0 1.3em;
-        border: 1px solid #d4dbe3;
+        margin: 1.2em 0 1.35em;
+        border: 1px solid #d8e1ea;
         border-radius: 0.72rem;
-        background: #f8fafc;
-        padding: 0.95rem 1.05rem;
+        background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+        padding: 1rem 1.08rem;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
       }
       .wechat-theme pre code {
-        font-size: 0.88rem;
+        font-size: 0.87rem;
         line-height: 1.68;
       }
       .wechat-theme blockquote {
-        margin: 1.15em 0;
-        border-left: 4px solid #10b981;
+        margin: 1.2em 0;
+        border-left: 4px solid #0ea5a0;
         border-radius: 0 0.6rem 0.6rem 0;
-        background: #f0fdfa;
+        background: linear-gradient(90deg, #ecfeff, #f0fdfa);
         color: #334155;
-        padding: 0.72rem 0.95rem;
+        padding: 0.78rem 1rem;
       }
       .wechat-theme hr {
         margin: 1.6em 0;
-        border-color: #dbe3ec;
+        border-color: #d8e5de;
       }
       .wechat-theme table {
         width: 100%;
         border-collapse: collapse;
-        margin: 1.1em 0 1.3em;
-        font-size: 0.94rem;
+        margin: 1.15em 0 1.35em;
+        font-size: 0.93rem;
+        overflow: hidden;
+        border-radius: 0.6rem;
       }
       .wechat-theme :where(th, td) {
-        border: 1px solid #d7dee7;
-        padding: 0.48rem 0.66rem;
+        border: 1px solid #dce4ec;
+        padding: 0.5rem 0.68rem;
         text-align: left;
       }
       .wechat-theme th {
-        background: #f8fafc;
+        background: #f3f8f6;
         color: #334155;
         font-weight: 600;
       }
       .wechat-theme tbody tr:nth-child(even) {
-        background: #fcfdff;
+        background: #fbfefd;
+      }
+      .wechat-theme img {
+        border-radius: 0.6rem;
+        border: 1px solid #e5edf3;
+        box-shadow: 0 8px 20px -18px rgba(15, 23, 42, 0.45);
       }
       .wechat-theme .mdv-code .copy-button {
         background: rgba(255, 255, 255, 0.94);
@@ -409,6 +485,25 @@ export const themes: Theme[] = [
       .dark-theme .hljs-comment,
       .dark-theme .hljs-quote {
         color: #94a3b8;
+      }
+      .dark-theme .hljs-variable,
+      .dark-theme .hljs-template-variable,
+      .dark-theme .hljs-name {
+        color: #93c5fd;
+      }
+      .dark-theme .hljs-function .hljs-title,
+      .dark-theme .hljs-title.function_,
+      .dark-theme .hljs-title.class_ {
+        color: #bfdbfe;
+      }
+      .dark-theme .hljs-params,
+      .dark-theme .hljs-attr,
+      .dark-theme .hljs-property {
+        color: #cbd5e1;
+      }
+      .dark-theme .hljs-regexp,
+      .dark-theme .hljs-deletion {
+        color: #fda4af;
       }
     `,
   },
@@ -1081,6 +1176,25 @@ export const themes: Theme[] = [
       .terminal-theme .hljs-comment,
       .terminal-theme .hljs-quote {
         color: #4ade80;
+      }
+      .terminal-theme .hljs-variable,
+      .terminal-theme .hljs-template-variable,
+      .terminal-theme .hljs-name {
+        color: #67e8f9;
+      }
+      .terminal-theme .hljs-function .hljs-title,
+      .terminal-theme .hljs-title.function_,
+      .terminal-theme .hljs-title.class_ {
+        color: #22d3ee;
+      }
+      .terminal-theme .hljs-params,
+      .terminal-theme .hljs-attr,
+      .terminal-theme .hljs-property {
+        color: #bbf7d0;
+      }
+      .terminal-theme .hljs-regexp,
+      .terminal-theme .hljs-deletion {
+        color: #fb7185;
       }
     `,
   },

@@ -190,6 +190,8 @@ body::before {
     'Liberation Mono', 'Courier New', monospace;
   line-height: 1.6;
   tab-size: 2;
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
 }
 
 .markdown-preview .prose :where(table) {
@@ -201,6 +203,31 @@ body::before {
 .markdown-preview .prose :where(img) {
   max-width: 100%;
   height: auto;
+}
+
+.markdown-preview .mdv-code pre {
+  scrollbar-gutter: stable both-edges;
+}
+
+.markdown-preview .mdv-code pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.markdown-preview .mdv-code pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.markdown-preview .mdv-code pre::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.55);
+  border-radius: 9999px;
+}
+
+.markdown-preview .mdv-code pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.7);
+}
+
+.markdown-preview .mdv-code .copy-button {
+  touch-action: manipulation;
 }
 
 /* Neutralize hljs background so container styling shows */
@@ -243,6 +270,26 @@ body::before {
 .markdown-preview .hljs-selector-id,
 .markdown-preview .hljs-selector-class {
   color: #2563eb;
+}
+.markdown-preview .hljs-variable,
+.markdown-preview .hljs-template-variable,
+.markdown-preview .hljs-name {
+  color: #0284c7;
+}
+.markdown-preview .hljs-function .hljs-title,
+.markdown-preview .hljs-title.function_,
+.markdown-preview .hljs-title.class_ {
+  color: #1d4ed8;
+  font-weight: 600;
+}
+.markdown-preview .hljs-params,
+.markdown-preview .hljs-attr,
+.markdown-preview .hljs-property {
+  color: #475569;
+}
+.markdown-preview .hljs-regexp,
+.markdown-preview .hljs-deletion {
+  color: #dc2626;
 }
 .markdown-preview .hljs-emphasis {
   font-style: italic;

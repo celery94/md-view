@@ -43,11 +43,11 @@ export const ui = {
     code: {
       wrapper: 'relative group mdv-code overflow-hidden',
       controls:
-        'absolute right-2.5 top-2.5 z-10 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200',
+        'absolute right-2.5 top-2.5 z-10 flex items-center gap-1.5 opacity-100 transition-all duration-200 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100',
       languageBadge:
-        'language-badge select-none rounded-lg border border-slate-300/70 bg-white/85 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-600 shadow-sm backdrop-blur-sm',
+        'language-badge select-none rounded-md border border-slate-300/70 bg-white/88 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-600 shadow-sm backdrop-blur-sm',
       copyButton:
-        'copy-button inline-flex items-center gap-1 rounded-lg border border-slate-300/65 bg-white/90 px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-cyan-300/60 hover:bg-white hover:text-slate-900 hover:shadow active:scale-[0.97]',
+        'copy-button inline-flex items-center gap-1 rounded-md border border-slate-300/65 bg-white/92 px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-cyan-300/60 hover:bg-white hover:text-slate-900 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-2 active:scale-[0.97]',
     },
   },
 } as const;
