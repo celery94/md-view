@@ -160,52 +160,47 @@ body::before {
   scrollbar-color: #b7cbd4 transparent;
 }
 
-/* Custom styles for markdown preview */
-.prose pre {
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-  padding: 1.25rem 1.5rem;
-  border-radius: var(--radius-lg);
-  overflow-x: auto;
-  border: 1px solid var(--mdv-border);
-  position: relative;
-  box-shadow: var(--shadow-xs);
-  transition: box-shadow var(--duration-normal) var(--ease-out-expo);
+/* Theme-agnostic preview baseline; theme files own the visual styling. */
+.markdown-preview .prose {
+  max-width: none;
 }
 
-.prose pre:hover {
-  box-shadow: var(--shadow-sm);
+.markdown-preview .prose :where(h1, h2, h3, h4, h5, h6) {
+  scroll-margin-top: 6rem;
 }
 
-/* Inline code chips - Enhanced design */
-.prose :not(pre) > code {
-  font-size: 0.8125rem;
+.markdown-preview .prose :not(pre) > code {
   font-family:
     var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
-  background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
-  color: #1e293b;
-  padding: 0.15rem 0.45rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  font-weight: 500;
+  white-space: normal;
+  word-break: break-word;
 }
 
-.prose :not(pre) > code:hover {
-  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
+.markdown-preview .prose pre {
+  overflow-x: auto;
 }
 
-
-/* Remove duplication inside fenced blocks */
-.prose pre code {
+.markdown-preview .prose pre code {
   background: transparent;
   border: 0;
   padding: 0;
-  font-size: 0.9rem;
   font-family:
     var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
   line-height: 1.6;
   tab-size: 2;
+}
+
+.markdown-preview .prose :where(table) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.markdown-preview .prose :where(img) {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Neutralize hljs background so container styling shows */
@@ -255,188 +250,7 @@ body::before {
 .markdown-preview .hljs-strong {
   font-weight: 700;
 }
-.markdown-preview[data-theme='dark'] .hljs,
-.markdown-preview[data-theme='terminal'] .hljs {
-  color: #e2e8f0;
-}
-.markdown-preview[data-theme='dark'] .hljs-keyword,
-.markdown-preview[data-theme='terminal'] .hljs-keyword,
-.markdown-preview[data-theme='dark'] .hljs-selector-tag,
-.markdown-preview[data-theme='terminal'] .hljs-selector-tag {
-  color: #38bdf8;
-}
-.markdown-preview[data-theme='dark'] .hljs-string,
-.markdown-preview[data-theme='terminal'] .hljs-string,
-.markdown-preview[data-theme='dark'] .hljs-addition,
-.markdown-preview[data-theme='terminal'] .hljs-addition {
-  color: #4ade80;
-}
-.markdown-preview[data-theme='dark'] .hljs-number,
-.markdown-preview[data-theme='terminal'] .hljs-number,
-.markdown-preview[data-theme='dark'] .hljs-literal,
-.markdown-preview[data-theme='terminal'] .hljs-literal {
-  color: #fbbf24;
-}
-.markdown-preview[data-theme='dark'] .hljs-comment,
-.markdown-preview[data-theme='terminal'] .hljs-comment,
-.markdown-preview[data-theme='dark'] .hljs-quote,
-.markdown-preview[data-theme='terminal'] .hljs-quote {
-  color: #cbd5f5;
-}
-.markdown-preview[data-theme='terminal'] .hljs {
-  color: #e2e8f0;
-}
-
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
-  font-weight: 800;
-  margin-top: 2.5rem;
-  margin-bottom: 1.25rem;
-  color: var(--mdv-foreground);
-  letter-spacing: -0.025em;
-  line-height: 1.2;
-  transition: color 0.2s ease;
-}
-
-.prose h1 {
-  font-size: 2.5em;
-  margin-top: 0;
-}
-
-.prose h2 {
-  font-size: 1.875em;
-}
-
-.prose blockquote {
-  border-left: 4px solid;
-  border-image: linear-gradient(180deg, #0f766e 0%, #0891b2 100%) 1;
-  background: linear-gradient(
-    135deg,
-    rgba(15, 118, 110, 0.08) 0%,
-    rgba(8, 145, 178, 0.05) 50%,
-    transparent 100%
-  );
-  padding: 1.25rem 1.75rem;
-  font-style: italic;
-  margin: 1.75rem 0;
-  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-  color: var(--mdv-foreground);
-  box-shadow: var(--shadow-sm);
-  position: relative;
-  overflow: hidden;
-  transition: all var(--duration-normal) var(--ease-out-expo);
-  backdrop-filter: blur(8px);
-}
-
-.prose blockquote:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateX(3px);
-  background: linear-gradient(
-    135deg,
-    rgba(15, 118, 110, 0.1) 0%,
-    rgba(8, 145, 178, 0.06) 50%,
-    transparent 100%
-  );
-}
-
-.prose blockquote::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    rgba(15, 118, 110, 0.24),
-    rgba(8, 145, 178, 0.14),
-    transparent
-  );
-}
-
-.prose table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin: 1.75rem 0;
-  background-color: var(--mdv-background);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm), 0 0 0 1px var(--mdv-border);
-  transition: box-shadow var(--duration-normal) var(--ease-out-expo);
-}
-
-.prose table:hover {
-  box-shadow: var(--shadow-md), 0 0 0 1px var(--mdv-border);
-}
-
-.prose th,
-.prose td {
-  border: none;
-  border-bottom: 1px solid var(--mdv-border);
-  padding: 0.875rem 1.125rem;
-  text-align: left;
-  transition: all var(--duration-fast) ease;
-}
-
-.prose th {
-  background: linear-gradient(180deg, var(--mdv-accent), rgba(241, 245, 249, 0.4));
-  font-weight: 600;
-  color: var(--mdv-accent-foreground);
-  font-size: 0.8125rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  border-bottom: 1px solid var(--mdv-border);
-}
-
-.prose tbody tr {
-  transition: background-color var(--duration-fast) ease;
-}
-
-.prose tbody tr:nth-child(even) {
-  background-color: rgba(241, 245, 249, 0.4);
-}
-
-.prose tbody tr:hover {
-  background-color: rgba(15, 118, 110, 0.06) !important;
-}
-
-.prose tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* Links */
-.prose a {
-  color: var(--mdv-link);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 2px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.prose a:hover {
-  color: var(--mdv-link-hover);
-  text-decoration-thickness: 3px;
-  text-underline-offset: 4px;
-}
-
-/* Horizontal rule */
-.prose hr {
-  border: 0;
-  border-top: 1px solid var(--mdv-border);
-  margin: 2rem 0;
-}
-
-/* Headings: anchor visibility on hover and scroll offset */
-.prose :where(h1, h2, h3, h4, h5, h6) {
-  scroll-margin-top: 6rem;
-}
-
-/* Task list checkboxes */
-.prose input[type='checkbox'] {
+.markdown-preview .prose input[type='checkbox'] {
   width: 1rem;
   height: 1rem;
   vertical-align: middle;
@@ -444,61 +258,26 @@ body::before {
   accent-color: #0f766e;
 }
 
-/* Lists: spacing, markers, nesting */
-.prose ul {
-  list-style-type: disc; /* always dot bullets */
-  padding-left: 1.25rem; /* indent for bullet gutter */
-}
-.prose ul,
-.prose ol {
-  margin: 0.75rem 0; /* tighter but readable */
-}
-.prose li {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-}
-.prose li::marker {
-  color: var(--mdv-marker);
-  font-weight: 600;
-}
-.prose ul > li {
-  padding-left: 0.375rem; /* extra space between dot and text */
-}
-.prose ol > li {
-  padding-left: 0.125rem; /* align with ul visual spacing */
-}
-.prose ul ul,
-.prose ul ol,
-.prose ol ul,
-.prose ol ol {
-  list-style-type: disc; /* keep dot bullets for nested unordered lists */
-  padding-left: 1.25rem; /* nested indent */
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-}
-
-/* Task lists: remove extra bullets and align items */
-.prose ul.contains-task-list,
-.prose ol.contains-task-list {
+.markdown-preview .prose ul.contains-task-list,
+.markdown-preview .prose ol.contains-task-list {
   list-style: none;
   padding-left: 0;
 }
-.prose li.task-list-item {
+.markdown-preview .prose li.task-list-item {
   list-style: none;
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
 }
-.prose li.task-list-item > input[type='checkbox'] {
+.markdown-preview .prose li.task-list-item > input[type='checkbox'] {
   margin-top: 0.2rem; /* visually center with first line */
 }
-.prose li > p + ul,
-.prose li > p + ol {
+.markdown-preview .prose li > p + ul,
+.markdown-preview .prose li > p + ol {
   margin-top: 0.375rem; /* space nested lists after paragraphs */
 }
 
-/* Keyboard keys */
-.prose kbd {
+.markdown-preview .prose kbd {
   font-family:
     var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
@@ -509,8 +288,6 @@ body::before {
   border-radius: 0.375rem;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
-
-/* Removed - now handled in enhanced table section above */
 
 @keyframes drift-glow {
   0% {

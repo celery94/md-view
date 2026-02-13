@@ -9,16 +9,136 @@ export interface Theme {
   customStyles?: string;
 }
 
+const lightProseClass = 'prose prose-slate max-w-none mdv-prose';
+const darkProseClass = 'prose prose-invert max-w-none mdv-prose';
+
 export const themes: Theme[] = [
   {
     name: 'default',
     displayName: 'Default',
     description: 'Clean and detailed design',
     classes: {
-      container:
-        'h-full overflow-auto bg-white p-8 sm:p-12',
-      prose: 'prose prose-slate max-w-none prose-h1:text-3xl prose-h1:font-bold prose-h2:text-2xl prose-h2:font-semibold prose-h3:text-xl prose-p:text-slate-600 prose-p:leading-relaxed prose-code:text-rose-500 prose-code:bg-rose-50 prose-code:px-1 prose-code:rounded prose-pre:bg-slate-50 prose-pre:border prose-pre:border-slate-100',
+      container: 'h-full overflow-auto bg-gradient-to-b from-white to-slate-50 p-6 sm:p-10',
+      prose: `${lightProseClass} default-theme`,
     },
+    customStyles: `
+      .default-theme {
+        color: #1f2937;
+        font-size: 1.04rem;
+        line-height: 1.75;
+      }
+      .default-theme :where(h1, h2, h3, h4, h5, h6) {
+        color: #0f172a;
+        font-weight: 760;
+        letter-spacing: -0.01em;
+        line-height: 1.22;
+        margin-top: 2.25rem;
+        margin-bottom: 1rem;
+      }
+      .default-theme h1 {
+        margin-top: 0;
+        font-size: 2.15rem;
+      }
+      .default-theme h2 {
+        font-size: 1.7rem;
+      }
+      .default-theme h3 {
+        font-size: 1.35rem;
+      }
+      .default-theme p {
+        margin: 1rem 0;
+      }
+      .default-theme :where(ul, ol) {
+        margin: 0.8rem 0 1rem;
+        padding-left: 1.35rem;
+      }
+      .default-theme li::marker {
+        color: #64748b;
+      }
+      .default-theme a {
+        color: #0f766e;
+        text-decoration: underline;
+        text-decoration-thickness: 1.5px;
+        text-underline-offset: 2px;
+      }
+      .default-theme a:hover {
+        color: #155e75;
+      }
+      .default-theme :not(pre) > code {
+        font-size: 0.84rem;
+        color: #0f172a;
+        background: #e2e8f0;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.42rem;
+        padding: 0.14rem 0.42rem;
+      }
+      .default-theme pre {
+        margin: 1.25rem 0;
+        padding: 1rem 1.15rem;
+        border: 1px solid #1e293b;
+        border-radius: 0.75rem;
+        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        color: #e2e8f0;
+        box-shadow: 0 10px 20px -16px rgba(2, 6, 23, 0.55);
+      }
+      .default-theme pre code {
+        color: inherit;
+        font-size: 0.9rem;
+      }
+      .default-theme blockquote {
+        margin: 1.2rem 0;
+        border-left: 4px solid #0f766e;
+        border-radius: 0 0.6rem 0.6rem 0;
+        padding: 0.8rem 1rem;
+        background: linear-gradient(90deg, rgba(15, 118, 110, 0.08), rgba(148, 163, 184, 0.06));
+        color: #334155;
+      }
+      .default-theme hr {
+        margin: 1.8rem 0;
+        border-color: #cbd5e1;
+      }
+      .default-theme table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 1.25rem 0;
+        border: 1px solid #dbe3ec;
+        border-radius: 0.75rem;
+        overflow: hidden;
+      }
+      .default-theme th {
+        background: #f1f5f9;
+        color: #1e293b;
+        font-size: 0.78rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .default-theme :where(th, td) {
+        border-bottom: 1px solid #dbe3ec;
+        padding: 0.68rem 0.85rem;
+        text-align: left;
+      }
+      .default-theme tr:last-child td {
+        border-bottom: 0;
+      }
+      .default-theme tbody tr:nth-child(even) {
+        background: #f8fafc;
+      }
+      .default-theme .mdv-code .copy-button {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: rgba(148, 163, 184, 0.6);
+        color: #334155;
+      }
+      .default-theme .mdv-code .copy-button:hover {
+        background: #ffffff;
+        border-color: #7dd3fc;
+      }
+      .default-theme .mdv-code .language-badge {
+        background: rgba(255, 255, 255, 0.88);
+        border-color: rgba(148, 163, 184, 0.55);
+        color: #334155;
+      }
+    `,
   },
   {
     name: 'dark',
@@ -26,80 +146,142 @@ export const themes: Theme[] = [
     description: 'Dark theme for low-light environments',
     classes: {
       container:
-        'h-full overflow-auto bg-[#1e1e1e] p-8 sm:p-12',
-      prose: 'prose prose-invert max-w-none dark-theme',
+        'h-full overflow-auto bg-gradient-to-b from-slate-950 via-slate-900 to-slate-900 p-6 sm:p-10',
+      prose: `${darkProseClass} dark-theme`,
     },
     customStyles: `
       .dark-theme {
-        color: #e5e7eb;
-        background: #111827;
+        color: #dbe7f4;
+        font-size: 1.03rem;
+        line-height: 1.72;
       }
-      .dark-theme h1, .dark-theme h2, .dark-theme h3, .dark-theme h4, .dark-theme h5, .dark-theme h6 {
-        color: #f9fafb;
-        border-color: #374151;
+      .dark-theme :where(h1, h2, h3, h4, h5, h6) {
+        color: #f8fafc;
+        font-weight: 740;
+        line-height: 1.22;
+        margin-top: 2.15rem;
+        margin-bottom: 0.95rem;
       }
-      .dark-theme pre {
-        background: #1f2937;
-        border: 1px solid #374151;
-        color: #e5e7eb;
+      .dark-theme h1 {
+        margin-top: 0;
+        font-size: 2.05rem;
       }
-      .dark-theme code {
-        background: #1f2937;
-        color: #e5e7eb;
-        border: 1px solid #374151;
+      .dark-theme h2 {
+        font-size: 1.65rem;
       }
-      .dark-theme blockquote {
-        border-left: 4px solid #3b82f6;
-        background: #1f2937;
-        color: #d1d5db;
+      .dark-theme h3 {
+        font-size: 1.3rem;
       }
-      .dark-theme table {
-        background: #111827;
-        border: 1px solid #374151;
+      .dark-theme p {
+        margin: 1rem 0;
+        color: #d0deee;
       }
-      .dark-theme th {
-        background: #1f2937;
-        border: 1px solid #374151;
-        color: #f9fafb;
-      }
-      .dark-theme td {
-        border: 1px solid #374151;
-        color: #e5e7eb;
-      }
-      .dark-theme tr:nth-child(even) {
-        background: #1f2937;
-      }
-      .dark-theme a {
-        color: #60a5fa;
-      }
-      .dark-theme a:hover {
-        color: #93c5fd;
-      }
-      .dark-theme hr {
-        border-color: #374151;
+      .dark-theme :where(ul, ol) {
+        margin: 0.8rem 0 1rem;
+        padding-left: 1.3rem;
       }
       .dark-theme li::marker {
-        color: #9ca3af; /* gray-400 for contrast on dark */
-        font-weight: 600;
+        color: #93a8bf;
       }
-      /* Dark theme specific copy button and language badge styles */
+      .dark-theme a {
+        color: #67e8f9;
+        text-decoration-thickness: 1.6px;
+      }
+      .dark-theme a:hover {
+        color: #a5f3fc;
+      }
+      .dark-theme :not(pre) > code {
+        color: #cffafe;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px solid rgba(71, 85, 105, 0.9);
+        border-radius: 0.42rem;
+        padding: 0.14rem 0.42rem;
+      }
+      .dark-theme pre {
+        margin: 1.2rem 0;
+        border: 1px solid rgba(71, 85, 105, 0.85);
+        border-radius: 0.78rem;
+        padding: 1rem 1.15rem;
+        background: linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
+        color: #e5eef8;
+      }
+      .dark-theme pre code {
+        color: inherit;
+      }
+      .dark-theme blockquote {
+        margin: 1.2rem 0;
+        border-left: 4px solid #22d3ee;
+        border-radius: 0 0.6rem 0.6rem 0;
+        padding: 0.8rem 1rem;
+        background: rgba(15, 23, 42, 0.7);
+        color: #c9daed;
+      }
+      .dark-theme hr {
+        margin: 1.8rem 0;
+        border-color: rgba(71, 85, 105, 0.85);
+      }
+      .dark-theme table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 1.25rem 0;
+        border: 1px solid rgba(71, 85, 105, 0.9);
+        border-radius: 0.78rem;
+        overflow: hidden;
+        background: rgba(15, 23, 42, 0.6);
+      }
+      .dark-theme th {
+        background: rgba(30, 41, 59, 0.92);
+        color: #f8fafc;
+        font-size: 0.78rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .dark-theme :where(th, td) {
+        border-bottom: 1px solid rgba(71, 85, 105, 0.78);
+        padding: 0.68rem 0.85rem;
+      }
+      .dark-theme tr:last-child td {
+        border-bottom: 0;
+      }
+      .dark-theme tbody tr:nth-child(even) {
+        background: rgba(30, 41, 59, 0.44);
+      }
       .dark-theme .mdv-code .copy-button {
-        background: #1f2937;
-        border: 1px solid #374151;
-        color: #e5e7eb;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px solid rgba(71, 85, 105, 0.9);
+        color: #dbeafe;
       }
       .dark-theme .mdv-code .copy-button:hover {
-        background: #374151;
+        background: rgba(30, 41, 59, 0.96);
+        border-color: rgba(34, 211, 238, 0.7);
       }
       .dark-theme .mdv-code .language-badge {
-        background: #1f2937;
-        border: 1px solid #374151;
-        color: #d1d5db;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(71, 85, 105, 0.85);
+        color: #bfdbfe;
       }
-      
-      /* Dark theme success state for copy button */
       .dark-theme .mdv-code .copy-button .text-green-600 {
-        color: #10b981 !important;
+        color: #34d399 !important;
+      }
+      .dark-theme .hljs {
+        color: #d7e2ef;
+      }
+      .dark-theme .hljs-keyword,
+      .dark-theme .hljs-selector-tag {
+        color: #7dd3fc;
+      }
+      .dark-theme .hljs-string,
+      .dark-theme .hljs-addition {
+        color: #86efac;
+      }
+      .dark-theme .hljs-number,
+      .dark-theme .hljs-literal {
+        color: #fbbf24;
+      }
+      .dark-theme .hljs-comment,
+      .dark-theme .hljs-quote {
+        color: #94a3b8;
       }
     `,
   },
@@ -109,53 +291,105 @@ export const themes: Theme[] = [
     description: 'GitHub-like styling',
     classes: {
       container:
-        'h-full overflow-auto border border-slate-200/70 bg-white/90 p-4 sm:p-6 shadow-sm backdrop-blur',
-      prose: 'prose prose-slate max-w-none github-theme',
+        'h-full overflow-auto border border-slate-200/70 bg-white p-5 sm:p-8 shadow-sm',
+      prose: `${lightProseClass} github-theme`,
     },
     customStyles: `
-      .github-theme h1 { 
-        border-bottom: 1px solid #e1e4e8; 
-        padding-bottom: 0.3em; 
-        font-size: 2em;
-        margin-top: 0;
-        margin-bottom: 16px;
+      .github-theme {
+        color: #24292f;
+        font-size: 1rem;
+        line-height: 1.64;
       }
-      .github-theme h2 { 
-        border-bottom: 1px solid #e1e4e8; 
-        padding-bottom: 0.3em; 
-        font-size: 1.5em;
-        margin-top: 24px;
-        margin-bottom: 16px;
+      .github-theme :where(h1, h2, h3, h4, h5, h6) {
+        color: #1f2328;
+        margin-top: 1.8rem;
+        margin-bottom: 0.95rem;
+        font-weight: 600;
+        line-height: 1.25;
+      }
+      .github-theme h1,
+      .github-theme h2 {
+        border-bottom: 1px solid #d0d7de;
+        padding-bottom: 0.3em;
+      }
+      .github-theme h1 {
+        margin-top: 0;
+        font-size: 2rem;
+      }
+      .github-theme h2 {
+        font-size: 1.5rem;
+      }
+      .github-theme h3 {
+        font-size: 1.25rem;
+      }
+      .github-theme p {
+        margin: 0.9rem 0;
+      }
+      .github-theme :where(ul, ol) {
+        margin: 0.75rem 0 1rem;
+        padding-left: 1.4rem;
+      }
+      .github-theme a {
+        color: #0969da;
+      }
+      .github-theme a:hover {
+        color: #0550ae;
+      }
+      .github-theme :not(pre) > code {
+        color: #cf222e;
+        background: rgba(175, 184, 193, 0.2);
+        border: 1px solid rgba(175, 184, 193, 0.45);
+        border-radius: 0.35rem;
+        padding: 0.12rem 0.38rem;
+        font-size: 0.84rem;
       }
       .github-theme pre {
-        background-color: #f6f8fa;
-        border-radius: 6px;
-        font-size: 85%;
-        line-height: 1.45;
-        overflow: auto;
-        padding: 16px;
+        margin: 1rem 0 1.15rem;
+        padding: 1rem;
+        border-radius: 0.55rem;
+        border: 1px solid #d0d7de;
+        background: #f6f8fa;
       }
       .github-theme blockquote {
-        border-left: 0.25em solid #dfe2e5;
-        color: #6a737d;
+        margin: 1rem 0;
+        color: #59636e;
+        border-left: 0.25em solid #d0d7de;
         padding: 0 1em;
         background: transparent;
       }
       .github-theme table {
-        border-spacing: 0;
+        width: 100%;
         border-collapse: collapse;
-        display: block;
-        width: max-content;
-        max-width: 100%;
-        overflow: auto;
+        margin: 1rem 0;
       }
-      .github-theme table th {
+      .github-theme :where(th, td) {
+        border: 1px solid #d0d7de;
+        padding: 0.38rem 0.75rem;
+      }
+      .github-theme th {
+        background: #f6f8fa;
         font-weight: 600;
-        background-color: #f6f8fa;
-        border: 1px solid #d0d7de;
       }
-      .github-theme table td {
-        border: 1px solid #d0d7de;
+      .github-theme tr:nth-child(even) {
+        background: #f6f8fa;
+      }
+      .github-theme hr {
+        margin: 1.5rem 0;
+        border-color: #d0d7de;
+      }
+      .github-theme .mdv-code .copy-button {
+        background: #ffffff;
+        border-color: #d0d7de;
+        color: #57606a;
+      }
+      .github-theme .mdv-code .copy-button:hover {
+        background: #f6f8fa;
+        border-color: #afb8c1;
+      }
+      .github-theme .mdv-code .language-badge {
+        background: #ffffff;
+        border-color: #d0d7de;
+        color: #57606a;
       }
     `,
   },
@@ -164,46 +398,98 @@ export const themes: Theme[] = [
     displayName: 'Notion',
     description: 'Notion-inspired design',
     classes: {
-      container:
-        'h-full overflow-auto border border-slate-200/70 bg-white/90 p-4 sm:p-6 backdrop-blur',
-      prose: 'prose prose-slate max-w-none notion-theme',
+      container: 'h-full overflow-auto border border-stone-200/80 bg-stone-50/85 p-5 sm:p-8',
+      prose: `${lightProseClass} notion-theme`,
     },
     customStyles: `
       .notion-theme {
-        font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
-        line-height: 1.5;
-        color: rgb(55, 53, 47);
+        font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        color: #37352f;
+        font-size: 1.02rem;
+        line-height: 1.67;
       }
-      .notion-theme h1, .notion-theme h2, .notion-theme h3 {
-        font-weight: 700;
-        line-height: 1.2;
-        margin-top: 2em;
-        margin-bottom: 4px;
+      .notion-theme :where(h1, h2, h3, h4, h5, h6) {
+        color: #2f2d29;
+        font-weight: 650;
+        line-height: 1.25;
+        margin-top: 2rem;
+        margin-bottom: 0.58rem;
       }
-      .notion-theme h1 { font-size: 2.5em; }
-      .notion-theme h2 { font-size: 1.875em; }
-      .notion-theme h3 { font-size: 1.5em; }
-      .notion-theme p { margin: 1em 0; }
+      .notion-theme h1 {
+        margin-top: 0;
+        font-size: 2.1rem;
+      }
+      .notion-theme h2 {
+        font-size: 1.7rem;
+      }
+      .notion-theme h3 {
+        font-size: 1.38rem;
+      }
+      .notion-theme p {
+        margin: 0.9rem 0;
+      }
+      .notion-theme :where(ul, ol) {
+        margin: 0.72rem 0 1rem;
+        padding-left: 1.3rem;
+      }
+      .notion-theme a {
+        color: #0b6e99;
+      }
+      .notion-theme a:hover {
+        color: #0c4f75;
+      }
+      .notion-theme :not(pre) > code {
+        background: rgba(135, 131, 120, 0.2);
+        border: 1px solid rgba(135, 131, 120, 0.28);
+        border-radius: 0.3rem;
+        color: #3a3a3a;
+        padding: 0.1rem 0.36rem;
+        font-size: 0.83rem;
+      }
       .notion-theme pre {
-        background: rgb(247, 246, 243);
-        border-radius: 3px;
-        padding: 16px;
-        font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace;
-        font-size: 14px;
-        line-height: 1.4;
+        margin: 1rem 0 1.2rem;
+        border: 1px solid #e7e4de;
+        border-radius: 0.45rem;
+        padding: 0.9rem 1rem;
+        background: #f7f6f3;
       }
       .notion-theme blockquote {
-        border-left: 3px solid #dadada;
-        background: none;
-        padding-left: 14px;
-        margin: 16px 0;
-        font-style: normal;
+        margin: 1rem 0;
+        border-left: 3px solid #d5d2cc;
+        padding-left: 0.9rem;
+        color: #65615a;
       }
-      .notion-theme code {
-        background: rgba(135, 131, 120, 0.15);
-        border-radius: 3px;
-        padding: 0.2em 0.4em;
-        font-size: 85%;
+      .notion-theme table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        background: #ffffff;
+      }
+      .notion-theme :where(th, td) {
+        border: 1px solid #ebe8e3;
+        padding: 0.55rem 0.72rem;
+      }
+      .notion-theme th {
+        background: #f5f4f2;
+        color: #4a4742;
+        font-weight: 600;
+      }
+      .notion-theme hr {
+        margin: 1.5rem 0;
+        border-color: #ebe8e3;
+      }
+      .notion-theme .mdv-code .copy-button {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: rgba(193, 188, 179, 0.85);
+        color: #5a564f;
+      }
+      .notion-theme .mdv-code .copy-button:hover {
+        background: #ffffff;
+      }
+      .notion-theme .mdv-code .language-badge {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: rgba(193, 188, 179, 0.8);
+        color: #5a564f;
       }
     `,
   },
@@ -212,75 +498,115 @@ export const themes: Theme[] = [
     displayName: 'Medium',
     description: 'Medium.com-style typography',
     classes: {
-      container:
-        'h-full overflow-auto border border-slate-200/70 bg-white/90 p-4 sm:p-8 backdrop-blur',
-      prose: 'prose prose-slate max-w-none medium-theme',
+      container: 'h-full overflow-auto border border-zinc-200/70 bg-white p-6 sm:p-10',
+      prose: `${lightProseClass} medium-theme`,
     },
     customStyles: `
       .medium-theme {
         font-family: charter, Georgia, Cambria, "Times New Roman", Times, serif;
-        font-size: 21px;
-        line-height: 1.58;
-        letter-spacing: -.003em;
-        color: rgba(41, 41, 41, 1);
+        color: #242424;
+        font-size: 1.25rem;
+        line-height: 1.62;
+        letter-spacing: -0.003em;
       }
-      .medium-theme h1, .medium-theme h2, .medium-theme h3 {
-        font-family: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      .medium-theme :where(h1, h2, h3, h4, h5, h6) {
+        font-family: var(--font-geist-sans), "Helvetica Neue", Arial, sans-serif;
+        color: #1c1c1c;
         font-weight: 700;
-        color: rgba(41, 41, 41, 1);
+        line-height: 1.16;
       }
       .medium-theme h1 {
-        font-size: 42px;
-        line-height: 1.04;
-        letter-spacing: -.015em;
         margin-top: 0;
-        margin-bottom: 30px;
+        margin-bottom: 2rem;
+        font-size: 2.45rem;
+        letter-spacing: -0.02em;
       }
       .medium-theme h2 {
-        font-size: 34px;
-        line-height: 1.15;
-        letter-spacing: -.015em;
-        margin-top: 56px;
-        margin-bottom: 8px;
+        margin-top: 2.6rem;
+        margin-bottom: 0.65rem;
+        font-size: 2rem;
       }
       .medium-theme h3 {
-        font-size: 26px;
-        line-height: 1.22;
-        letter-spacing: -.012em;
-        margin-top: 40px;
-        margin-bottom: 4px;
+        margin-top: 2rem;
+        margin-bottom: 0.45rem;
+        font-size: 1.55rem;
       }
       .medium-theme p {
-        margin-top: 29px;
-        margin-bottom: 29px;
+        margin: 1.55rem 0;
+      }
+      .medium-theme :where(ul, ol) {
+        margin: 1.25rem 0 1.5rem;
+        padding-left: 1.4rem;
+      }
+      .medium-theme li {
+        margin: 0.25rem 0;
+      }
+      .medium-theme a {
+        color: #0f766e;
+        text-decoration-thickness: 2px;
+      }
+      .medium-theme a:hover {
+        color: #115e59;
+      }
+      .medium-theme :not(pre) > code {
+        font-family: var(--font-geist-mono), Menlo, Monaco, Consolas, monospace;
+        font-size: 0.88rem;
+        background: #f2f2f2;
+        border: 1px solid #e6e6e6;
+        color: #1f2937;
+        border-radius: 0.35rem;
+        padding: 0.1rem 0.35rem;
       }
       .medium-theme pre {
-        background: #f7f7f7;
-        border: none;
-        border-radius: 4px;
-        padding: 20px;
-        margin: 40px 0;
-        font-family: Menlo, Monaco, "Courier New", Courier, monospace;
-        font-size: 16px;
-        line-height: 1.4;
+        margin: 1.9rem 0;
+        background: #f8f8f8;
+        border: 1px solid #ececec;
+        border-radius: 0.5rem;
+        padding: 1.1rem 1.2rem;
+      }
+      .medium-theme pre code {
+        font-size: 0.95rem;
       }
       .medium-theme blockquote {
-        border-left: 3px solid rgba(41, 41, 41, 1);
-        padding-left: 23px;
-        margin-left: 0;
-        margin-right: 0;
-        font-style: italic;
-        font-size: 24px;
-        line-height: 1.48;
-        letter-spacing: -.014em;
-        background: none;
+        margin: 1.9rem 0;
+        border-left: 3px solid #1f2937;
+        padding-left: 1.2rem;
+        font-size: 1.25rem;
+        line-height: 1.5;
+        color: #303030;
       }
-      .medium-theme code {
-        background: #f2f2f2;
-        padding: 2px 4px;
-        border-radius: 3px;
-        font-family: Menlo, Monaco, "Courier New", Courier, monospace;
-        font-size: 16px;
+      .medium-theme table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+        font-size: 1rem;
+      }
+      .medium-theme :where(th, td) {
+        border-bottom: 1px solid #e5e7eb;
+        padding: 0.6rem 0.5rem;
+        text-align: left;
+      }
+      .medium-theme th {
+        font-family: var(--font-geist-sans), "Helvetica Neue", Arial, sans-serif;
+        font-weight: 600;
+        color: #2f2f2f;
+      }
+      .medium-theme hr {
+        margin: 2.2rem 0;
+        border-color: #e5e7eb;
+      }
+      .medium-theme .mdv-code .copy-button {
+        background: rgba(255, 255, 255, 0.95);
+        border-color: rgba(156, 163, 175, 0.55);
+        color: #4b5563;
+      }
+      .medium-theme .mdv-code .copy-button:hover {
+        background: #ffffff;
+      }
+      .medium-theme .mdv-code .language-badge {
+        background: rgba(255, 255, 255, 0.92);
+        border-color: rgba(156, 163, 175, 0.55);
+        color: #4b5563;
       }
     `,
   },
@@ -290,73 +616,103 @@ export const themes: Theme[] = [
     description: 'Academic paper style',
     classes: {
       container:
-        'h-full overflow-auto border border-slate-200/70 bg-white/90 p-5 sm:p-10 xl:p-12 shadow-lg backdrop-blur',
-      prose: 'prose prose-slate max-w-none paper-theme',
+        'h-full overflow-auto border border-stone-300/70 bg-[#fffefb] p-6 sm:p-10 xl:p-12 shadow-[0_12px_36px_-22px_rgba(15,23,42,0.45)]',
+      prose: `${lightProseClass} paper-theme`,
     },
     customStyles: `
       .paper-theme {
         font-family: "Times New Roman", Times, serif;
-        font-size: 16px;
-        line-height: 1.6;
-        color: #000;
+        color: #111827;
+        font-size: 1.03rem;
+        line-height: 1.78;
         max-width: 210mm;
         margin: 0 auto;
       }
+      .paper-theme :where(h1, h2, h3, h4, h5, h6) {
+        color: #0f172a;
+        font-weight: 700;
+        line-height: 1.26;
+        margin-top: 1.9rem;
+        margin-bottom: 0.7rem;
+      }
       .paper-theme h1 {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
         text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 24px;
-        page-break-after: avoid;
+        font-size: 2rem;
       }
       .paper-theme h2 {
-        font-size: 18px;
-        font-weight: bold;
-        margin-top: 24px;
-        margin-bottom: 12px;
-        page-break-after: avoid;
+        font-size: 1.45rem;
       }
       .paper-theme h3 {
-        font-size: 16px;
-        font-weight: bold;
-        margin-top: 18px;
-        margin-bottom: 9px;
-        page-break-after: avoid;
+        font-size: 1.18rem;
       }
       .paper-theme p {
+        margin: 0.85rem 0;
         text-align: justify;
-        margin-bottom: 12px;
-        text-indent: 0;
+      }
+      .paper-theme :where(ul, ol) {
+        margin: 0.7rem 0 1rem;
+        padding-left: 1.4rem;
+      }
+      .paper-theme a {
+        color: #1d4ed8;
+      }
+      .paper-theme :not(pre) > code {
+        font-size: 0.82rem;
+        background: #f4f4f5;
+        border: 1px solid #d4d4d8;
+        border-radius: 0.28rem;
+        padding: 0.08rem 0.3rem;
+        color: #1f2937;
       }
       .paper-theme pre {
-        background: #f5f5f5;
-        border: 1px solid #ddd;
-        font-family: "Courier New", Courier, monospace;
-        font-size: 12px;
-        padding: 12px;
-        margin: 18px 0;
+        margin: 1rem 0 1.25rem;
+        border: 1px solid #d4d4d8;
+        border-radius: 0.35rem;
+        background: #f9fafb;
+        padding: 0.8rem 0.9rem;
         page-break-inside: avoid;
+      }
+      .paper-theme pre code {
+        font-size: 0.84rem;
       }
       .paper-theme blockquote {
-        margin: 18px 40px;
-        font-style: italic;
-        border-left: none;
-        background: none;
-        padding-left: 0;
+        margin: 1rem 0;
+        padding: 0.2rem 0 0.2rem 1rem;
+        border-left: 3px solid #9ca3af;
+        color: #374151;
+      }
+      .paper-theme hr {
+        margin: 1.5rem 0;
+        border-color: #d1d5db;
       }
       .paper-theme table {
-        margin: 18px auto;
+        width: 100%;
         border-collapse: collapse;
-        page-break-inside: avoid;
+        margin: 1.15rem 0;
       }
-      .paper-theme th, .paper-theme td {
-        border: 1px solid #000;
-        padding: 6px 12px;
+      .paper-theme :where(th, td) {
+        border: 1px solid #6b7280;
+        padding: 0.35rem 0.55rem;
         text-align: left;
       }
       .paper-theme th {
-        background: #f0f0f0;
-        font-weight: bold;
+        background: #f3f4f6;
+        font-weight: 700;
+      }
+      .paper-theme .mdv-code .copy-button {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: #c4c9d2;
+        color: #374151;
+      }
+      .paper-theme .mdv-code .copy-button:hover {
+        background: #ffffff;
+      }
+      .paper-theme .mdv-code .language-badge {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: #c4c9d2;
+        color: #4b5563;
       }
     `,
   },
@@ -365,70 +721,102 @@ export const themes: Theme[] = [
     displayName: 'Minimal',
     description: 'Ultra-clean minimal design',
     classes: {
-      container:
-        'h-full overflow-auto border border-slate-200/70 bg-slate-100/85 p-4 sm:p-6 backdrop-blur',
-      prose: 'prose prose-gray max-w-none minimal-theme',
+      container: 'h-full overflow-auto bg-white p-6 sm:p-10',
+      prose: `${lightProseClass} minimal-theme`,
     },
     customStyles: `
       .minimal-theme {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 18px;
-        line-height: 1.7;
-        color: #333;
+        font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #3a3a3a;
+        font-size: 1.03rem;
+        line-height: 1.78;
       }
-      .minimal-theme h1, .minimal-theme h2, .minimal-theme h3 {
-        font-weight: 300;
-        color: #222;
-        margin-top: 2em;
-        margin-bottom: 0.5em;
+      .minimal-theme :where(h1, h2, h3, h4, h5, h6) {
+        color: #212121;
+        font-weight: 500;
+        line-height: 1.25;
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
       }
-      .minimal-theme h1 { 
-        font-size: 2.5em; 
-        border-bottom: 1px solid #eee;
-        padding-bottom: 0.3em;
+      .minimal-theme h1 {
+        margin-top: 0;
+        font-size: 2.1rem;
+        border-bottom: 1px solid #ececec;
+        padding-bottom: 0.34rem;
       }
-      .minimal-theme h2 { font-size: 1.8em; }
-      .minimal-theme h3 { font-size: 1.3em; }
-      .minimal-theme p { margin: 1.5em 0; }
+      .minimal-theme h2 {
+        font-size: 1.55rem;
+      }
+      .minimal-theme h3 {
+        font-size: 1.28rem;
+      }
+      .minimal-theme p {
+        margin: 1.1rem 0;
+      }
+      .minimal-theme :where(ul, ol) {
+        margin: 0.78rem 0 1.1rem;
+        padding-left: 1.3rem;
+      }
+      .minimal-theme li::marker {
+        color: #9ca3af;
+      }
+      .minimal-theme a {
+        color: #0f766e;
+      }
+      .minimal-theme a:hover {
+        color: #0f5f8c;
+      }
+      .minimal-theme :not(pre) > code {
+        background: #f7f7f7;
+        border: 1px solid #ebebeb;
+        border-radius: 0.28rem;
+        color: #303030;
+        padding: 0.08rem 0.3rem;
+      }
       .minimal-theme pre {
-        background: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 0;
-        padding: 20px;
-        font-family: "SF Mono", Monaco, Inconsolata, "Roboto Mono", monospace;
-        font-size: 14px;
-        line-height: 1.5;
+        margin: 1rem 0 1.2rem;
+        border: 1px solid #e6e6e6;
+        border-radius: 0.4rem;
+        background: #fcfcfc;
+        padding: 0.9rem 1rem;
       }
       .minimal-theme blockquote {
-        border-left: 2px solid #ccc;
-        padding-left: 20px;
-        margin: 2em 0;
-        background: none;
-        font-style: normal;
-        color: #666;
+        margin: 1rem 0;
+        border-left: 2px solid #d4d4d4;
+        color: #616161;
+        padding-left: 0.85rem;
+        background: transparent;
       }
-      .minimal-theme code {
-        background: #f8f8f8;
-        padding: 2px 6px;
-        border-radius: 3px;
-        font-family: "SF Mono", Monaco, Inconsolata, "Roboto Mono", monospace;
-        font-size: 0.9em;
+      .minimal-theme hr {
+        margin: 1.5rem 0;
+        border-color: #e7e7e7;
       }
       .minimal-theme table {
-        border: none;
+        width: 100%;
         border-collapse: collapse;
-        margin: 2em 0;
+        margin: 1rem 0;
       }
-      .minimal-theme th, .minimal-theme td {
-        border-bottom: 1px solid #eee;
-        border-left: none;
-        border-right: none;
-        padding: 8px 16px;
+      .minimal-theme :where(th, td) {
+        border-bottom: 1px solid #ececec;
+        padding: 0.5rem 0.6rem;
       }
       .minimal-theme th {
-        background: none;
         font-weight: 600;
-        color: #555;
+        color: #525252;
+        background: #fafafa;
+      }
+      .minimal-theme .mdv-code .copy-button {
+        background: #ffffff;
+        border-color: #e5e7eb;
+        color: #4b5563;
+      }
+      .minimal-theme .mdv-code .copy-button:hover {
+        background: #fafafa;
+      }
+      .minimal-theme .mdv-code .language-badge {
+        background: #ffffff;
+        border-color: #e5e7eb;
+        color: #6b7280;
       }
     `,
   },
@@ -438,92 +826,134 @@ export const themes: Theme[] = [
     description: 'Retro terminal/console style',
     classes: {
       container:
-        'h-full overflow-auto border border-emerald-500/70 bg-black/90 p-4 sm:p-6 shadow-lg',
-      prose: 'prose prose-invert max-w-none terminal-theme',
+        'h-full overflow-auto border border-emerald-500/70 bg-black p-5 sm:p-8 shadow-[0_16px_44px_-26px_rgba(16,185,129,0.6)]',
+      prose: `${darkProseClass} terminal-theme`,
     },
     customStyles: `
       .terminal-theme {
-        font-family: "Courier New", Courier, monospace;
-        font-size: 14px;
-        line-height: 1.4;
-        color: #00ff00;
-        background: #000;
+        font-family: "IBM Plex Mono", "Courier New", Courier, monospace;
+        color: #6eff88;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        text-shadow: 0 0 0.35px rgba(110, 255, 136, 0.45);
       }
-      .terminal-theme h1, .terminal-theme h2, .terminal-theme h3 {
-        color: #00ff00;
-        font-weight: bold;
+      .terminal-theme :where(h1, h2, h3, h4, h5, h6) {
+        color: #7dff9d;
+        font-weight: 700;
         text-transform: uppercase;
-        border-bottom: 1px solid #00ff00;
-        padding-bottom: 4px;
-        margin-top: 2em;
-        margin-bottom: 1em;
+        line-height: 1.24;
+        margin-top: 1.8rem;
+        margin-bottom: 0.7rem;
       }
-      .terminal-theme h1 { font-size: 18px; }
-      .terminal-theme h2 { font-size: 16px; }
-      .terminal-theme h3 { font-size: 14px; }
-      .terminal-theme p { margin: 1em 0; }
-      .terminal-theme pre {
-        background: #111;
-        border: 1px solid #333;
-        color: #fff;
-        padding: 12px;
-        margin: 1em 0;
+      .terminal-theme h1 {
+        margin-top: 0;
+        font-size: 1.5rem;
+        border-bottom: 1px solid rgba(110, 255, 136, 0.55);
+        padding-bottom: 0.32rem;
       }
-      .terminal-theme code {
-        background: #111;
-        color: #fff;
-        padding: 2px 4px;
-        border: 1px solid #333;
+      .terminal-theme h2 {
+        font-size: 1.25rem;
       }
-      .terminal-theme blockquote {
-        border-left: 3px solid #00ff00;
-        background: #001100;
-        padding: 8px 16px;
-        margin: 1em 0;
-        font-style: normal;
+      .terminal-theme h3 {
+        font-size: 1.05rem;
       }
-      .terminal-theme a {
-        color: #00ffff;
-        text-decoration: underline;
+      .terminal-theme p {
+        margin: 0.85rem 0;
       }
-      .terminal-theme a:hover {
-        color: #ffff00;
-      }
-      .terminal-theme table {
-        border: 1px solid #00ff00;
-        background: #000;
+      .terminal-theme :where(ul, ol) {
+        margin: 0.65rem 0 0.95rem;
+        padding-left: 1.35rem;
       }
       .terminal-theme li::marker {
-        color: #00ff00;
-        font-weight: 600;
+        color: #7dff9d;
       }
-      .terminal-theme th, .terminal-theme td {
-        border: 1px solid #333;
-        padding: 8px;
-        color: #00ff00;
+      .terminal-theme a {
+        color: #67e8f9;
+      }
+      .terminal-theme a:hover {
+        color: #fef08a;
+      }
+      .terminal-theme :not(pre) > code {
+        color: #9efbb0;
+        background: #020803;
+        border: 1px solid #1b3e26;
+        border-radius: 0.25rem;
+        padding: 0.08rem 0.28rem;
+      }
+      .terminal-theme pre {
+        margin: 1rem 0;
+        border: 1px solid #1f462c;
+        border-radius: 0.5rem;
+        background: #020b04;
+        box-shadow: inset 0 0 0 1px rgba(110, 255, 136, 0.08);
+        padding: 0.85rem 0.95rem;
+        color: #a9fbb9;
+      }
+      .terminal-theme pre code {
+        color: inherit;
+      }
+      .terminal-theme blockquote {
+        margin: 1rem 0;
+        border-left: 3px solid #7dff9d;
+        border-radius: 0 0.35rem 0.35rem 0;
+        background: rgba(5, 20, 8, 0.85);
+        color: #8af5a5;
+        padding: 0.55rem 0.8rem;
+      }
+      .terminal-theme hr {
+        margin: 1.3rem 0;
+        border-color: #1f462c;
+      }
+      .terminal-theme table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        border: 1px solid #1f462c;
+      }
+      .terminal-theme :where(th, td) {
+        border: 1px solid #1f462c;
+        padding: 0.4rem 0.55rem;
       }
       .terminal-theme th {
-        background: #003300;
-        font-weight: bold;
+        background: #062211;
+        color: #7dff9d;
+        font-weight: 700;
       }
-      /* Terminal theme specific copy button and language badge styles */
       .terminal-theme .mdv-code .copy-button {
-        background: #111;
-        border: 1px solid #333;
-        color: #00ff00;
+        background: #020803;
+        border: 1px solid #1f462c;
+        color: #7dff9d;
       }
       .terminal-theme .mdv-code .copy-button:hover {
-        background: #222;
+        background: #062211;
+        border-color: #2f6f44;
       }
       .terminal-theme .mdv-code .language-badge {
-        background: #111;
-        border: 1px solid #333;
-        color: #00ff00;
+        background: #020803;
+        border: 1px solid #1f462c;
+        color: #7dff9d;
       }
-      
-      /* Terminal theme success state for copy button */
       .terminal-theme .mdv-code .copy-button .text-green-600 {
-        color: #00ff00 !important;
+        color: #86efac !important;
+      }
+      .terminal-theme .hljs {
+        color: #8ef8a8;
+      }
+      .terminal-theme .hljs-keyword,
+      .terminal-theme .hljs-selector-tag {
+        color: #67e8f9;
+      }
+      .terminal-theme .hljs-string,
+      .terminal-theme .hljs-addition {
+        color: #bef264;
+      }
+      .terminal-theme .hljs-number,
+      .terminal-theme .hljs-literal {
+        color: #facc15;
+      }
+      .terminal-theme .hljs-comment,
+      .terminal-theme .hljs-quote {
+        color: #4ade80;
       }
     `,
   },
