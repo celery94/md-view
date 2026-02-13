@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type React from 'react';
 import Link from 'next/link';
 import RichMarkdownEditor from '../components/RichMarkdownEditor';
@@ -8,7 +8,6 @@ import MarkdownPreview from '../components/MarkdownPreview';
 import ThemeSelector from '../components/ThemeSelector';
 import CompactThemeSelector from '../components/CompactThemeSelector';
 import ViewModeSelector from '../components/ViewModeSelector';
-import QuickActionsMenu from '../components/QuickActionsMenu';
 import Footer from '../components/Footer';
 
 import { themes, getTheme } from '../lib/themes';
@@ -30,6 +29,7 @@ import {
   Github,
   Image as ImageIcon,
   ClipboardCopy,
+  ChevronDown,
 } from 'lucide-react';
 
 type ViewMode = 'split' | 'editor' | 'preview';
@@ -102,6 +102,8 @@ export default function Home() {
   const [urlToImport, setUrlToImport] = useState('');
   const [isImportingUrl, setIsImportingUrl] = useState(false);
   const [urlImportError, setUrlImportError] = useState<string | null>(null);
+  const [isDesktopExportMenuOpen, setIsDesktopExportMenuOpen] = useState(false);
+  const [isMobileExportMenuOpen, setIsMobileExportMenuOpen] = useState(false);
 
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -109,6 +111,14 @@ export default function Home() {
   const previewRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
   const navRowRef = useRef<HTMLDivElement | null>(null);
+  const desktopExportMenuRef = useRef<HTMLDivElement | null>(null);
+  const desktopExportMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const mobileExportMenuRef = useRef<HTMLDivElement | null>(null);
+  const mobileExportMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const desktopExportMenuId = useId();
+  const desktopExportMenuTriggerId = useId();
+  const mobileExportMenuId = useId();
+  const mobileExportMenuTriggerId = useId();
 
   const wordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
   const lineCount = markdown.split('\n').length;
@@ -204,6 +214,78 @@ export default function Home() {
       localStorage.setItem('mdv:viewMode', viewMode);
     } catch {}
   }, [viewMode]);
+
+  useEffect(() => {
+    if (!isDesktopExportMenuOpen) {
+      return;
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        desktopExportMenuRef.current &&
+        !desktopExportMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsDesktopExportMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isDesktopExportMenuOpen]);
+
+  useEffect(() => {
+    if (!isDesktopExportMenuOpen) {
+      return;
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') {
+        return;
+      }
+      event.preventDefault();
+      setIsDesktopExportMenuOpen(false);
+      desktopExportMenuTriggerRef.current?.focus();
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isDesktopExportMenuOpen]);
+
+  useEffect(() => {
+    if (!isMobileExportMenuOpen) {
+      return;
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        mobileExportMenuRef.current &&
+        !mobileExportMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsMobileExportMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMobileExportMenuOpen]);
+
+  useEffect(() => {
+    if (!isMobileExportMenuOpen) {
+      return;
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') {
+        return;
+      }
+      event.preventDefault();
+      setIsMobileExportMenuOpen(false);
+      mobileExportMenuTriggerRef.current?.focus();
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isMobileExportMenuOpen]);
 
   // Observe nav row size to decide if we need to collapse text labels into icon-only.
   useEffect(() => {
@@ -450,18 +532,14 @@ export default function Home() {
     }
   }, [currentTheme]);
 
-  const openGuide = useCallback(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    window.open('/guide', '_blank');
+  const handleDesktopExportAction = useCallback((action: () => void) => {
+    action();
+    setIsDesktopExportMenuOpen(false);
   }, []);
 
-  const openGithub = useCallback(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    window.open('https://github.com/celery94/md-view', '_blank', 'noopener,noreferrer');
+  const handleMobileExportAction = useCallback((action: () => void) => {
+    action();
+    setIsMobileExportMenuOpen(false);
   }, []);
 
   // Scroll synchronization handlers
@@ -575,43 +653,72 @@ export default function Home() {
                     title="Import .md file"
                   >
                     <Upload className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
-                      Import
-                    </span>
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Import</span>
                   </button>
-                  <button
-                    onClick={exportMarkdown}
-                    className={ui.home.buttons.secondary}
-                    aria-label="Export as markdown file"
-                    title="Export as .md file"
-                  >
-                    <FileText className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
-                      Export MD
-                    </span>
-                  </button>
-                  <button
-                    onClick={exportHtml}
-                    className={ui.home.buttons.secondary}
-                    aria-label="Export as HTML file"
-                    title="Export as .html file"
-                  >
-                    <FileCode className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
-                      Export HTML
-                    </span>
-                  </button>
-                  <button
-                    onClick={exportImage}
-                    className={ui.home.buttons.secondary}
-                    aria-label="Export as image"
-                    title="Export as PNG image"
-                  >
-                    <ImageIcon className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
-                      Export Image
-                    </span>
-                  </button>
+                  <div ref={desktopExportMenuRef} className="relative">
+                    <button
+                      type="button"
+                      ref={desktopExportMenuTriggerRef}
+                      id={desktopExportMenuTriggerId}
+                      onClick={() => {
+                        setIsDesktopExportMenuOpen((prev) => !prev);
+                        setIsMobileExportMenuOpen(false);
+                      }}
+                      className={ui.home.buttons.secondary}
+                      aria-label="Export actions"
+                      title="Export actions"
+                      aria-haspopup="menu"
+                      aria-expanded={isDesktopExportMenuOpen}
+                      aria-controls={isDesktopExportMenuOpen ? desktopExportMenuId : undefined}
+                    >
+                      <FileCode className="h-4 w-4" aria-hidden="true" />
+                      <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
+                        Export
+                      </span>
+                      <ChevronDown
+                        className={cn('h-3.5 w-3.5 transition-transform', {
+                          'rotate-180': isDesktopExportMenuOpen,
+                        })}
+                        aria-hidden="true"
+                      />
+                    </button>
+                    {isDesktopExportMenuOpen && (
+                      <div
+                        className="absolute right-0 top-full z-50 mt-2 w-52 rounded-xl border border-slate-300/70 bg-white/95 p-1.5 shadow-lg ring-1 ring-black/5 backdrop-blur-md"
+                        role="menu"
+                        id={desktopExportMenuId}
+                        aria-labelledby={desktopExportMenuTriggerId}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => handleDesktopExportAction(exportMarkdown)}
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          role="menuitem"
+                        >
+                          <FileText className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <span>Export as Markdown</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDesktopExportAction(exportHtml)}
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          role="menuitem"
+                        >
+                          <FileCode className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <span>Export as HTML</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDesktopExportAction(exportImage)}
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          role="menuitem"
+                        >
+                          <ImageIcon className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <span>Export as Image</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                   <button
                     onClick={copyHtmlToClipboard}
                     className={ui.home.buttons.secondary}
@@ -619,9 +726,7 @@ export default function Home() {
                     title="Copy inline HTML for rich text editors"
                   >
                     <ClipboardCopy className="h-4 w-4" aria-hidden="true" />
-                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>
-                      Copy HTML
-                    </span>
+                    <span className={`${isNavCompact ? 'sr-only' : 'hidden md:inline'}`}>Copy</span>
                   </button>
                 </div>
 
@@ -688,19 +793,117 @@ export default function Home() {
                     URL
                   </button>
                 </div>
-                <QuickActionsMenu
-                  onImport={onPickFile}
-                  onImportUrl={() => void importFromUrl()}
-                  onExportMarkdown={exportMarkdown}
-                  onExportHtml={exportHtml}
-                  onExportImage={exportImage}
-                  onCopyHtml={copyHtmlToClipboard}
-                  onReset={resetSample}
-                  onGuide={openGuide}
-                  onGithub={openGithub}
-                  triggerClassName={cn(ui.home.mobileActionButton, 'flex-none')}
-                  triggerLabel="More"
-                />
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={onPickFile}
+                    className={cn(ui.home.mobileActionButton, 'px-2.5 py-1.5 text-[11px]')}
+                    aria-label="Import markdown file"
+                    title="Import .md file"
+                  >
+                    <Upload className="h-3.5 w-3.5" aria-hidden="true" />
+                    <span>Import</span>
+                  </button>
+                  <div ref={mobileExportMenuRef} className="relative">
+                    <button
+                      type="button"
+                      ref={mobileExportMenuTriggerRef}
+                      id={mobileExportMenuTriggerId}
+                      onClick={() => {
+                        setIsMobileExportMenuOpen((prev) => !prev);
+                        setIsDesktopExportMenuOpen(false);
+                      }}
+                      className={cn(ui.home.mobileActionButton, 'px-2.5 py-1.5 text-[11px]')}
+                      aria-label="Export actions"
+                      title="Export actions"
+                      aria-haspopup="menu"
+                      aria-expanded={isMobileExportMenuOpen}
+                      aria-controls={isMobileExportMenuOpen ? mobileExportMenuId : undefined}
+                    >
+                      <FileCode className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span>Export</span>
+                      <ChevronDown
+                        className={cn('h-3.5 w-3.5 transition-transform', {
+                          'rotate-180': isMobileExportMenuOpen,
+                        })}
+                        aria-hidden="true"
+                      />
+                    </button>
+                    {isMobileExportMenuOpen && (
+                      <div
+                        className="absolute right-0 top-full z-50 mt-2 w-52 rounded-xl border border-slate-300/70 bg-white/95 p-1.5 shadow-lg ring-1 ring-black/5 backdrop-blur-md"
+                        role="menu"
+                        id={mobileExportMenuId}
+                        aria-labelledby={mobileExportMenuTriggerId}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => handleMobileExportAction(exportMarkdown)}
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          role="menuitem"
+                        >
+                          <FileText className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <span>Export as Markdown</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleMobileExportAction(exportHtml)}
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          role="menuitem"
+                        >
+                          <FileCode className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <span>Export as HTML</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleMobileExportAction(exportImage)}
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          role="menuitem"
+                        >
+                          <ImageIcon className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <span>Export as Image</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={copyHtmlToClipboard}
+                    className={cn(ui.home.mobileActionButton, 'px-2.5 py-1.5 text-[11px]')}
+                    aria-label="Copy inline HTML"
+                    title="Copy inline HTML for rich text editors"
+                  >
+                    <ClipboardCopy className="h-3.5 w-3.5" aria-hidden="true" />
+                    <span>Copy</span>
+                  </button>
+                  <div className="flex items-center gap-0.5 rounded-lg border border-slate-200 bg-white p-0.5">
+                    <Link href="/guide" className={cn(ui.home.buttons.quietNav, 'p-1.5')} title="Guide">
+                      <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span className="sr-only">Guide</span>
+                    </Link>
+                    <a
+                      href="https://github.com/celery94/md-view"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(ui.home.buttons.quietNav, 'p-1.5')}
+                      aria-label="GitHub repository"
+                      title="GitHub"
+                    >
+                      <Github className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span className="sr-only">GitHub</span>
+                    </a>
+                    <button
+                      type="button"
+                      onClick={resetSample}
+                      className={cn(ui.home.buttons.quietNav, 'p-1.5')}
+                      aria-label="Reset to sample content"
+                      title="Reset to sample markdown"
+                    >
+                      <RotateCw className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span className="sr-only">Reset</span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
