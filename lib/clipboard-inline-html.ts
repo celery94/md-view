@@ -7,6 +7,8 @@ export interface InlineClipboardPayload {
   plainText: string;
 }
 
+type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
 interface ThemePalette {
   text: string;
   background: string;
@@ -18,6 +20,12 @@ interface ThemePalette {
   codeBorder: string;
   tableBorder: string;
   tableHeaderBackground: string;
+  headingColor: string;
+  headingFontWeight: string;
+  headingLineHeight: string;
+  headingLetterSpacing?: string;
+  headingExtra?: Record<string, string>;
+  headingOverrides?: Partial<Record<HeadingTag, Record<string, string>>>;
 }
 
 const BODY_FONT_STACK =
@@ -36,6 +44,15 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     codeBorder: '#d7e1e8',
     tableBorder: '#d7e1e8',
     tableHeaderBackground: '#eaf0f4',
+    headingColor: '#0f172a',
+    headingFontWeight: '760',
+    headingLineHeight: '1.22',
+    headingLetterSpacing: '-0.01em',
+    headingOverrides: {
+      h1: { 'margin-top': '0', 'font-size': '2.15rem' },
+      h2: { 'font-size': '1.7rem' },
+      h3: { 'font-size': '1.35rem' },
+    },
   },
   'wechat-publish': {
     text: '#374151',
@@ -48,6 +65,31 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     codeBorder: '#d8e3ed',
     tableBorder: '#dce4ec',
     tableHeaderBackground: '#f3f8f6',
+    headingColor: '#1f2937',
+    headingFontWeight: '700',
+    headingLineHeight: '1.34',
+    headingOverrides: {
+      h1: {
+        'margin-top': '0',
+        'margin-bottom': '1.35em',
+        'font-size': '2rem',
+        'text-align': 'center',
+        'letter-spacing': '0.03em',
+        'padding-bottom': '0.55rem',
+        'border-bottom': '1px solid #d1fae5',
+      },
+      h2: {
+        'font-size': '1.45rem',
+        padding: '0.14rem 0 0.14rem 0.7rem',
+        'border-left': '4px solid #10b981',
+        background: 'linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0))',
+        'border-radius': '0 0.35rem 0.35rem 0',
+      },
+      h3: {
+        'font-size': '1.2rem',
+        color: '#065f46',
+      },
+    },
   },
   dark: {
     text: '#e2e8f0',
@@ -60,6 +102,14 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     codeBorder: '#374151',
     tableBorder: '#374151',
     tableHeaderBackground: '#1f2937',
+    headingColor: '#f8fafc',
+    headingFontWeight: '740',
+    headingLineHeight: '1.22',
+    headingOverrides: {
+      h1: { 'margin-top': '0', 'font-size': '2.05rem' },
+      h2: { 'font-size': '1.65rem' },
+      h3: { 'font-size': '1.3rem' },
+    },
   },
   github: {
     text: '#24292f',
@@ -72,6 +122,23 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     codeBorder: '#d0d7de',
     tableBorder: '#d0d7de',
     tableHeaderBackground: '#f6f8fa',
+    headingColor: '#1f2328',
+    headingFontWeight: '600',
+    headingLineHeight: '1.25',
+    headingOverrides: {
+      h1: {
+        'margin-top': '0',
+        'font-size': '2rem',
+        'border-bottom': '1px solid #d0d7de',
+        'padding-bottom': '0.3em',
+      },
+      h2: {
+        'font-size': '1.5rem',
+        'border-bottom': '1px solid #d0d7de',
+        'padding-bottom': '0.3em',
+      },
+      h3: { 'font-size': '1.25rem' },
+    },
   },
   notion: {
     text: '#37352f',
@@ -84,6 +151,14 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     codeBorder: '#e6e6e4',
     tableBorder: '#e6e6e4',
     tableHeaderBackground: '#f7f6f3',
+    headingColor: '#2f2d29',
+    headingFontWeight: '650',
+    headingLineHeight: '1.25',
+    headingOverrides: {
+      h1: { 'margin-top': '0', 'font-size': '2.1rem' },
+      h2: { 'font-size': '1.7rem' },
+      h3: { 'font-size': '1.38rem' },
+    },
   },
   medium: {
     text: '#242424',
@@ -96,6 +171,30 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     codeBorder: '#e5e7eb',
     tableBorder: '#e5e7eb',
     tableHeaderBackground: '#f9fafb',
+    headingColor: '#1c1c1c',
+    headingFontWeight: '700',
+    headingLineHeight: '1.16',
+    headingExtra: {
+      'font-family': "var(--font-geist-sans), 'Helvetica Neue', Arial, sans-serif",
+    },
+    headingOverrides: {
+      h1: {
+        'margin-top': '0',
+        'margin-bottom': '2rem',
+        'font-size': '2.45rem',
+        'letter-spacing': '-0.02em',
+      },
+      h2: {
+        'margin-top': '2.6rem',
+        'margin-bottom': '0.65rem',
+        'font-size': '2rem',
+      },
+      h3: {
+        'margin-top': '2rem',
+        'margin-bottom': '0.45rem',
+        'font-size': '1.55rem',
+      },
+    },
   },
   paper: {
     text: '#1f2937',
@@ -108,6 +207,22 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     codeBorder: '#d6c8b5',
     tableBorder: '#d6c8b5',
     tableHeaderBackground: '#f3e9d8',
+    headingColor: '#0f172a',
+    headingFontWeight: '700',
+    headingLineHeight: '1.26',
+    headingExtra: {
+      'font-family': "'Times New Roman', Times, serif",
+    },
+    headingOverrides: {
+      h1: {
+        'margin-top': '0',
+        'margin-bottom': '1.5rem',
+        'font-size': '2rem',
+        'text-align': 'center',
+      },
+      h2: { 'font-size': '1.45rem' },
+      h3: { 'font-size': '1.18rem' },
+    },
   },
   minimal: {
     text: '#111827',
@@ -120,6 +235,19 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     codeBorder: '#e2e8f0',
     tableBorder: '#e2e8f0',
     tableHeaderBackground: '#f8fafc',
+    headingColor: '#212121',
+    headingFontWeight: '500',
+    headingLineHeight: '1.25',
+    headingOverrides: {
+      h1: {
+        'margin-top': '0',
+        'font-size': '2.1rem',
+        'border-bottom': '1px solid #ececec',
+        'padding-bottom': '0.34rem',
+      },
+      h2: { 'font-size': '1.55rem' },
+      h3: { 'font-size': '1.28rem' },
+    },
   },
   terminal: {
     text: '#00ff00',
@@ -132,6 +260,23 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     codeBorder: '#333333',
     tableBorder: '#333333',
     tableHeaderBackground: '#101010',
+    headingColor: '#7dff9d',
+    headingFontWeight: '700',
+    headingLineHeight: '1.24',
+    headingExtra: {
+      'text-transform': 'uppercase',
+      'font-family': "'IBM Plex Mono', 'Courier New', Courier, monospace",
+    },
+    headingOverrides: {
+      h1: {
+        'margin-top': '0',
+        'font-size': '1.5rem',
+        'border-bottom': '1px solid rgba(110, 255, 136, 0.55)',
+        'padding-bottom': '0.32rem',
+      },
+      h2: { 'font-size': '1.25rem' },
+      h3: { 'font-size': '1.05rem' },
+    },
   },
 };
 
@@ -155,17 +300,36 @@ function applyStyle(element: HTMLElement, declarations: Record<string, string>):
   element.setAttribute('style', styleText(declarations));
 }
 
-function applyHeadingStyles(root: HTMLElement, tag: string, size: string): void {
+const DEFAULT_HEADING_SIZES: Record<HeadingTag, string> = {
+  h1: '2em',
+  h2: '1.6em',
+  h3: '1.35em',
+  h4: '1.2em',
+  h5: '1.05em',
+  h6: '1em',
+};
+
+function applyHeadingStyles(root: HTMLElement, tag: HeadingTag, palette: ThemePalette): void {
+  const overrides = palette.headingOverrides?.[tag] ?? {};
+  const base: Record<string, string> = {
+    margin: '1.2em 0 0.6em',
+    'font-size': DEFAULT_HEADING_SIZES[tag],
+    'font-weight': palette.headingFontWeight,
+    'line-height': palette.headingLineHeight,
+    color: palette.headingColor,
+  };
+  if (palette.headingLetterSpacing) {
+    base['letter-spacing'] = palette.headingLetterSpacing;
+  }
+  if (palette.headingExtra) {
+    Object.assign(base, palette.headingExtra);
+  }
+  const merged = { ...base, ...overrides };
   root.querySelectorAll(tag).forEach((node) => {
     if (!(node instanceof HTMLElement)) {
       return;
     }
-    applyStyle(node, {
-      margin: '1.2em 0 0.6em',
-      'font-size': size,
-      'font-weight': '700',
-      'line-height': '1.35',
-    });
+    applyStyle(node, merged);
   });
 }
 
@@ -182,12 +346,12 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     'overflow-wrap': 'anywhere',
   });
 
-  applyHeadingStyles(root, 'h1', '2em');
-  applyHeadingStyles(root, 'h2', '1.6em');
-  applyHeadingStyles(root, 'h3', '1.35em');
-  applyHeadingStyles(root, 'h4', '1.2em');
-  applyHeadingStyles(root, 'h5', '1.05em');
-  applyHeadingStyles(root, 'h6', '1em');
+  applyHeadingStyles(root, 'h1', palette);
+  applyHeadingStyles(root, 'h2', palette);
+  applyHeadingStyles(root, 'h3', palette);
+  applyHeadingStyles(root, 'h4', palette);
+  applyHeadingStyles(root, 'h5', palette);
+  applyHeadingStyles(root, 'h6', palette);
 
   root.querySelectorAll('p').forEach((node) => {
     if (!(node instanceof HTMLElement)) {
