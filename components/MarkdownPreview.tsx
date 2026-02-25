@@ -49,16 +49,14 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
 
   return (
     <div className={ui.preview.code.wrapper}>
-      {/* Top-right controls */}
+      {/* Header bar with language + copy */}
       <div
-        className={ui.preview.code.controls}
+        className={ui.preview.code.header}
         data-no-export="true"
       >
-        {language ? (
-          <span className={ui.preview.code.languageBadge}>
-            {language}
-          </span>
-        ) : null}
+        <span className={ui.preview.code.languageBadge}>
+          {language || 'code'}
+        </span>
         <button
           type="button"
           onClick={onCopy}

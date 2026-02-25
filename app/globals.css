@@ -207,6 +207,19 @@ body::before {
 
 .markdown-preview .mdv-code pre {
   scrollbar-gutter: stable both-edges;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Code block header bar */
+.markdown-preview .mdv-code {
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.markdown-preview .mdv-code .mdv-code-header {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .markdown-preview .mdv-code pre::-webkit-scrollbar {

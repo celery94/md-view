@@ -42,12 +42,12 @@ export const ui = {
   preview: {
     code: {
       wrapper: 'relative group mdv-code overflow-hidden',
-      controls:
-        'absolute right-2.5 top-2.5 z-10 flex items-center gap-1.5 opacity-100 transition-all duration-200 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100',
+      header:
+        'mdv-code-header flex items-center justify-between gap-2 px-4 py-2',
       languageBadge:
-        'language-badge select-none rounded-md border border-slate-300/70 bg-white/88 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-600 shadow-sm backdrop-blur-sm',
+        'language-badge select-none text-[11px] font-semibold uppercase tracking-[0.08em]',
       copyButton:
-        'copy-button inline-flex items-center gap-1 rounded-md border border-slate-300/65 bg-white/92 px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-cyan-300/60 hover:bg-white hover:text-slate-900 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-2 active:scale-[0.97]',
+        'copy-button inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 active:scale-[0.97]',
     },
   },
 } as const;

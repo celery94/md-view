@@ -72,6 +72,25 @@ export const themes: Theme[] = [
         border-radius: 0.42rem;
         padding: 0.14rem 0.42rem;
       }
+      .default-theme .mdv-code {
+        border: 1px solid #1e293b;
+        border-radius: 0.75rem;
+        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        box-shadow: 0 10px 20px -16px rgba(2, 6, 23, 0.55);
+      }
+      .default-theme .mdv-code .mdv-code-header {
+        border-bottom-color: rgba(148, 163, 184, 0.18);
+      }
+      .default-theme .mdv-code .language-badge {
+        color: #94a3b8;
+      }
+      .default-theme .mdv-code .copy-button {
+        color: #94a3b8;
+      }
+      .default-theme .mdv-code .copy-button:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #e2e8f0;
+      }
       .default-theme pre {
         margin: 1.25rem 0;
         padding: 1rem 1.15rem;
@@ -123,20 +142,6 @@ export const themes: Theme[] = [
       }
       .default-theme tbody tr:nth-child(even) {
         background: #f8fafc;
-      }
-      .default-theme .mdv-code .copy-button {
-        background: rgba(255, 255, 255, 0.9);
-        border-color: rgba(148, 163, 184, 0.6);
-        color: #334155;
-      }
-      .default-theme .mdv-code .copy-button:hover {
-        background: #ffffff;
-        border-color: #7dd3fc;
-      }
-      .default-theme .mdv-code .language-badge {
-        background: rgba(255, 255, 255, 0.88);
-        border-color: rgba(148, 163, 184, 0.55);
-        color: #334155;
       }
       .default-theme .hljs {
         color: #e2e8f0;
@@ -288,6 +293,25 @@ export const themes: Theme[] = [
         font-size: 0.83rem;
         font-weight: 500;
       }
+      .wechat-theme .mdv-code {
+        border: 1px solid #d8e1ea;
+        border-radius: 0.72rem;
+        background: #fafbfd;
+        box-shadow: 0 2px 8px -4px rgba(15, 23, 42, 0.08);
+      }
+      .wechat-theme .mdv-code .mdv-code-header {
+        border-bottom-color: #e8edf3;
+      }
+      .wechat-theme .mdv-code .language-badge {
+        color: #475569;
+      }
+      .wechat-theme .mdv-code .copy-button {
+        color: #475569;
+      }
+      .wechat-theme .mdv-code .copy-button:hover {
+        background: rgba(16, 185, 129, 0.08);
+        color: #1f2937;
+      }
       .wechat-theme pre {
         margin: 1.2em 0 1.35em;
         border: 1px solid #d8e1ea;
@@ -355,20 +379,6 @@ export const themes: Theme[] = [
         border-radius: 0.6rem;
         border: 1px solid #e5edf3;
         box-shadow: 0 8px 20px -18px rgba(15, 23, 42, 0.45);
-      }
-      .wechat-theme .mdv-code .copy-button {
-        background: rgba(255, 255, 255, 0.94);
-        border-color: rgba(148, 163, 184, 0.55);
-        color: #334155;
-      }
-      .wechat-theme .mdv-code .copy-button:hover {
-        background: #ffffff;
-        border-color: #86efac;
-      }
-      .wechat-theme .mdv-code .language-badge {
-        background: rgba(255, 255, 255, 0.92);
-        border-color: rgba(148, 163, 184, 0.5);
-        color: #475569;
       }
       .wechat-theme .hljs {
         color: #24292f;
@@ -482,6 +492,24 @@ export const themes: Theme[] = [
         border-radius: 0.42rem;
         padding: 0.14rem 0.42rem;
       }
+      .dark-theme .mdv-code {
+        border: 1px solid rgba(71, 85, 105, 0.85);
+        border-radius: 0.78rem;
+        background: linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
+      }
+      .dark-theme .mdv-code .mdv-code-header {
+        border-bottom-color: rgba(71, 85, 105, 0.5);
+      }
+      .dark-theme .mdv-code .language-badge {
+        color: #94a3b8;
+      }
+      .dark-theme .mdv-code .copy-button {
+        color: #94a3b8;
+      }
+      .dark-theme .mdv-code .copy-button:hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: #dbeafe;
+      }
       .dark-theme pre {
         margin: 1.2rem 0;
         border: 1px solid rgba(71, 85, 105, 0.85);
@@ -531,20 +559,6 @@ export const themes: Theme[] = [
       }
       .dark-theme tbody tr:nth-child(even) {
         background: rgba(30, 41, 59, 0.44);
-      }
-      .dark-theme .mdv-code .copy-button {
-        background: rgba(15, 23, 42, 0.92);
-        border: 1px solid rgba(71, 85, 105, 0.9);
-        color: #dbeafe;
-      }
-      .dark-theme .mdv-code .copy-button:hover {
-        background: rgba(30, 41, 59, 0.96);
-        border-color: rgba(34, 211, 238, 0.7);
-      }
-      .dark-theme .mdv-code .language-badge {
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(71, 85, 105, 0.85);
-        color: #bfdbfe;
       }
       .dark-theme .mdv-code .copy-button .text-green-600 {
         color: #34d399 !important;
@@ -647,6 +661,24 @@ export const themes: Theme[] = [
         padding: 0.12rem 0.38rem;
         font-size: 0.84rem;
       }
+      .github-theme .mdv-code {
+        border: 1px solid #d0d7de;
+        border-radius: 0.55rem;
+        background: #f6f8fa;
+      }
+      .github-theme .mdv-code .mdv-code-header {
+        border-bottom-color: #d0d7de;
+      }
+      .github-theme .mdv-code .language-badge {
+        color: #57606a;
+      }
+      .github-theme .mdv-code .copy-button {
+        color: #57606a;
+      }
+      .github-theme .mdv-code .copy-button:hover {
+        background: rgba(208, 215, 222, 0.4);
+        color: #24292f;
+      }
       .github-theme pre {
         margin: 1rem 0 1.15rem;
         padding: 1rem;
@@ -680,20 +712,6 @@ export const themes: Theme[] = [
       .github-theme hr {
         margin: 1.5rem 0;
         border-color: #d0d7de;
-      }
-      .github-theme .mdv-code .copy-button {
-        background: #ffffff;
-        border-color: #d0d7de;
-        color: #57606a;
-      }
-      .github-theme .mdv-code .copy-button:hover {
-        background: #f6f8fa;
-        border-color: #afb8c1;
-      }
-      .github-theme .mdv-code .language-badge {
-        background: #ffffff;
-        border-color: #d0d7de;
-        color: #57606a;
       }
     `,
   },
@@ -750,6 +768,24 @@ export const themes: Theme[] = [
         padding: 0.1rem 0.36rem;
         font-size: 0.83rem;
       }
+      .notion-theme .mdv-code {
+        border: 1px solid #e7e4de;
+        border-radius: 0.45rem;
+        background: #f7f6f3;
+      }
+      .notion-theme .mdv-code .mdv-code-header {
+        border-bottom-color: #e7e4de;
+      }
+      .notion-theme .mdv-code .language-badge {
+        color: #80796e;
+      }
+      .notion-theme .mdv-code .copy-button {
+        color: #80796e;
+      }
+      .notion-theme .mdv-code .copy-button:hover {
+        background: rgba(135, 131, 120, 0.12);
+        color: #37352f;
+      }
       .notion-theme pre {
         margin: 1rem 0 1.2rem;
         border: 1px solid #e7e4de;
@@ -781,19 +817,6 @@ export const themes: Theme[] = [
       .notion-theme hr {
         margin: 1.5rem 0;
         border-color: #ebe8e3;
-      }
-      .notion-theme .mdv-code .copy-button {
-        background: rgba(255, 255, 255, 0.9);
-        border-color: rgba(193, 188, 179, 0.85);
-        color: #5a564f;
-      }
-      .notion-theme .mdv-code .copy-button:hover {
-        background: #ffffff;
-      }
-      .notion-theme .mdv-code .language-badge {
-        background: rgba(255, 255, 255, 0.9);
-        border-color: rgba(193, 188, 179, 0.8);
-        color: #5a564f;
       }
     `,
   },
@@ -861,6 +884,24 @@ export const themes: Theme[] = [
         border-radius: 0.35rem;
         padding: 0.1rem 0.35rem;
       }
+      .medium-theme .mdv-code {
+        border: 1px solid #ececec;
+        border-radius: 0.5rem;
+        background: #f8f8f8;
+      }
+      .medium-theme .mdv-code .mdv-code-header {
+        border-bottom-color: #e5e5e5;
+      }
+      .medium-theme .mdv-code .language-badge {
+        color: #6b7280;
+      }
+      .medium-theme .mdv-code .copy-button {
+        color: #6b7280;
+      }
+      .medium-theme .mdv-code .copy-button:hover {
+        background: rgba(0, 0, 0, 0.05);
+        color: #1f2937;
+      }
       .medium-theme pre {
         margin: 1.9rem 0;
         background: #f8f8f8;
@@ -898,19 +939,6 @@ export const themes: Theme[] = [
       .medium-theme hr {
         margin: 2.2rem 0;
         border-color: #e5e7eb;
-      }
-      .medium-theme .mdv-code .copy-button {
-        background: rgba(255, 255, 255, 0.95);
-        border-color: rgba(156, 163, 175, 0.55);
-        color: #4b5563;
-      }
-      .medium-theme .mdv-code .copy-button:hover {
-        background: #ffffff;
-      }
-      .medium-theme .mdv-code .language-badge {
-        background: rgba(255, 255, 255, 0.92);
-        border-color: rgba(156, 163, 175, 0.55);
-        color: #4b5563;
       }
     `,
   },
@@ -970,6 +998,24 @@ export const themes: Theme[] = [
         padding: 0.08rem 0.3rem;
         color: #1f2937;
       }
+      .paper-theme .mdv-code {
+        border: 1px solid #d4d4d8;
+        border-radius: 0.35rem;
+        background: #f9fafb;
+      }
+      .paper-theme .mdv-code .mdv-code-header {
+        border-bottom-color: #d4d4d8;
+      }
+      .paper-theme .mdv-code .language-badge {
+        color: #6b7280;
+      }
+      .paper-theme .mdv-code .copy-button {
+        color: #6b7280;
+      }
+      .paper-theme .mdv-code .copy-button:hover {
+        background: rgba(0, 0, 0, 0.04);
+        color: #374151;
+      }
       .paper-theme pre {
         margin: 1rem 0 1.25rem;
         border: 1px solid #d4d4d8;
@@ -1004,19 +1050,6 @@ export const themes: Theme[] = [
       .paper-theme th {
         background: #f3f4f6;
         font-weight: 700;
-      }
-      .paper-theme .mdv-code .copy-button {
-        background: rgba(255, 255, 255, 0.9);
-        border-color: #c4c9d2;
-        color: #374151;
-      }
-      .paper-theme .mdv-code .copy-button:hover {
-        background: #ffffff;
-      }
-      .paper-theme .mdv-code .language-badge {
-        background: rgba(255, 255, 255, 0.9);
-        border-color: #c4c9d2;
-        color: #4b5563;
       }
     `,
   },
@@ -1077,6 +1110,24 @@ export const themes: Theme[] = [
         color: #303030;
         padding: 0.08rem 0.3rem;
       }
+      .minimal-theme .mdv-code {
+        border: 1px solid #e6e6e6;
+        border-radius: 0.4rem;
+        background: #fcfcfc;
+      }
+      .minimal-theme .mdv-code .mdv-code-header {
+        border-bottom-color: #eeeeee;
+      }
+      .minimal-theme .mdv-code .language-badge {
+        color: #9ca3af;
+      }
+      .minimal-theme .mdv-code .copy-button {
+        color: #9ca3af;
+      }
+      .minimal-theme .mdv-code .copy-button:hover {
+        background: rgba(0, 0, 0, 0.04);
+        color: #4b5563;
+      }
       .minimal-theme pre {
         margin: 1rem 0 1.2rem;
         border: 1px solid #e6e6e6;
@@ -1108,19 +1159,6 @@ export const themes: Theme[] = [
         font-weight: 600;
         color: #525252;
         background: #fafafa;
-      }
-      .minimal-theme .mdv-code .copy-button {
-        background: #ffffff;
-        border-color: #e5e7eb;
-        color: #4b5563;
-      }
-      .minimal-theme .mdv-code .copy-button:hover {
-        background: #fafafa;
-      }
-      .minimal-theme .mdv-code .language-badge {
-        background: #ffffff;
-        border-color: #e5e7eb;
-        color: #6b7280;
       }
     `,
   },
@@ -1184,6 +1222,28 @@ export const themes: Theme[] = [
         border-radius: 0.25rem;
         padding: 0.08rem 0.28rem;
       }
+      .terminal-theme .mdv-code {
+        border: 1px solid #1f462c;
+        border-radius: 0.5rem;
+        background: #020b04;
+        box-shadow: inset 0 0 0 1px rgba(110, 255, 136, 0.08);
+      }
+      .terminal-theme .mdv-code .mdv-code-header {
+        border-bottom-color: rgba(110, 255, 136, 0.15);
+      }
+      .terminal-theme .mdv-code .language-badge {
+        color: #4ade80;
+      }
+      .terminal-theme .mdv-code .copy-button {
+        color: #4ade80;
+      }
+      .terminal-theme .mdv-code .copy-button:hover {
+        background: rgba(110, 255, 136, 0.08);
+        color: #7dff9d;
+      }
+      .terminal-theme .mdv-code .copy-button .text-green-600 {
+        color: #86efac !important;
+      }
       .terminal-theme pre {
         margin: 1rem 0;
         border: 1px solid #1f462c;
@@ -1222,23 +1282,6 @@ export const themes: Theme[] = [
         background: #062211;
         color: #7dff9d;
         font-weight: 700;
-      }
-      .terminal-theme .mdv-code .copy-button {
-        background: #020803;
-        border: 1px solid #1f462c;
-        color: #7dff9d;
-      }
-      .terminal-theme .mdv-code .copy-button:hover {
-        background: #062211;
-        border-color: #2f6f44;
-      }
-      .terminal-theme .mdv-code .language-badge {
-        background: #020803;
-        border: 1px solid #1f462c;
-        color: #7dff9d;
-      }
-      .terminal-theme .mdv-code .copy-button .text-green-600 {
-        color: #86efac !important;
       }
       .terminal-theme .hljs {
         color: #8ef8a8;
