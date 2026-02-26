@@ -1,49 +1,106 @@
 # Repository Guidelines
 
-## Project Structure & Module Organization
+## Purpose
 
-- `app/`: Next.js App Router entrypoints (`page.tsx`, `layout.tsx`) and `globals.css`.
-- `components/`: UI modules (e.g., `MarkdownEditor.tsx`, `MarkdownPreview.tsx`).
-- `lib/`: Shared utilities/hooks (add `useXyz.ts` here).
-- `public/`: Static assets (SVGs, icons).
-- Root config: `next.config.ts`, `tailwind.config.ts`, `postcss.config.mjs`, `tsconfig.json`.
-- Tracking: `todo.md` is the single source of truth for tasks.
-- Do not modify `.next/` or `node_modules/`.
+MD-View is a Next.js App Router markdown workspace with:
 
-## Build, Test, and Development Commands
+- live editor/preview panes
+- multiple publish-style themes
+- markdown/html/image export
+- URL-to-markdown import API
+- local persistence in browser storage
 
-- `npm ci`: Install dependencies (use `npm`; lockfile present).
-- `npm run dev`: Start local dev with Turbopack at `http://localhost:3000`.
-- `npm run build`: Create production build.
-- `npm run start`: Serve the production build.
-- Node 18.18+ (or 20+) required.
+Use this file as the implementation-accurate guide for contributors and coding agents.
 
-## Coding Style & Naming Conventions
+## Runtime and Stack
 
-- Language: TypeScript; prefer explicit types; avoid `any`.
-- Components: PascalCase (e.g., `MarkdownPreview.tsx`).
-- Hooks: camelCase starting with `use` (e.g., `useXyz.ts`).
-- Indentation: 2 spaces; order imports external → internal.
-- Styling: Tailwind CSS; prefer utilities; use `prose` for markdown content.
-- Layout: keep pages full-width (avoid global `max-w-*` wrappers unless scoped to a specific component).
-- Performance: keep syntax highlighting CSS local (no CDN fetches) and lazy-load highlight plugins.
+- Node: `>=20.9.0` (from `next@16` engine requirement)
+- Framework: Next.js 16 + React 19 + TypeScript 5
+- Styling: Tailwind CSS v4 (`@tailwindcss/postcss`, typography plugin)
+- Markdown render: `react-markdown` + `remark-gfm` + lazy `rehype-highlight`
+- URL import pipeline: `fetch` + `jsdom` + `@mozilla/readability` + `turndown`
 
-## Testing Guidelines
+## Project Structure
 
-- Not yet configured. When adding:
-  - Unit: Jest + React Testing Library in `__tests__/**/*.test.tsx`.
-  - E2E: Playwright in `e2e/**/*.spec.ts`.
-  - Coverage: target ≥70% lines on changed code.
-  - Commands: `npm test` and `npx playwright test`.
+- `app/`
+  - `page.tsx`: primary editor/preview app shell
+  - `api/import-url/route.ts`: server URL import endpoint
+  - `guide/page.tsx`: feature and markdown usage guide page
+  - `layout.tsx`: metadata, GA bootstrapping, fonts, global scripts
+  - `globals.css`: global styles, markdown baseline styles, animations
+- `components/`
+  - Active in app shell: `MarkdownEditor`, `RichMarkdownEditor`, `MarkdownPreview`, `Toolbar`, theme/view selectors, `Footer`
+  - Utility but currently not wired into routes: `QuickActionsMenu`, `TableOfContents`, `JsonLd`
+- `lib/`
+  - `themes.ts`: preview theme registry and CSS payloads
+  - `clipboard-inline-html.ts`: inline-style clipboard/export HTML builder
+  - `url-import.ts`: URL validation/fetch/extract/convert pipeline
+  - `formatter.ts`: built-in markdown formatter used by editor shortcut/context menu
+  - misc helpers: `cn.ts`, `slugify.ts`, `gtag.ts`, `seo-utils.ts`
+- `scripts/xss-check.mjs`: standalone XSS regression check (no test framework required)
+- `public/`: static assets and metadata files (`manifest.json`, `robots.txt`, etc.)
 
-## Commit & Pull Request Guidelines
+Do not modify `.next/` or `node_modules/`.
 
-- Conventional Commits (e.g., `feat: add localStorage persistence`, `fix: sanitize HTML in preview`).
-- PRs: concise description, linked issues, and screenshots/GIFs for UI changes.
-- Keep PRs focused; update docs (`todo.md`, `README.md`) when behavior changes.
+## Current Product Behavior (Source of Truth)
 
-## Security & Configuration Tips
+- View modes: `editor | split | preview` with `Ctrl/Cmd + 1/2/3`
+- Mobile behavior: split mode hidden/disabled; auto-fallback to editor mode
+- Scroll sync in split mode between editor and preview
+- Floating "scroll to top" appears once any tracked scroll area reaches 25%
+- Persistence keys in `localStorage`:
+  - `mdv:content`
+  - `mdv:ratio`
+  - `mdv:theme`
+  - `mdv:viewMode`
+- Export options:
+  - markdown file
+  - themed HTML
+  - PNG snapshot via `@zumer/snapdom`
+  - copy inline HTML/plain text clipboard payload
+- Themes (9): `default`, `wechat-publish`, `dark`, `github`, `notion`, `medium`, `paper`, `minimal`, `terminal`
 
-- Rendering: Avoid unsafe HTML. Use `rehype-sanitize` with a safe schema; pair `rehype-raw` only if necessary.
-- Secrets: Do not commit `.env*`; respect `.gitignore`.
-- Tailwind: Update `content` in `tailwind.config.ts` when adding paths.
+## URL Import API Constraints
+
+From `lib/url-import.ts` and `app/api/import-url/route.ts`:
+
+- only `http(s)` URLs
+- blocks localhost/private/internal hosts (with DNS resolution checks)
+- manual redirect handling (max 3 redirects)
+- timeout: 12 seconds
+- response size cap: 3 MB
+- only HTML/XHTML content types accepted
+- non-OK and parse failures return typed API errors
+
+## Build, Run, and Validation
+
+- Install: `npm ci`
+- Dev server: `npm run dev`
+- Production build: `npm run build`
+- Start production server: `npm run start`
+- Lint: `npm run lint`
+- Typecheck: `npm run typecheck`
+- Optional security smoke check: `node scripts/xss-check.mjs`
+
+## Coding Conventions
+
+- TypeScript strict mode; avoid introducing `any` unless unavoidable.
+- Keep component names PascalCase and utility names descriptive.
+- Keep imports ordered: external first, then internal.
+- Prefer Tailwind utilities and existing `ui` class maps in `lib/ui-classes.ts`.
+- Keep syntax highlighting styles local; do not add CDN style dependencies.
+- When adding UI behavior, keep desktop/mobile parity explicit.
+
+## Security and Privacy Rules
+
+- Markdown rendering in-app currently uses `skipHtml` (raw HTML is ignored).
+- Do not weaken URL import SSRF protections in `lib/url-import.ts`.
+- Keep security headers and redirects in `next.config.ts` intact unless intentionally changed.
+- Do not commit secrets (`.env*`) or new tracking identifiers without explicit approval.
+
+## Pull Request Expectations
+
+- Use Conventional Commits (`feat:`, `fix:`, `docs:`, etc.).
+- Keep PR scope focused and include screenshots/GIFs for UI changes.
+- Run lint + typecheck before opening/merging.
+- Update `README.md` and this `AGENTS.md` when behavior, scripts, architecture, or constraints change.

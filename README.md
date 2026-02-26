@@ -1,143 +1,138 @@
-# MD-View — Free Online Markdown Editor with Live Preview
+# MD-View
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19-blue)](https://reactjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-blue)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A fast, free, and open‑source Markdown editor with a beautiful live preview. Built with modern web tech, perfect for docs, READMEs, notes, and blogs.
+MD-View is a free, open-source markdown workspace with real-time preview, publishing themes, export tools, and URL-to-markdown import.
 
-🌐 **[Try it live](https://www.md-view.com/)** | 📖 **[Documentation](#-features)** | 🐛 **[Report Issues](https://github.com/celery94/md-view/issues)**
+- Live site: https://www.md-view.com/
+- Guide page: https://www.md-view.com/guide
+- Issues: https://github.com/celery94/md-view/issues
 
-## ✨ Features
+## Highlights
 
-- Real‑time preview powered by `react-markdown` + GFM
-- Eight themes: default, Dark, GitHub, Notion, Medium, Paper, Minimal, Terminal
-- Syntax highlighting (highlight.js) with copy‑code buttons and language badges
-- GFM extras: tables, task lists, strikethrough, autolinks
-- Import `.md`, export `.md`/`.html` (print to PDF via browser)
-- Import public article URLs and convert page content to Markdown
-- View modes: Editor, Preview, or Split with draggable resize
-- Keyboard: Cmd/Ctrl+1/2/3 to switch view modes
-- Mobile‑friendly, accessible roles/labels, localStorage persistence
-- Safe by default: raw HTML rendering disabled
+- Real-time markdown preview with `react-markdown` + `remark-gfm`
+- Syntax-highlighted fenced code blocks with language badge and copy button
+- 9 themes: `default`, `wechat-publish`, `dark`, `github`, `notion`, `medium`, `paper`, `minimal`, `terminal`
+- Editor/preview/split modes with draggable split ratio and scroll sync
+- Markdown formatting shortcuts and context menu formatter (`Shift+Alt+F`)
+- Import markdown from:
+  - local `.md/.markdown/.txt` files
+  - public URLs via server-side readability extraction
+- Export options:
+  - `.md`
+  - themed standalone `.html`
+  - `.png` snapshot from preview
+  - copy inline rich HTML + plain text to clipboard
+- Local persistence: content, view mode, theme, split ratio
+- Mobile-safe behavior: split mode is disabled on small screens
+- Floating "scroll to top" action appears after 25% scroll
 
-## 🚀 Quick Start
+## Security Model
+
+- Markdown render uses `skipHtml`, so raw HTML from markdown is not rendered.
+- URL import blocks local/private targets and validates redirects.
+- URL import constraints:
+  - timeout: 12 seconds
+  - max redirects: 3
+  - max response size: 3 MB
+  - content type: HTML/XHTML only
+- App-wide security headers are set in `next.config.ts` (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, etc.).
+
+## Tech Stack
+
+- Next.js 16 App Router
+- React 19
+- TypeScript 5 (strict mode)
+- Tailwind CSS v4 + Typography plugin
+- `react-markdown`, `remark-gfm`, lazy `rehype-highlight`
+- `@mozilla/readability` + `jsdom` + `turndown` for URL import conversion
+- `@zumer/snapdom` for preview image export
+
+## Getting Started
+
+### Requirements
+
+- Node.js `>=20.9.0`
+- npm (lockfile is present)
+
+### Local Development
 
 ```bash
-# Clone the repository
 git clone https://github.com/celery94/md-view.git
 cd md-view
-
-# Install dependencies (uses lockfile)
 npm ci
-
-# Start development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open http://localhost:3000
 
-## 📦 Production Build
+### Production
 
 ```bash
-# Build for production
 npm run build
-
-# Start production server
 npm run start
 ```
 
-## 🛠️ Tech Stack
+## Scripts
 
-- **Framework**: [Next.js 15](https://nextjs.org/) with App Router
-- **UI Library**: [React 19](https://reactjs.org/)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + `@tailwindcss/typography`
-- **Markdown**: [react-markdown](https://github.com/remarkjs/react-markdown) with [remark-gfm](https://github.com/remarkjs/remark-gfm)
-- **Syntax Highlighting**: [highlight.js](https://highlightjs.org/)
-- **Icons**: [lucide-react](https://lucide.dev/icons)
+- `npm run dev`: start dev server with Turbopack
+- `npm run build`: production build with Turbopack
+- `npm run start`: run production server
+- `npm run lint`: ESLint checks
+- `npm run typecheck`: TypeScript checks (`tsc --noEmit`)
+- `npm run format`: Prettier write
+- `npm run format:check`: Prettier check
+- `node scripts/xss-check.mjs`: lightweight XSS regression smoke test
 
-## 🧭 App Structure
+## Repository Layout
 
-- `app/` — Next.js App Router entries (`page.tsx`, `layout.tsx`) and `globals.css`
-- `components/` — UI modules (`MarkdownEditor.tsx`, `MarkdownPreview.tsx`, selectors, menus)
-- `lib/` — Shared utilities, themes, SEO helpers
-- `public/` — Static assets (icons, images)
+- `app/`
+  - `page.tsx`: main editor/preview workspace
+  - `layout.tsx`: metadata, fonts, analytics bootstrap, structured data
+  - `api/import-url/route.ts`: URL import API route
+  - `guide/page.tsx`: product guide and markdown syntax reference
+  - `globals.css`: shared visual system and markdown baseline styles
+- `components/`
+  - core UI: editor, preview, toolbar, view/theme selectors, footer
+  - utility components are present for future use (`QuickActionsMenu`, `TableOfContents`, `JsonLd`)
+- `lib/`
+  - theme definitions and style payloads
+  - clipboard inline-style exporter
+  - URL import service and typed responses
+  - formatter, class helper, slug helper, analytics helper
+- `public/`
+  - static site assets and PWA metadata
+- `scripts/`
+  - small standalone checks and tooling scripts
 
-Requires Node 18.18+ (or 20+).
+## Local Persistence Keys
 
-## 📝 Available Scripts
+Saved in browser `localStorage`:
 
-- `npm run dev` - Start development server with Turbopack
-- `npm run build` - Build for production with Turbopack
-- `npm run start` - Start production server
-- `npm run typecheck` - TypeScript type checking
-- `npm run lint` - Lint code with ESLint
-- `npm run format` - Format code with Prettier
-- `npm run format:check` - Check code formatting
+- `mdv:content`
+- `mdv:ratio`
+- `mdv:theme`
+- `mdv:viewMode`
 
-## 🧰 Usage Tips
+## Environment Variables
 
-- Switch themes from the preview header; state persists across reloads.
-- Split view is resizable and sync‑scrolls between editor and preview.
-- Use browser Print to save PDF (export HTML is also available).
-- Headings receive stable IDs for deep links; visible “#” anchor icons are disabled by default for a cleaner look.
+- `NEXT_PUBLIC_GA_ID` (optional): overrides the default GA measurement ID used by the analytics helper.
 
-## 🔒 Security
+## Contributing
 
-- Raw HTML in markdown is disabled (`skipHtml: true`) to prevent XSS.
-- Code highlighting uses `rehype-highlight`; HTML injection is not allowed.
-- No external data collection; analytics (if enabled) is anonymized pageview only.
+1. Fork and branch from `main`
+2. Make focused changes
+3. Run checks:
+   - `npm run lint`
+   - `npm run typecheck`
+4. Open a PR with a concise description and screenshots for UI changes
 
-## 🌐 URL Import Limits
+Use Conventional Commit prefixes (`feat:`, `fix:`, `docs:`, etc.).
 
-- URL import supports public `http(s)` HTML pages only.
-- Local/private hosts (for example `localhost`, `127.0.0.1`, private LAN ranges) are blocked.
-- Large pages are capped (3MB) and requests timeout after 12 seconds.
-- Some websites may still block automated fetching with anti-bot protections.
+## License
 
-## 🎨 Styling & Markdown Details
-
-- Typography via Tailwind `prose`; custom styles for code, tables, blockquotes.
-- Lists are tuned for readability: dot bullets, consistent indent, improved markers; task lists align checkboxes with text.
-- Images are lazy‑loaded and styled with borders/shadows.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🌟 Why MD-View?
-
-- **No Vendor Lock-in**: Your content stays with you
-- **Open Source**: Transparent, auditable, and free forever
-- **Modern Tech**: Built with the latest web technologies
-- **Performance First**: Optimized for speed and efficiency
-- **User-Centric**: Designed with the user experience in mind
-
-## 🔗 Links
-
-- **Live Demo**: [https://www.md-view.com/](https://www.md-view.com/)
-- **GitHub**: [https://github.com/celery94/md-view](https://github.com/celery94/md-view)
-- **Issues**: [https://github.com/celery94/md-view/issues](https://github.com/celery94/md-view/issues)
-
----
-
-Made with ❤️ by the MD-View team. Star ⭐ this repository if you find it useful!
-
-## Tips
-
-- Tasks and roadmap: see `todo.md`.
-- Code themes are scoped with classes like `code-theme-github`.
-- Editor content and pane ratio persist in `localStorage` (`mdv:*`).
+MIT. See [LICENSE](LICENSE).
