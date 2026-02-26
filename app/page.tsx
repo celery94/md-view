@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type React from 'react';
 import Link from 'next/link';
 import RichMarkdownEditor from '../components/RichMarkdownEditor';
@@ -12,6 +12,7 @@ import Footer from '../components/Footer';
 
 import { themes, getTheme } from '../lib/themes';
 import { buildInlineClipboardPayload } from '../lib/clipboard-inline-html';
+import { stripLeadingYamlFrontmatter } from '../lib/markdown-frontmatter';
 import { cn } from '../lib/cn';
 import { ui } from '../lib/ui-classes';
 import type {
@@ -90,6 +91,10 @@ export function Example() {
 export default function Home() {
   const [markdown, setMarkdown] = useState(initialMarkdown);
   const [debouncedMarkdown, setDebouncedMarkdown] = useState(initialMarkdown);
+  const previewMarkdown = useMemo(
+    () => stripLeadingYamlFrontmatter(debouncedMarkdown),
+    [debouncedMarkdown]
+  );
   const [currentTheme, setCurrentTheme] = useState('default');
   const [viewMode, setViewMode] = useState<ViewMode>('split');
   const [ratio, setRatio] = useState<number>(0.5);
@@ -1069,7 +1074,7 @@ export default function Home() {
                   <div className="flex flex-col flex-1 min-h-0">
                     <MarkdownPreview
                       ref={previewRef}
-                      content={debouncedMarkdown}
+                      content={previewMarkdown}
                       theme={currentTheme}
                       onScroll={handlePreviewScroll}
                       scrollToPercentage={previewScrollPercentage}
