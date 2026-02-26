@@ -30,9 +30,11 @@ import {
   Image as ImageIcon,
   ClipboardCopy,
   ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 type ViewMode = 'split' | 'editor' | 'preview';
+const SCROLL_TOP_THRESHOLD = 0.25;
 
 const initialMarkdown = `# MD-View: Focused Markdown workspace
 
@@ -99,6 +101,9 @@ export default function Home() {
   const [previewScrollPercentage, setPreviewScrollPercentage] = useState<number | undefined>(
     undefined
   );
+  const [pageScrollProgress, setPageScrollProgress] = useState(0);
+  const [editorScrollProgress, setEditorScrollProgress] = useState(0);
+  const [previewScrollProgress, setPreviewScrollProgress] = useState(0);
   const [urlToImport, setUrlToImport] = useState('');
   const [isImportingUrl, setIsImportingUrl] = useState(false);
   const [urlImportError, setUrlImportError] = useState<string | null>(null);
@@ -366,6 +371,28 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    const getPageScrollProgress = () => {
+      const doc = document.documentElement;
+      const scrollableHeight = doc.scrollHeight - window.innerHeight;
+      if (scrollableHeight <= 0) return 0;
+      const progress = window.scrollY / scrollableHeight;
+      return Math.min(1, Math.max(0, progress));
+    };
+
+    const handlePageScroll = () => {
+      setPageScrollProgress(getPageScrollProgress());
+    };
+
+    handlePageScroll();
+    window.addEventListener('scroll', handlePageScroll, { passive: true });
+    window.addEventListener('resize', handlePageScroll);
+    return () => {
+      window.removeEventListener('scroll', handlePageScroll);
+      window.removeEventListener('resize', handlePageScroll);
+    };
+  }, []);
+
   const startDrag = useCallback(() => {
     isDraggingRef.current = true;
     document.body.style.cursor = 'col-resize';
@@ -545,6 +572,7 @@ export default function Home() {
   // Scroll synchronization handlers
   const handleEditorScroll = useCallback(
     (scrollPercentage: number) => {
+      setEditorScrollProgress(scrollPercentage);
       if (viewMode === 'split') {
         setPreviewScrollPercentage(scrollPercentage);
       }
@@ -554,6 +582,7 @@ export default function Home() {
 
   const handlePreviewScroll = useCallback(
     (scrollPercentage: number) => {
+      setPreviewScrollProgress(scrollPercentage);
       if (viewMode === 'split') {
         setEditorScrollPercentage(scrollPercentage);
       }
@@ -566,6 +595,24 @@ export default function Home() {
     setEditorScrollPercentage(undefined);
     setPreviewScrollPercentage(undefined);
   }, [viewMode]);
+
+  const handleScrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setEditorScrollPercentage(0);
+    setPreviewScrollPercentage(0);
+    setPageScrollProgress(0);
+    setEditorScrollProgress(0);
+    setPreviewScrollProgress(0);
+  }, []);
+
+  const activePanelScrollProgress =
+    viewMode === 'split'
+      ? Math.max(editorScrollProgress, previewScrollProgress)
+      : viewMode === 'editor'
+        ? editorScrollProgress
+        : previewScrollProgress;
+  const showScrollToTop =
+    Math.max(pageScrollProgress, activePanelScrollProgress) >= SCROLL_TOP_THRESHOLD;
 
   return (
     <>
@@ -1033,6 +1080,18 @@ export default function Home() {
             </div>
           </div>
         </main>
+
+        {showScrollToTop && (
+          <button
+            type="button"
+            onClick={handleScrollToTop}
+            className="fixed bottom-4 right-4 z-40 inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-300/80 bg-white/90 text-slate-700 shadow-[0_12px_28px_-16px_rgba(15,23,42,0.85)] backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-300/80 hover:bg-white hover:text-cyan-700 hover:shadow-[0_14px_32px_-16px_rgba(8,145,178,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-2 sm:bottom-6 sm:right-6"
+            aria-label="Scroll to top"
+            title="Scroll to top"
+          >
+            <ChevronUp className="h-5 w-5" aria-hidden="true" />
+          </button>
+        )}
 
         <Footer />
       </div>

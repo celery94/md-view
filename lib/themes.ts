@@ -202,57 +202,57 @@ export const themes: Theme[] = [
     description: 'Optimized for WeChat Official Account publishing',
     classes: {
       container:
-        'h-full overflow-auto border border-emerald-100/80 bg-gradient-to-b from-white to-emerald-50/30 p-5 sm:p-8 shadow-[0_18px_40px_-30px_rgba(6,95,70,0.35)]',
+        'h-full overflow-auto border border-emerald-100/80 bg-gradient-to-b from-white to-emerald-50/25 p-4 sm:p-6 shadow-[0_16px_34px_-28px_rgba(6,95,70,0.32)]',
       prose: `${lightProseClass} wechat-theme`,
     },
     customStyles: `
       .wechat-theme {
         color: #374151;
         font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Helvetica Neue", Arial, sans-serif;
-        font-size: 16.5px;
-        line-height: 1.88;
-        letter-spacing: 0.01em;
-        max-width: 760px;
+        font-size: 15.5px;
+        line-height: 1.72;
+        letter-spacing: 0.005em;
+        max-width: 720px;
         margin: 0 auto;
       }
       .wechat-theme :where(h1, h2, h3, h4, h5, h6) {
         color: #1f2937;
-        line-height: 1.34;
-        margin-top: 1.95em;
-        margin-bottom: 0.72em;
+        line-height: 1.28;
+        margin-top: 1.55em;
+        margin-bottom: 0.5em;
         font-weight: 700;
       }
       .wechat-theme h1 {
         margin-top: 0;
-        margin-bottom: 1.25em;
-        font-size: 1.95rem;
+        margin-bottom: 0.95em;
+        font-size: 1.72rem;
         text-align: center;
-        letter-spacing: 0.02em;
-        padding-bottom: 0.6rem;
+        letter-spacing: 0.015em;
+        padding-bottom: 0.45rem;
         border-bottom: 2px solid #10b981;
-        background: linear-gradient(180deg, rgba(16, 185, 129, 0.06), transparent);
-        padding-top: 0.4rem;
-        border-radius: 0.35rem 0.35rem 0 0;
+        background: linear-gradient(180deg, rgba(16, 185, 129, 0.05), transparent);
+        padding-top: 0.3rem;
+        border-radius: 0.3rem 0.3rem 0 0;
       }
       .wechat-theme h2 {
-        font-size: 1.42rem;
-        padding: 0.22rem 0 0.22rem 0.75rem;
-        border-left: 4px solid #10b981;
-        background: linear-gradient(90deg, rgba(16, 185, 129, 0.08), transparent);
-        border-radius: 0 0.35rem 0.35rem 0;
+        font-size: 1.28rem;
+        padding: 0.15rem 0 0.15rem 0.6rem;
+        border-left: 3px solid #10b981;
+        background: linear-gradient(90deg, rgba(16, 185, 129, 0.07), transparent);
+        border-radius: 0 0.28rem 0.28rem 0;
       }
       .wechat-theme h3 {
-        font-size: 1.18rem;
+        font-size: 1.12rem;
         color: #065f46;
-        padding-bottom: 0.18rem;
+        padding-bottom: 0.12rem;
         border-bottom: 1px dashed rgba(16, 185, 129, 0.35);
       }
       .wechat-theme h4 {
-        font-size: 1.06rem;
+        font-size: 1rem;
         color: #0f766e;
       }
       .wechat-theme p {
-        margin: 1.05em 0;
+        margin: 0.78em 0;
         text-align: justify;
       }
       .wechat-theme strong {
@@ -264,11 +264,11 @@ export const themes: Theme[] = [
         font-style: italic;
       }
       .wechat-theme :where(ul, ol) {
-        margin: 0.82em 0 1.08em;
-        padding-left: 1.35rem;
+        margin: 0.65em 0 0.88em;
+        padding-left: 1.2rem;
       }
       .wechat-theme li {
-        margin: 0.32em 0;
+        margin: 0.2em 0;
       }
       .wechat-theme li::marker {
         color: #059669;
@@ -285,53 +285,58 @@ export const themes: Theme[] = [
         border-bottom-color: rgba(4, 120, 87, 0.65);
       }
       .wechat-theme :not(pre) > code {
-        color: #b45309;
-        background: rgba(251, 191, 36, 0.1);
-        border: 1px solid rgba(251, 191, 36, 0.3);
-        border-radius: 0.35rem;
-        padding: 0.12rem 0.4rem;
-        font-size: 0.83rem;
+        color: #cf222e;
+        background: rgba(175, 184, 193, 0.2);
+        border: 1px solid rgba(175, 184, 193, 0.45);
+        border-radius: 0.28rem;
+        padding: 0.07rem 0.26rem;
+        font-size: 0.78rem;
         font-weight: 500;
       }
       .wechat-theme .mdv-code {
-        border: 1px solid #d8e1ea;
-        border-radius: 0.72rem;
-        background: #fafbfd;
-        box-shadow: 0 2px 8px -4px rgba(15, 23, 42, 0.08);
+        border: 1px solid #d0d7de;
+        border-radius: 0.5rem;
+        background: #f6f8fa;
+        box-shadow: none;
       }
       .wechat-theme .mdv-code .mdv-code-header {
-        border-bottom-color: #e8edf3;
+        border-bottom-color: #d0d7de;
+        padding: 0.36rem 0.56rem;
       }
       .wechat-theme .mdv-code .language-badge {
-        color: #475569;
+        color: #57606a;
+        font-size: 0.64rem;
+        letter-spacing: 0.06em;
       }
       .wechat-theme .mdv-code .copy-button {
-        color: #475569;
+        color: #57606a;
+        padding: 0.16rem 0.36rem;
+        font-size: 0.7rem;
       }
       .wechat-theme .mdv-code .copy-button:hover {
-        background: rgba(16, 185, 129, 0.08);
-        color: #1f2937;
+        background: rgba(208, 215, 222, 0.4);
+        color: #24292f;
       }
       .wechat-theme pre {
-        margin: 1.2em 0 1.35em;
-        border: 1px solid #d8e1ea;
-        border-radius: 0.72rem;
-        background: #fafbfd;
-        padding: 1rem 1.08rem;
-        box-shadow: 0 2px 8px -4px rgba(15, 23, 42, 0.08);
+        margin: 0.72em 0 0.86em;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        padding: 0.64rem 0.72rem;
+        box-shadow: none;
       }
       .wechat-theme pre code {
-        font-size: 0.86rem;
-        line-height: 1.72;
+        font-size: 0.78rem;
+        line-height: 1.52;
         color: #24292f;
       }
       .wechat-theme blockquote {
-        margin: 1.25em 0;
+        margin: 0.95em 0;
         border-left: 4px solid #10b981;
-        border-radius: 0 0.55rem 0.55rem 0;
+        border-radius: 0 0.48rem 0.48rem 0;
         background: linear-gradient(135deg, #ecfdf5, #f0fdfa);
         color: #334155;
-        padding: 0.82rem 1.05rem;
+        padding: 0.64rem 0.82rem;
         box-shadow: 0 1px 4px -2px rgba(16, 185, 129, 0.12);
       }
       .wechat-theme blockquote p:first-child {
@@ -341,7 +346,7 @@ export const themes: Theme[] = [
         margin-bottom: 0;
       }
       .wechat-theme hr {
-        margin: 1.8em 0;
+        margin: 1.25em 0;
         border: none;
         height: 1px;
         background: linear-gradient(90deg, transparent, #d1d5db 20%, #d1d5db 80%, transparent);
@@ -350,22 +355,22 @@ export const themes: Theme[] = [
         width: 100%;
         border-collapse: separate;
         border-spacing: 0;
-        margin: 1.15em 0 1.35em;
-        font-size: 0.93rem;
+        margin: 0.92em 0 1.08em;
+        font-size: 0.88rem;
         overflow: hidden;
         border: 1px solid #dce4ec;
-        border-radius: 0.6rem;
+        border-radius: 0.5rem;
       }
       .wechat-theme :where(th, td) {
         border-bottom: 1px solid #dce4ec;
-        padding: 0.55rem 0.72rem;
+        padding: 0.42rem 0.58rem;
         text-align: left;
       }
       .wechat-theme th {
         background: linear-gradient(180deg, #f0fdf4, #ecfdf5);
         color: #1e293b;
         font-weight: 600;
-        font-size: 0.82rem;
+        font-size: 0.78rem;
         letter-spacing: 0.02em;
         text-transform: uppercase;
       }
@@ -376,62 +381,84 @@ export const themes: Theme[] = [
         background: #f9fefb;
       }
       .wechat-theme img {
-        border-radius: 0.6rem;
+        border-radius: 0.45rem;
         border: 1px solid #e5edf3;
-        box-shadow: 0 8px 20px -18px rgba(15, 23, 42, 0.45);
+        box-shadow: 0 8px 16px -20px rgba(15, 23, 42, 0.42);
       }
       .wechat-theme .hljs {
-        color: #24292f;
+        color: #24292e;
       }
       .wechat-theme .hljs-comment,
-      .wechat-theme .hljs-quote {
+      .wechat-theme .hljs-code,
+      .wechat-theme .hljs-formula {
         color: #6a737d;
+      }
+      .wechat-theme .hljs-quote,
+      .wechat-theme .hljs-emphasis {
         font-style: italic;
       }
       .wechat-theme .hljs-keyword,
-      .wechat-theme .hljs-selector-tag,
-      .wechat-theme .hljs-subst,
-      .wechat-theme .hljs-meta {
+      .wechat-theme .hljs-doctag,
+      .wechat-theme .hljs-meta .hljs-keyword,
+      .wechat-theme .hljs-template-tag,
+      .wechat-theme .hljs-template-variable,
+      .wechat-theme .hljs-type,
+      .wechat-theme .hljs-variable.language_ {
         color: #d73a49;
       }
-      .wechat-theme .hljs-string,
-      .wechat-theme .hljs-doctag,
-      .wechat-theme .hljs-addition,
-      .wechat-theme .hljs-attribute,
-      .wechat-theme .hljs-built_in {
-        color: #22863a;
+      .wechat-theme .hljs-title,
+      .wechat-theme .hljs-title.class_,
+      .wechat-theme .hljs-title.class_.inherited__,
+      .wechat-theme .hljs-title.function_ {
+        color: #6f42c1;
       }
+      .wechat-theme .hljs-attr,
+      .wechat-theme .hljs-attribute,
       .wechat-theme .hljs-number,
       .wechat-theme .hljs-literal,
-      .wechat-theme .hljs-symbol,
-      .wechat-theme .hljs-bullet {
-        color: #005cc5;
-      }
-      .wechat-theme .hljs-title,
-      .wechat-theme .hljs-section,
-      .wechat-theme .hljs-selector-id,
-      .wechat-theme .hljs-selector-class {
-        color: #6f42c1;
-      }
+      .wechat-theme .hljs-meta,
+      .wechat-theme .hljs-operator,
       .wechat-theme .hljs-variable,
-      .wechat-theme .hljs-template-variable,
-      .wechat-theme .hljs-name {
-        color: #e36209;
-      }
-      .wechat-theme .hljs-function .hljs-title,
-      .wechat-theme .hljs-title.function_,
-      .wechat-theme .hljs-title.class_ {
-        color: #6f42c1;
-      }
-      .wechat-theme .hljs-params,
-      .wechat-theme .hljs-attr,
-      .wechat-theme .hljs-property {
+      .wechat-theme .hljs-selector-attr,
+      .wechat-theme .hljs-selector-class,
+      .wechat-theme .hljs-selector-id {
         color: #005cc5;
       }
       .wechat-theme .hljs-regexp,
+      .wechat-theme .hljs-string,
+      .wechat-theme .hljs-meta .hljs-string {
+        color: #032f62;
+      }
+      .wechat-theme .hljs-built_in,
+      .wechat-theme .hljs-symbol {
+        color: #e36209;
+      }
+      .wechat-theme .hljs-name,
+      .wechat-theme .hljs-selector-tag,
+      .wechat-theme .hljs-selector-pseudo {
+        color: #22863a;
+      }
+      .wechat-theme .hljs-subst,
+      .wechat-theme .hljs-strong {
+        color: #24292e;
+      }
+      .wechat-theme .hljs-strong,
+      .wechat-theme .hljs-section {
+        font-weight: 700;
+      }
+      .wechat-theme .hljs-section {
+        color: #005cc5;
+      }
+      .wechat-theme .hljs-bullet {
+        color: #735c0f;
+      }
+      .wechat-theme .hljs-addition {
+        color: #22863a;
+        background: #f0fff4;
+      }
       .wechat-theme .hljs-deletion {
         color: #b31d28;
-        background: rgba(255, 220, 220, 0.5);
+        background: #ffeef0;
       }
     `,
   },
