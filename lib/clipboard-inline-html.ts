@@ -26,6 +26,34 @@ interface ThemePalette {
   headingLetterSpacing?: string;
   headingExtra?: Record<string, string>;
   headingOverrides?: Partial<Record<HeadingTag, Record<string, string>>>;
+  bodyFont?: string;
+  bodyFontSize?: string;
+  bodyLineHeight?: string;
+  inlineCodeColor?: string;
+  inlineCodeBackground?: string;
+  inlineCodeBorder?: string;
+  inlineCodeBorderRadius?: string;
+  inlineCodePadding?: string;
+  inlineCodeFontSize?: string;
+  preBackground?: string;
+  preColor?: string;
+  preBorder?: string;
+  preBorderRadius?: string;
+  prePadding?: string;
+  preCodeFontSize?: string;
+  blockquoteColor?: string;
+  blockquotePadding?: string;
+  blockquoteExtra?: Record<string, string>;
+  pMargin?: string;
+  pExtra?: Record<string, string>;
+  listMargin?: string;
+  tableCellPadding?: string;
+  tableHeaderColor?: string;
+  tableHeaderExtra?: Record<string, string>;
+  linkExtra?: Record<string, string>;
+  strongExtra?: Record<string, string>;
+  emExtra?: Record<string, string>;
+  hrBorder?: string;
 }
 
 const BODY_FONT_STACK =
@@ -34,16 +62,39 @@ const MONO_FONT_STACK = "'SFMono-Regular',Consolas,'Liberation Mono',Menlo,Couri
 
 const THEME_PALETTES: Record<string, ThemePalette> = {
   default: {
-    text: '#12263a',
+    text: '#1f2937',
     background: '#ffffff',
+    bodyFontSize: '1.04rem',
     link: '#0f766e',
+    linkExtra: { 'text-decoration-thickness': '1.5px' },
+    inlineCodeColor: '#0f172a',
+    inlineCodeBackground: '#e2e8f0',
+    inlineCodeBorder: '#cbd5e1',
+    inlineCodeBorderRadius: '0.42rem',
+    inlineCodePadding: '0.14rem 0.42rem',
+    inlineCodeFontSize: '0.84rem',
+    preBackground: '#0f172a',
+    preColor: '#e2e8f0',
+    preBorder: '#1e293b',
+    preBorderRadius: '0.75rem',
+    prePadding: '1rem 1.15rem',
+    preCodeFontSize: '0.9rem',
     blockquoteBorder: '#0f766e',
-    blockquoteBackground: '#f0fdfa',
+    blockquoteBackground: '#f0f8f7',
+    blockquoteColor: '#334155',
+    blockquotePadding: '0.8rem 1rem',
+    blockquoteExtra: { 'border-radius': '0 0.6rem 0.6rem 0' },
     codeBackground: '#f8fafc',
     codeText: '#0f172a',
     codeBorder: '#d7e1e8',
-    tableBorder: '#d7e1e8',
-    tableHeaderBackground: '#eaf0f4',
+    tableBorder: '#dbe3ec',
+    tableHeaderBackground: '#f1f5f9',
+    tableHeaderColor: '#1e293b',
+    tableHeaderExtra: { 'font-size': '0.78rem', 'letter-spacing': '0.05em', 'text-transform': 'uppercase' },
+    tableCellPadding: '0.68rem 0.85rem',
+    pMargin: '1rem 0',
+    listMargin: '0.8rem 0 1rem 1.35rem',
+    hrBorder: '#cbd5e1',
     headingColor: '#0f172a',
     headingFontWeight: '760',
     headingLineHeight: '1.22',
@@ -57,51 +108,93 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
   'wechat-publish': {
     text: '#374151',
     background: '#ffffff',
+    bodyFont: '"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Helvetica Neue",Arial,sans-serif',
+    bodyFontSize: '15.5px',
+    bodyLineHeight: '1.72',
     link: '#0f766e',
-    blockquoteBorder: '#0ea5a0',
-    blockquoteBackground: '#ecfeff',
+    linkExtra: { 'text-decoration': 'none', 'border-bottom': '1px solid rgba(15, 118, 110, 0.4)', 'padding-bottom': '1px' },
+    inlineCodeColor: '#cf222e',
+    inlineCodeBackground: '#ebedee',
+    inlineCodeBorder: '#ced3d8',
+    inlineCodeBorderRadius: '0.28rem',
+    inlineCodePadding: '0.07rem 0.26rem',
+    inlineCodeFontSize: '0.78rem',
+    preBackground: '#f6f8fa',
+    preColor: '#24292f',
+    preBorder: '#d0d7de',
+    preBorderRadius: '0.5rem',
+    preCodeFontSize: '0.78rem',
+    blockquoteBorder: '#10b981',
+    blockquoteBackground: '#eefdf8',
+    blockquoteColor: '#334155',
+    blockquotePadding: '0.64rem 0.82rem',
+    blockquoteExtra: { 'border-radius': '0 0.48rem 0.48rem 0' },
     codeBackground: '#f6f8fa',
     codeText: '#24292f',
     codeBorder: '#d0d7de',
     tableBorder: '#dce4ec',
-    tableHeaderBackground: '#f3f8f6',
+    tableHeaderBackground: '#f0fdf4',
+    tableHeaderColor: '#1e293b',
+    tableHeaderExtra: { 'font-size': '0.78rem', 'letter-spacing': '0.02em', 'text-transform': 'uppercase' },
+    tableCellPadding: '0.42rem 0.58rem',
+    pMargin: '0.78em 0',
+    pExtra: { 'text-align': 'justify' },
+    listMargin: '0.65em 0 0.88em 1.2rem',
+    strongExtra: { color: '#0f172a' },
+    emExtra: { color: '#0f766e' },
     headingColor: '#1f2937',
     headingFontWeight: '700',
-    headingLineHeight: '1.34',
+    headingLineHeight: '1.28',
     headingOverrides: {
       h1: {
         'margin-top': '0',
-        'margin-bottom': '1.35em',
-        'font-size': '2rem',
+        'margin-bottom': '0.95em',
+        'font-size': '1.72rem',
         'text-align': 'center',
-        'letter-spacing': '0.03em',
-        'padding-bottom': '0.55rem',
-        'border-bottom': '1px solid #d1fae5',
+        'letter-spacing': '0.015em',
+        'padding-bottom': '0.45rem',
+        'border-bottom': '2px solid #10b981',
       },
       h2: {
-        'font-size': '1.45rem',
-        padding: '0.14rem 0 0.14rem 0.7rem',
-        'border-left': '4px solid #10b981',
-        background: 'linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0))',
-        'border-radius': '0 0.35rem 0.35rem 0',
+        'font-size': '1.28rem',
+        padding: '0.15rem 0 0.15rem 0.6rem',
+        'border-left': '3px solid #10b981',
+        background: '#f0fdf4',
+        'border-radius': '0 0.28rem 0.28rem 0',
       },
       h3: {
-        'font-size': '1.2rem',
+        'font-size': '1.12rem',
         color: '#065f46',
       },
     },
   },
   dark: {
-    text: '#e2e8f0',
+    text: '#dbe7f4',
     background: '#111827',
     link: '#67e8f9',
-    blockquoteBorder: '#38bdf8',
-    blockquoteBackground: '#1f2937',
+    inlineCodeColor: '#cffafe',
+    inlineCodeBackground: '#0f172a',
+    inlineCodeBorder: '#475569',
+    inlineCodeBorderRadius: '0.42rem',
+    inlineCodePadding: '0.14rem 0.42rem',
+    preBackground: '#0f172a',
+    preColor: '#e5eef8',
+    preBorder: '#475569',
+    preBorderRadius: '0.78rem',
+    blockquoteBorder: '#22d3ee',
+    blockquoteBackground: '#0f172a',
+    blockquoteColor: '#c9daed',
+    blockquoteExtra: { 'border-radius': '0 0.6rem 0.6rem 0' },
     codeBackground: '#0f172a',
     codeText: '#e2e8f0',
     codeBorder: '#374151',
-    tableBorder: '#374151',
-    tableHeaderBackground: '#1f2937',
+    tableBorder: '#475569',
+    tableHeaderBackground: '#1e293b',
+    tableHeaderColor: '#f8fafc',
+    tableHeaderExtra: { 'font-size': '0.78rem', 'letter-spacing': '0.05em', 'text-transform': 'uppercase' },
+    tableCellPadding: '0.68rem 0.85rem',
+    pMargin: '1rem 0',
+    pExtra: { color: '#d0deee' },
     headingColor: '#f8fafc',
     headingFontWeight: '740',
     headingLineHeight: '1.22',
@@ -115,13 +208,30 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     text: '#24292f',
     background: '#ffffff',
     link: '#0969da',
+    inlineCodeColor: '#cf222e',
+    inlineCodeBackground: '#ebedee',
+    inlineCodeBorder: '#ced3d8',
+    inlineCodeBorderRadius: '0.35rem',
+    inlineCodePadding: '0.12rem 0.38rem',
+    inlineCodeFontSize: '0.84rem',
+    preBackground: '#f6f8fa',
+    preColor: '#24292f',
+    preBorder: '#d0d7de',
+    preBorderRadius: '0.55rem',
+    prePadding: '1rem',
     blockquoteBorder: '#d0d7de',
-    blockquoteBackground: '#f6f8fa',
+    blockquoteBackground: 'transparent',
+    blockquoteColor: '#59636e',
+    blockquotePadding: '0 1em',
+    blockquoteExtra: { 'border-left': '0.25em solid #d0d7de' },
     codeBackground: '#f6f8fa',
     codeText: '#24292f',
     codeBorder: '#d0d7de',
     tableBorder: '#d0d7de',
     tableHeaderBackground: '#f6f8fa',
+    tableCellPadding: '0.38rem 0.75rem',
+    pMargin: '0.9rem 0',
+    listMargin: '0.75rem 0 1rem 1.4rem',
     headingColor: '#1f2328',
     headingFontWeight: '600',
     headingLineHeight: '1.25',
@@ -143,14 +253,32 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
   notion: {
     text: '#37352f',
     background: '#ffffff',
-    link: '#0f766e',
-    blockquoteBorder: '#dadada',
-    blockquoteBackground: '#f7f6f3',
+    bodyFont: "ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif",
+    link: '#0b6e99',
+    inlineCodeColor: '#3a3a3a',
+    inlineCodeBackground: '#e4e3e0',
+    inlineCodeBorder: '#d9d7d3',
+    inlineCodeBorderRadius: '0.3rem',
+    inlineCodePadding: '0.1rem 0.36rem',
+    inlineCodeFontSize: '0.83rem',
+    preBackground: '#f7f6f3',
+    preBorder: '#e7e4de',
+    preBorderRadius: '0.45rem',
+    prePadding: '0.9rem 1rem',
+    blockquoteBorder: '#d5d2cc',
+    blockquoteBackground: 'transparent',
+    blockquoteColor: '#65615a',
+    blockquotePadding: '0 0 0 0.9rem',
+    blockquoteExtra: { 'border-left': '3px solid #d5d2cc' },
     codeBackground: '#f1f1ef',
     codeText: '#37352f',
     codeBorder: '#e6e6e4',
-    tableBorder: '#e6e6e4',
-    tableHeaderBackground: '#f7f6f3',
+    tableBorder: '#ebe8e3',
+    tableHeaderBackground: '#f5f4f2',
+    tableHeaderColor: '#4a4742',
+    tableCellPadding: '0.55rem 0.72rem',
+    pMargin: '0.9rem 0',
+    listMargin: '0.72rem 0 1rem 1.3rem',
     headingColor: '#2f2d29',
     headingFontWeight: '650',
     headingLineHeight: '1.25',
@@ -163,19 +291,43 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
   medium: {
     text: '#242424',
     background: '#ffffff',
+    bodyFont: "charter,Georgia,Cambria,'Times New Roman',Times,serif",
+    bodyFontSize: '1.25rem',
+    bodyLineHeight: '1.62',
     link: '#0f766e',
-    blockquoteBorder: '#d1d5db',
-    blockquoteBackground: '#f8fafc',
+    linkExtra: { 'text-decoration-thickness': '2px' },
+    inlineCodeColor: '#1f2937',
+    inlineCodeBackground: '#f2f2f2',
+    inlineCodeBorder: '#e6e6e6',
+    inlineCodeBorderRadius: '0.35rem',
+    inlineCodePadding: '0.1rem 0.35rem',
+    inlineCodeFontSize: '0.88rem',
+    preBackground: '#f8f8f8',
+    preBorder: '#ececec',
+    preBorderRadius: '0.5rem',
+    prePadding: '1.1rem 1.2rem',
+    preCodeFontSize: '0.95rem',
+    blockquoteBorder: '#1f2937',
+    blockquoteBackground: 'transparent',
+    blockquoteColor: '#303030',
+    blockquotePadding: '0 0 0 1.2rem',
+    blockquoteExtra: { 'border-left': '3px solid #1f2937', 'font-size': '1.25rem', 'line-height': '1.5' },
     codeBackground: '#f5f5f5',
     codeText: '#242424',
     codeBorder: '#e5e7eb',
     tableBorder: '#e5e7eb',
-    tableHeaderBackground: '#f9fafb',
+    tableHeaderBackground: 'transparent',
+    tableHeaderColor: '#2f2f2f',
+    tableHeaderExtra: { 'font-family': "'Helvetica Neue',Arial,sans-serif", border: 'none', 'border-bottom': '1px solid #e5e7eb' },
+    tableCellPadding: '0.6rem 0.5rem',
+    pMargin: '1.55rem 0',
+    listMargin: '1.25rem 0 1.5rem 1.4rem',
+    hrBorder: '#e5e7eb',
     headingColor: '#1c1c1c',
     headingFontWeight: '700',
     headingLineHeight: '1.16',
     headingExtra: {
-      'font-family': "var(--font-geist-sans), 'Helvetica Neue', Arial, sans-serif",
+      'font-family': "'Helvetica Neue',Arial,sans-serif",
     },
     headingOverrides: {
       h1: {
@@ -197,21 +349,41 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     },
   },
   paper: {
-    text: '#1f2937',
-    background: '#fefbf5',
+    text: '#111827',
+    background: '#fffefb',
+    bodyFont: "'Times New Roman',Times,serif",
+    bodyLineHeight: '1.78',
     link: '#1d4ed8',
-    blockquoteBorder: '#c4b5a5',
-    blockquoteBackground: '#f6efe3',
+    inlineCodeColor: '#1f2937',
+    inlineCodeBackground: '#f4f4f5',
+    inlineCodeBorder: '#d4d4d8',
+    inlineCodeBorderRadius: '0.28rem',
+    inlineCodePadding: '0.08rem 0.3rem',
+    inlineCodeFontSize: '0.82rem',
+    preBackground: '#f9fafb',
+    preBorder: '#d4d4d8',
+    preBorderRadius: '0.35rem',
+    prePadding: '0.8rem 0.9rem',
+    preCodeFontSize: '0.84rem',
+    blockquoteBorder: '#9ca3af',
+    blockquoteBackground: 'transparent',
+    blockquoteColor: '#374151',
+    blockquotePadding: '0.2rem 0 0.2rem 1rem',
+    blockquoteExtra: { 'border-left': '3px solid #9ca3af' },
     codeBackground: '#f4efe6',
     codeText: '#111827',
     codeBorder: '#d6c8b5',
-    tableBorder: '#d6c8b5',
-    tableHeaderBackground: '#f3e9d8',
+    tableBorder: '#6b7280',
+    tableHeaderBackground: '#f3f4f6',
+    tableCellPadding: '0.35rem 0.55rem',
+    pMargin: '0.85rem 0',
+    pExtra: { 'text-align': 'justify' },
+    listMargin: '0.7rem 0 1rem 1.4rem',
     headingColor: '#0f172a',
     headingFontWeight: '700',
     headingLineHeight: '1.26',
     headingExtra: {
-      'font-family': "'Times New Roman', Times, serif",
+      'font-family': "'Times New Roman',Times,serif",
     },
     headingOverrides: {
       h1: {
@@ -225,16 +397,35 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     },
   },
   minimal: {
-    text: '#111827',
+    text: '#3a3a3a',
     background: '#ffffff',
+    bodyFont: "'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif",
+    bodyLineHeight: '1.78',
     link: '#0f766e',
-    blockquoteBorder: '#cbd5e1',
-    blockquoteBackground: '#f8fafc',
+    inlineCodeColor: '#303030',
+    inlineCodeBackground: '#f7f7f7',
+    inlineCodeBorder: '#ebebeb',
+    inlineCodeBorderRadius: '0.28rem',
+    inlineCodePadding: '0.08rem 0.3rem',
+    preBackground: '#fcfcfc',
+    preBorder: '#e6e6e6',
+    preBorderRadius: '0.4rem',
+    prePadding: '0.9rem 1rem',
+    blockquoteBorder: '#d4d4d4',
+    blockquoteBackground: 'transparent',
+    blockquoteColor: '#616161',
+    blockquotePadding: '0 0 0 0.85rem',
+    blockquoteExtra: { 'border-left': '2px solid #d4d4d4' },
     codeBackground: '#f8fafc',
     codeText: '#1e293b',
     codeBorder: '#e2e8f0',
-    tableBorder: '#e2e8f0',
-    tableHeaderBackground: '#f8fafc',
+    tableBorder: '#ececec',
+    tableHeaderBackground: '#fafafa',
+    tableHeaderColor: '#525252',
+    tableCellPadding: '0.5rem 0.6rem',
+    pMargin: '1.1rem 0',
+    listMargin: '0.78rem 0 1.1rem 1.3rem',
+    hrBorder: '#e7e7e7',
     headingColor: '#212121',
     headingFontWeight: '500',
     headingLineHeight: '1.25',
@@ -250,22 +441,43 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     },
   },
   terminal: {
-    text: '#00ff00',
+    text: '#6eff88',
     background: '#000000',
-    link: '#5aff5a',
-    blockquoteBorder: '#00cc66',
-    blockquoteBackground: '#0a0a0a',
+    bodyFont: "'IBM Plex Mono','Courier New',Courier,monospace",
+    bodyFontSize: '0.95rem',
+    bodyLineHeight: '1.6',
+    link: '#67e8f9',
+    inlineCodeColor: '#9efbb0',
+    inlineCodeBackground: '#020803',
+    inlineCodeBorder: '#1b3e26',
+    inlineCodeBorderRadius: '0.25rem',
+    inlineCodePadding: '0.08rem 0.28rem',
+    preBackground: '#020b04',
+    preColor: '#a9fbb9',
+    preBorder: '#1f462c',
+    preBorderRadius: '0.5rem',
+    prePadding: '0.85rem 0.95rem',
+    blockquoteBorder: '#7dff9d',
+    blockquoteBackground: '#051408',
+    blockquoteColor: '#8af5a5',
+    blockquotePadding: '0.55rem 0.8rem',
+    blockquoteExtra: { 'border-left': '3px solid #7dff9d', 'border-radius': '0 0.35rem 0.35rem 0' },
     codeBackground: '#050505',
     codeText: '#00ff00',
     codeBorder: '#333333',
-    tableBorder: '#333333',
-    tableHeaderBackground: '#101010',
+    tableBorder: '#1f462c',
+    tableHeaderBackground: '#062211',
+    tableHeaderColor: '#7dff9d',
+    tableCellPadding: '0.4rem 0.55rem',
+    pMargin: '0.85rem 0',
+    listMargin: '0.65rem 0 0.95rem 1.35rem',
+    hrBorder: '#1f462c',
     headingColor: '#7dff9d',
     headingFontWeight: '700',
     headingLineHeight: '1.24',
     headingExtra: {
       'text-transform': 'uppercase',
-      'font-family': "'IBM Plex Mono', 'Courier New', Courier, monospace",
+      'font-family': "'IBM Plex Mono','Courier New',Courier,monospace",
     },
     headingOverrides: {
       h1: {
@@ -339,9 +551,9 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     padding: '0',
     color: palette.text,
     'background-color': palette.background,
-    'font-family': BODY_FONT_STACK,
-    'font-size': '16px',
-    'line-height': '1.75',
+    'font-family': palette.bodyFont || BODY_FONT_STACK,
+    'font-size': palette.bodyFontSize || '16px',
+    'line-height': palette.bodyLineHeight || '1.75',
     'word-break': 'break-word',
     'overflow-wrap': 'anywhere',
   });
@@ -357,19 +569,24 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     if (!(node instanceof HTMLElement)) {
       return;
     }
-    applyStyle(node, { margin: '0 0 1em' });
+    const pStyles: Record<string, string> = { margin: palette.pMargin || '0 0 1em' };
+    if (palette.pExtra) Object.assign(pStyles, palette.pExtra);
+    applyStyle(node, pStyles);
   });
 
   root.querySelectorAll('blockquote').forEach((node) => {
     if (!(node instanceof HTMLElement)) {
       return;
     }
-    applyStyle(node, {
+    const bqStyles: Record<string, string> = {
       margin: '1.2em 0',
-      padding: '0.8em 1em',
+      padding: palette.blockquotePadding || '0.8em 1em',
       'border-left': `4px solid ${palette.blockquoteBorder}`,
       'background-color': palette.blockquoteBackground,
-    });
+    };
+    if (palette.blockquoteColor) bqStyles.color = palette.blockquoteColor;
+    if (palette.blockquoteExtra) Object.assign(bqStyles, palette.blockquoteExtra);
+    applyStyle(node, bqStyles);
   });
 
   root.querySelectorAll('pre').forEach((node) => {
@@ -378,11 +595,11 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     }
     applyStyle(node, {
       margin: '1.1em 0',
-      padding: '14px 16px',
-      'background-color': palette.codeBackground,
-      color: palette.codeText,
-      border: `1px solid ${palette.codeBorder}`,
-      'border-radius': '8px',
+      padding: palette.prePadding || '14px 16px',
+      'background-color': palette.preBackground || palette.codeBackground,
+      color: palette.preColor || palette.codeText,
+      border: `1px solid ${palette.preBorder || palette.codeBorder}`,
+      'border-radius': palette.preBorderRadius || '8px',
       'font-family': MONO_FONT_STACK,
       'font-size': '14px',
       'line-height': '1.6',
@@ -398,11 +615,11 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     applyStyle(node, {
       margin: '0',
       padding: '0',
-      color: palette.codeText,
+      color: palette.preColor || palette.codeText,
       background: 'transparent',
       border: '0',
       'font-family': MONO_FONT_STACK,
-      'font-size': '1em',
+      'font-size': palette.preCodeFontSize || '1em',
       'line-height': '1.6',
       display: 'block',
       'white-space': 'pre',
@@ -414,13 +631,13 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
       return;
     }
     applyStyle(node, {
-      'background-color': palette.codeBackground,
-      color: palette.codeText,
-      border: `1px solid ${palette.codeBorder}`,
-      'border-radius': '4px',
-      padding: '0.08em 0.35em',
+      'background-color': palette.inlineCodeBackground || palette.codeBackground,
+      color: palette.inlineCodeColor || palette.codeText,
+      border: `1px solid ${palette.inlineCodeBorder || palette.codeBorder}`,
+      'border-radius': palette.inlineCodeBorderRadius || '4px',
+      padding: palette.inlineCodePadding || '0.08em 0.35em',
       'font-family': MONO_FONT_STACK,
-      'font-size': '0.9em',
+      'font-size': palette.inlineCodeFontSize || '0.9em',
     });
   });
 
@@ -428,11 +645,13 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     if (!(node instanceof HTMLElement)) {
       return;
     }
-    applyStyle(node, {
+    const linkStyles: Record<string, string> = {
       color: palette.link,
       'text-decoration': 'underline',
       'text-underline-offset': '2px',
-    });
+    };
+    if (palette.linkExtra) Object.assign(linkStyles, palette.linkExtra);
+    applyStyle(node, linkStyles);
   });
 
   root.querySelectorAll('hr').forEach((node) => {
@@ -441,7 +660,7 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     }
     applyStyle(node, {
       border: '0',
-      'border-top': `1px solid ${palette.tableBorder}`,
+      'border-top': `1px solid ${palette.hrBorder || palette.tableBorder}`,
       margin: '1.5em 0',
     });
   });
@@ -461,13 +680,16 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     if (!(node instanceof HTMLElement)) {
       return;
     }
-    applyStyle(node, {
+    const thStyles: Record<string, string> = {
       border: `1px solid ${palette.tableBorder}`,
       'background-color': palette.tableHeaderBackground,
-      padding: '8px 10px',
+      padding: palette.tableCellPadding || '8px 10px',
       'text-align': 'left',
       'font-weight': '600',
-    });
+    };
+    if (palette.tableHeaderColor) thStyles.color = palette.tableHeaderColor;
+    if (palette.tableHeaderExtra) Object.assign(thStyles, palette.tableHeaderExtra);
+    applyStyle(node, thStyles);
   });
 
   root.querySelectorAll('td').forEach((node) => {
@@ -476,7 +698,7 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     }
     applyStyle(node, {
       border: `1px solid ${palette.tableBorder}`,
-      padding: '8px 10px',
+      padding: palette.tableCellPadding || '8px 10px',
     });
   });
 
@@ -485,7 +707,7 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
       return;
     }
     applyStyle(node, {
-      margin: '0.7em 0 1em 1.25em',
+      margin: palette.listMargin || '0.7em 0 1em 1.25em',
       padding: '0',
       'list-style-type': 'disc',
     });
@@ -496,7 +718,7 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
       return;
     }
     applyStyle(node, {
-      margin: '0.7em 0 1em 1.25em',
+      margin: palette.listMargin || '0.7em 0 1em 1.25em',
       padding: '0',
       'list-style-type': 'decimal',
     });
@@ -568,14 +790,18 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     if (!(node instanceof HTMLElement)) {
       return;
     }
-    applyStyle(node, { 'font-weight': '700' });
+    const strongStyles: Record<string, string> = { 'font-weight': '700' };
+    if (palette.strongExtra) Object.assign(strongStyles, palette.strongExtra);
+    applyStyle(node, strongStyles);
   });
 
   root.querySelectorAll('em').forEach((node) => {
     if (!(node instanceof HTMLElement)) {
       return;
     }
-    applyStyle(node, { 'font-style': 'italic' });
+    const emStyles: Record<string, string> = { 'font-style': 'italic' };
+    if (palette.emExtra) Object.assign(emStyles, palette.emExtra);
+    applyStyle(node, emStyles);
   });
 
   root.querySelectorAll('kbd').forEach((node) => {
