@@ -447,6 +447,16 @@ export default function Home() {
     reader.readAsText(file);
   }, []);
 
+  // Handle file launched via OS file association (PWA File Handling API)
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.launchQueue) return;
+    window.launchQueue.setConsumer(async (params) => {
+      if (params.files.length === 0) return;
+      const file = await params.files[0].getFile();
+      onFileChosen(file);
+    });
+  }, [onFileChosen]);
+
   const onDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();

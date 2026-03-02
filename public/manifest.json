@@ -18,5 +18,21 @@
   ],
   "categories": ["developer", "productivity", "utilities"],
   "lang": "en",
-  "dir": "ltr"
+  "dir": "ltr",
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "text/markdown": [".md", ".markdown", ".mdown", ".mkd", ".mkdn", ".mdwn"]
+      },
+      "icons": [
+        {
+          "src": "/md-view-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ],
+      "launch_type": "single-client"
+    }
+  ]
 }
