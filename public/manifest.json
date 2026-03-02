@@ -14,11 +14,6 @@
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
-    },
-    {
-      "src": "/favicon-16x16.svg",
-      "sizes": "16x16",
-      "type": "image/svg+xml"
     }
   ],
   "categories": ["developer", "productivity", "utilities"],

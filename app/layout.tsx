@@ -71,7 +71,6 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon-16x16.svg', sizes: '16x16', type: 'image/svg+xml' },
       { url: '/md-view-icon.svg', sizes: 'any', type: 'image/svg+xml' },
     ],
     shortcut: '/md-view-icon.svg',
@@ -193,7 +192,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/md-view-icon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/favicon-16x16.svg" type="image/svg+xml" sizes="16x16" />
         <link rel="canonical" href="https://www.md-view.com/" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="color-scheme" content="dark light" />
