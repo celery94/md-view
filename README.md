@@ -22,6 +22,7 @@ MD-View is a free, open-source markdown workspace with real-time preview, publis
 - Import markdown from:
   - local `.md/.markdown/.txt` files
   - public URLs via server-side readability extraction
+  - `?url=<encoded-http(s)-url>` query param for one-time auto-import on page load
 - Export options:
   - `.md`
   - themed standalone `.html`

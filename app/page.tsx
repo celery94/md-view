@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type React from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import RichMarkdownEditor from '../components/RichMarkdownEditor';
 import MarkdownPreview from '../components/MarkdownPreview';
 import ThemeSelector from '../components/ThemeSelector';
@@ -36,6 +37,7 @@ import {
 
 type ViewMode = 'split' | 'editor' | 'preview';
 const SCROLL_TOP_THRESHOLD = 0.25;
+const URL_IMPORT_QUERY_KEY = 'url';
 
 const initialMarkdown = `# MD-View: Focused Markdown workspace
 
@@ -89,6 +91,7 @@ export function Example() {
 ![Preview](/image.png)
 `;
 export default function Home() {
+  const searchParams = useSearchParams();
   const [markdown, setMarkdown] = useState(initialMarkdown);
   const [debouncedMarkdown, setDebouncedMarkdown] = useState(initialMarkdown);
   const previewMarkdown = useMemo(
@@ -125,6 +128,7 @@ export default function Home() {
   const desktopExportMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
   const mobileExportMenuRef = useRef<HTMLDivElement | null>(null);
   const mobileExportMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const autoImportedFromQueryRef = useRef(false);
   const desktopExportMenuId = useId();
   const desktopExportMenuTriggerId = useId();
   const mobileExportMenuId = useId();
@@ -501,6 +505,28 @@ export default function Home() {
     },
     [urlToImport]
   );
+
+  useEffect(() => {
+    if (autoImportedFromQueryRef.current) {
+      return;
+    }
+
+    const queryUrl = searchParams.get(URL_IMPORT_QUERY_KEY)?.trim();
+    if (!queryUrl) {
+      return;
+    }
+
+    autoImportedFromQueryRef.current = true;
+    setUrlToImport(queryUrl);
+
+    const nextSearchParams = new URLSearchParams(searchParams.toString());
+    nextSearchParams.delete(URL_IMPORT_QUERY_KEY);
+    const nextQuery = nextSearchParams.toString();
+    const nextLocation = `${window.location.pathname}${nextQuery ? `?${nextQuery}` : ''}${window.location.hash}`;
+    window.history.replaceState(window.history.state, '', nextLocation);
+
+    void importFromUrl(queryUrl);
+  }, [importFromUrl, searchParams]);
 
   const download = useCallback((name: string, content: string, type: string) => {
     const blob = new Blob([content], { type });

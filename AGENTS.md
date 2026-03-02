@@ -48,6 +48,7 @@ Do not modify `.next/` or `node_modules/`.
 - Mobile behavior: split mode hidden/disabled; auto-fallback to editor mode
 - Scroll sync in split mode between editor and preview
 - Floating "scroll to top" appears once any tracked scroll area reaches 25%
+- Opening with `?url=<encoded-http(s)-url>` auto-imports that page once and then removes only the `url` query key
 - Persistence keys in `localStorage`:
   - `mdv:content`
   - `mdv:ratio`
