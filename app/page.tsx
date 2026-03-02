@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState, Suspense } from 'react';
 import type React from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -90,7 +90,7 @@ export function Example() {
 
 ![Preview](/image.png)
 `;
-export default function Home() {
+function HomeContent() {
   const searchParams = useSearchParams();
   const [markdown, setMarkdown] = useState(initialMarkdown);
   const [debouncedMarkdown, setDebouncedMarkdown] = useState(initialMarkdown);
@@ -1141,6 +1141,15 @@ export default function Home() {
 }
 
 // Minimal inline CSS for HTML export; focuses on readability and code blocks.
+
+export default function Home() {
+  return (
+    <Suspense fallback={null}>
+      <HomeContent />
+    </Suspense>
+  );
+}
+
 const inlineStyles = `
   :root { color-scheme: light; }
   body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 2rem; }
