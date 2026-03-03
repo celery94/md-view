@@ -205,7 +205,7 @@ export default function Guide() {
                     <h3 className="font-semibold text-slate-800">Import & Export</h3>
                   </div>
                   <p className="text-slate-500 text-sm leading-relaxed">
-                    Import .md files and export to .md or .html formats for sharing.
+                    Import .md files and export to .md, .docx, or .html formats for sharing.
                   </p>
                 </div>
 
@@ -271,7 +271,9 @@ export default function Guide() {
                       <span className="text-amber-700 font-bold text-lg">4</span>
                     </div>
                     <h3 className="font-semibold text-slate-800 mb-2">Export & Share</h3>
-                    <p className="text-sm text-slate-500">Export as .md or .html for sharing</p>
+                    <p className="text-sm text-slate-500">
+                      Export as .md, .docx, or .html for sharing
+                    </p>
                   </div>
                 </div>
               </div>
@@ -291,12 +293,13 @@ export default function Guide() {
                   <div className="p-1.5 bg-sky-100 rounded-lg">
                     <Download className="h-5 w-5 text-sky-600" />
                   </div>
-                  Export to HTML & PDF
+                  Export to DOCX, HTML & PDF
                 </h2>
                 <div className="prose prose-slate max-w-none">
                   <p className="text-slate-600 mb-4 leading-relaxed">
-                    Use the toolbar to export your document as <strong>HTML</strong> for sharing or
-                    hosting. To create a <strong>PDF</strong>, open the exported HTML in your
+                    Use the toolbar to export your document as <strong>DOCX</strong> for Word-based
+                    editing, or <strong>HTML</strong> for sharing and hosting. To create a{' '}
+                    <strong>PDF</strong>, open the exported HTML in your
                     browser and use
                     <em>Print</em> → <em>Save as PDF</em>.
                   </p>

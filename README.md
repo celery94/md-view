@@ -28,6 +28,7 @@ MD-View is a free, open-source markdown workspace with real-time preview, publis
 - Export options:
   - `.md`
   - themed standalone `.html`
+  - `.docx` document
   - `.png` snapshot from preview
   - copy inline rich HTML + plain text to clipboard
 - Local persistence: content, view mode, theme, split ratio

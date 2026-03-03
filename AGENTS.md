@@ -57,6 +57,7 @@ Do not modify `.next/` or `node_modules/`.
 - Export options:
   - markdown file
   - themed HTML
+  - DOCX document
   - PNG snapshot via `@zumer/snapdom`
   - copy inline HTML/plain text clipboard payload
 - Themes (9): `default`, `wechat-publish`, `dark`, `github`, `notion`, `medium`, `paper`, `minimal`, `terminal`

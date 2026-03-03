@@ -550,16 +550,45 @@ function HomeContent() {
     URL.revokeObjectURL(url);
   }, []);
 
+  const downloadBlob = useCallback((name: string, blob: Blob) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }, []);
+
+  const getTimestampedFilename = useCallback((extension: 'md' | 'html' | 'docx' | 'png') => {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    return `document-${timestamp}.${extension}`;
+  }, []);
+
   const exportMarkdown = useCallback(() => {
-    download('document.md', markdown, 'text/markdown;charset=utf-8');
-  }, [download, markdown]);
+    download(getTimestampedFilename('md'), markdown, 'text/markdown;charset=utf-8');
+  }, [download, getTimestampedFilename, markdown]);
 
   const exportHtml = useCallback(() => {
     const { theme, htmlContent, styles } = getSerializablePreview();
 
     const doc = `<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>Markdown Export</title><style>${styles}</style></head><body><main class=\"${theme.classes.prose}\">${htmlContent}</main></body></html>`;
-    download('document.html', doc, 'text/html;charset=utf-8');
-  }, [download, getSerializablePreview]);
+    download(getTimestampedFilename('html'), doc, 'text/html;charset=utf-8');
+  }, [download, getSerializablePreview, getTimestampedFilename]);
+
+  const exportDocx = useCallback(async () => {
+    const previewElement = previewRef.current;
+    if (!previewElement) return;
+
+    try {
+      const { buildDocxBlobFromPreview } = await import('../lib/docx-export');
+      const blob = await buildDocxBlobFromPreview(previewElement);
+      downloadBlob(getTimestampedFilename('docx'), blob);
+    } catch (error) {
+      console.error('Failed to export DOCX:', error);
+    }
+  }, [downloadBlob, getTimestampedFilename]);
 
   const exportImage = useCallback(async () => {
     const previewElement = previewRef.current;
@@ -568,15 +597,14 @@ function HomeContent() {
     try {
       const { snapdom } = await import('@zumer/snapdom');
       const result = await snapdom(previewElement);
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
       await result.download({
         type: 'png',
-        filename: `document-${timestamp}`,
+        filename: getTimestampedFilename('png'),
       });
     } catch (error) {
       console.error('Failed to export image:', error);
     }
-  }, []);
+  }, [getTimestampedFilename]);
 
   const copyHtmlToClipboard = useCallback(async () => {
     const previewElement = previewRef.current;
@@ -797,6 +825,15 @@ function HomeContent() {
                         </button>
                         <button
                           type="button"
+                          onClick={() => handleDesktopExportAction(exportDocx)}
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          role="menuitem"
+                        >
+                          <FileText className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <span>Export as DOCX</span>
+                        </button>
+                        <button
+                          type="button"
                           onClick={() => handleDesktopExportAction(exportImage)}
                           className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
                           role="menuitem"
@@ -941,6 +978,15 @@ function HomeContent() {
                         >
                           <FileCode className="h-4 w-4 text-slate-500" aria-hidden="true" />
                           <span>Export as HTML</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleMobileExportAction(exportDocx)}
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          role="menuitem"
+                        >
+                          <FileText className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <span>Export as DOCX</span>
                         </button>
                         <button
                           type="button"
