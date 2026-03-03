@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import Script from 'next/script';
 import { Space_Grotesk, IBM_Plex_Mono } from 'next/font/google';
 import Analytics from '../components/Analytics';
-import { GA_ID } from '../lib/gtag';
+import { GA_ID, ADSENSE_ID } from '../lib/gtag';
 import './globals.css';
 
 const spaceGrotesk = Space_Grotesk({
@@ -126,7 +126,7 @@ export default function RootLayout({
         <link rel="icon" href="/md-view-icon.svg" type="image/svg+xml" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="color-scheme" content="dark light" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5786030221199442"
+        <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
           crossOrigin="anonymous"></script>
       </head>
       <body className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} antialiased`}>

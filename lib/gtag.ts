@@ -1,4 +1,5 @@
 export const GA_ID: string = process.env.NEXT_PUBLIC_GA_ID || 'G-PQ0PJ2D7EN';
+export const ADSENSE_ID: string = process.env.NEXT_PUBLIC_ADSENSE_ID || 'ca-pub-5786030221199442';
 
 /**
  * Send a pageview event to Google Analytics (gtag)
