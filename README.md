@@ -17,6 +17,7 @@ MD-View is a free, open-source markdown workspace with real-time preview, publis
 - Real-time markdown preview with `react-markdown` + `remark-gfm`
 - Syntax-highlighted fenced code blocks with language badge and copy button
 - 9 themes: `default`, `wechat-publish`, `dark`, `github`, `notion`, `medium`, `paper`, `minimal`, `terminal`
+- `wechat-publish` converts http(s) links to numbered bottom references in preview/export/copy HTML
 - Editor/preview/split modes with draggable split ratio and scroll sync
 - Markdown formatting shortcuts and context menu formatter (`Shift+Alt+F`)
 - Import markdown from:

@@ -832,6 +832,10 @@ function cleanupAttributes(root: HTMLElement): void {
         return;
       }
 
+      if (attrName === 'id' && /^mdv-wechat-ref-\d+$/.test(attribute.value)) {
+        return;
+      }
+
       if (attrName === 'class' || attrName === 'id' || attrName.startsWith('data-')) {
         node.removeAttribute(attribute.name);
         return;

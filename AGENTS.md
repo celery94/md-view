@@ -60,6 +60,7 @@ Do not modify `.next/` or `node_modules/`.
   - PNG snapshot via `@zumer/snapdom`
   - copy inline HTML/plain text clipboard payload
 - Themes (9): `default`, `wechat-publish`, `dark`, `github`, `notion`, `medium`, `paper`, `minimal`, `terminal`
+- `wechat-publish` converts http(s) links to numbered bottom references across preview, HTML export, and clipboard HTML
 
 ## URL Import API Constraints
 

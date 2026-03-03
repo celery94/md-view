@@ -19,6 +19,116 @@ interface MarkdownPreviewProps {
   contentClassName?: string;
 }
 
+const WECHAT_REFERENCE_ID_PREFIX = 'mdv-wechat-ref-';
+
+interface MarkdownAstNode {
+  type: string;
+  url?: string;
+  value?: string;
+  depth?: number;
+  ordered?: boolean;
+  spread?: boolean;
+  start?: number;
+  children?: MarkdownAstNode[];
+  data?: {
+    hProperties?: Record<string, unknown>;
+  };
+}
+
+function isWechatExternalLink(url: string | undefined): url is string {
+  return typeof url === 'string' && /^https?:\/\//i.test(url.trim());
+}
+
+function remarkWechatExternalReferences() {
+  return (tree: MarkdownAstNode) => {
+    if (!Array.isArray(tree.children)) {
+      return;
+    }
+
+    const references: string[] = [];
+    const indexByUrl = new Map<string, number>();
+
+    const visit = (node: MarkdownAstNode): void => {
+      if (node.type === 'link' && isWechatExternalLink(node.url)) {
+        const normalizedUrl = node.url.trim();
+        let index = indexByUrl.get(normalizedUrl);
+
+        if (!index) {
+          index = references.length + 1;
+          indexByUrl.set(normalizedUrl, index);
+          references.push(normalizedUrl);
+        }
+
+        node.url = `#${WECHAT_REFERENCE_ID_PREFIX}${index}`;
+        node.children = [...(node.children ?? []), { type: 'text', value: ` [${index}]` }];
+        node.data = {
+          ...(node.data ?? {}),
+          hProperties: {
+            ...(node.data?.hProperties ?? {}),
+            className: 'mdv-wechat-inline-reference',
+          },
+        };
+      }
+
+      node.children?.forEach(visit);
+    };
+
+    tree.children.forEach(visit);
+
+    if (references.length === 0) {
+      return;
+    }
+
+    const listItems: MarkdownAstNode[] = references.map((url, idx) => ({
+      type: 'listItem',
+      spread: false,
+      children: [
+        {
+          type: 'paragraph',
+          children: [
+            {
+              type: 'link',
+              url,
+              data: {
+                hProperties: {
+                  id: `${WECHAT_REFERENCE_ID_PREFIX}${idx + 1}`,
+                  className: 'mdv-wechat-reference-link',
+                },
+              },
+              children: [{ type: 'text', value: url }],
+            },
+          ],
+        },
+      ],
+    }));
+
+    tree.children.push(
+      {
+        type: 'heading',
+        depth: 3,
+        data: {
+          hProperties: {
+            className: 'mdv-wechat-reference-title',
+          },
+        },
+        children: [{ type: 'text', value: '外链引用' }],
+      },
+      {
+        type: 'list',
+        ordered: true,
+        spread: false,
+        start: 1,
+        data: {
+          hProperties: {
+            className: 'mdv-wechat-reference-list',
+          },
+        },
+        children: listItems,
+      }
+    );
+  };
+}
+
 function CodeBlock({ className, children, ...props }: React.ComponentProps<'code'>) {
   const match = /language-(\w+)/.exec(className || '');
   const language = match?.[1]?.toLowerCase();
@@ -186,6 +296,10 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
     () => (needsHighlight && hlPlugin ? [hlPlugin] : []),
     [hlPlugin, needsHighlight]
   );
+  const remarkPlugins = useMemo(
+    () => (theme === 'wechat-publish' ? [remarkGfm, remarkWechatExternalReferences] : [remarkGfm]),
+    [theme]
+  );
 
   const components = useMemo<Components>(() => {
     const slugger = createSlugger();
@@ -260,7 +374,7 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
     >
       <div className={proseClasses}>
         <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
+          remarkPlugins={remarkPlugins}
           rehypePlugins={rehypePlugins}
           skipHtml
           components={components}

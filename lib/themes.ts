@@ -284,6 +284,28 @@ export const themes: Theme[] = [
         color: #047857;
         border-bottom-color: rgba(4, 120, 87, 0.65);
       }
+      .wechat-theme a.mdv-wechat-inline-reference {
+        border-bottom-style: dashed;
+      }
+      .wechat-theme .mdv-wechat-reference-title {
+        margin-top: 1.35em;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #0f172a;
+        font-size: 0.98rem;
+      }
+      .wechat-theme .mdv-wechat-reference-list {
+        margin: 0.5em 0 1em;
+        padding-left: 1.25rem;
+        font-size: 0.84rem;
+      }
+      .wechat-theme .mdv-wechat-reference-list li::marker {
+        color: #64748b;
+      }
+      .wechat-theme .mdv-wechat-reference-link {
+        word-break: break-all;
+      }
       .wechat-theme :not(pre) > code {
         color: #cf222e;
         background: rgba(175, 184, 193, 0.2);
