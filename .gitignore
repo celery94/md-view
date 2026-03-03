@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+scripts/perf-fixture.md
 
 # debug
 npm-debug.log*

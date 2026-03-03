@@ -1,6 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useId, useMemo, useRef, useState, Suspense } from 'react';
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  Suspense,
+} from 'react';
 import type React from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -10,9 +19,7 @@ import ThemeSelector from '../components/ThemeSelector';
 import CompactThemeSelector from '../components/CompactThemeSelector';
 import ViewModeSelector from '../components/ViewModeSelector';
 import Footer from '../components/Footer';
-
-import { themes, getTheme } from '../lib/themes';
-import { buildInlineClipboardPayload } from '../lib/clipboard-inline-html';
+import { getTheme } from '../lib/themes';
 import { stripLeadingYamlFrontmatter } from '../lib/markdown-frontmatter';
 import { cn } from '../lib/cn';
 import { ui } from '../lib/ui-classes';
@@ -38,6 +45,13 @@ import {
 type ViewMode = 'split' | 'editor' | 'preview';
 const SCROLL_TOP_THRESHOLD = 0.25;
 const URL_IMPORT_QUERY_KEY = 'url';
+const SCROLL_SYNC_EPSILON = 0.001;
+
+interface ScrollMetrics {
+  page: number;
+  editor: number;
+  preview: number;
+}
 
 const initialMarkdown = `# MD-View: Focused Markdown workspace
 
@@ -93,10 +107,10 @@ export function Example() {
 function HomeContent() {
   const searchParams = useSearchParams();
   const [markdown, setMarkdown] = useState(initialMarkdown);
-  const [debouncedMarkdown, setDebouncedMarkdown] = useState(initialMarkdown);
+  const deferredMarkdown = useDeferredValue(markdown);
   const previewMarkdown = useMemo(
-    () => stripLeadingYamlFrontmatter(debouncedMarkdown),
-    [debouncedMarkdown]
+    () => stripLeadingYamlFrontmatter(deferredMarkdown),
+    [deferredMarkdown]
   );
   const [currentTheme, setCurrentTheme] = useState('default');
   const [viewMode, setViewMode] = useState<ViewMode>('split');
@@ -109,9 +123,11 @@ function HomeContent() {
   const [previewScrollPercentage, setPreviewScrollPercentage] = useState<number | undefined>(
     undefined
   );
-  const [pageScrollProgress, setPageScrollProgress] = useState(0);
-  const [editorScrollProgress, setEditorScrollProgress] = useState(0);
-  const [previewScrollProgress, setPreviewScrollProgress] = useState(0);
+  const [scrollMetrics, setScrollMetrics] = useState<ScrollMetrics>({
+    page: 0,
+    editor: 0,
+    preview: 0,
+  });
   const [urlToImport, setUrlToImport] = useState('');
   const [isImportingUrl, setIsImportingUrl] = useState(false);
   const [urlImportError, setUrlImportError] = useState<string | null>(null);
@@ -129,14 +145,27 @@ function HomeContent() {
   const mobileExportMenuRef = useRef<HTMLDivElement | null>(null);
   const mobileExportMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
   const autoImportedFromQueryRef = useRef(false);
+  const pendingScrollMetricsRef = useRef<ScrollMetrics>({
+    page: 0,
+    editor: 0,
+    preview: 0,
+  });
+  const scrollMetricsRafRef = useRef<number | null>(null);
   const desktopExportMenuId = useId();
   const desktopExportMenuTriggerId = useId();
   const mobileExportMenuId = useId();
   const mobileExportMenuTriggerId = useId();
 
-  const wordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
-  const lineCount = markdown.split('\n').length;
-  const fileSizeKb = Math.max(1, Math.round(new Blob([markdown]).size / 1024));
+  const { wordCount, lineCount, fileSizeKb } = useMemo(() => {
+    const nextWordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
+    const nextLineCount = markdown.split('\n').length;
+    const nextFileSizeKb = Math.max(1, Math.round(new Blob([markdown]).size / 1024));
+    return {
+      wordCount: nextWordCount,
+      lineCount: nextLineCount,
+      fileSizeKb: nextFileSizeKb,
+    };
+  }, [markdown]);
 
   const getSerializablePreview = useCallback(() => {
     const theme = getTheme(currentTheme);
@@ -199,12 +228,6 @@ function HomeContent() {
         localStorage.setItem('mdv:content', markdown);
       } catch {}
     }, 300);
-    return () => clearTimeout(t);
-  }, [markdown]);
-
-  // Debounce preview updates for performance
-  useEffect(() => {
-    const t = setTimeout(() => setDebouncedMarkdown(markdown), 200);
     return () => clearTimeout(t);
   }, [markdown]);
 
@@ -381,6 +404,49 @@ function HomeContent() {
   }, []);
 
   useEffect(() => {
+    return () => {
+      if (scrollMetricsRafRef.current !== null) {
+        window.cancelAnimationFrame(scrollMetricsRafRef.current);
+      }
+    };
+  }, []);
+
+  const scheduleScrollMetricsCommit = useCallback(() => {
+    if (scrollMetricsRafRef.current !== null) {
+      return;
+    }
+
+    scrollMetricsRafRef.current = window.requestAnimationFrame(() => {
+      scrollMetricsRafRef.current = null;
+      const next = pendingScrollMetricsRef.current;
+      setScrollMetrics((prev) => {
+        if (
+          Math.abs(prev.page - next.page) < SCROLL_SYNC_EPSILON &&
+          Math.abs(prev.editor - next.editor) < SCROLL_SYNC_EPSILON &&
+          Math.abs(prev.preview - next.preview) < SCROLL_SYNC_EPSILON
+        ) {
+          return prev;
+        }
+
+        return { ...next };
+      });
+    });
+  }, []);
+
+  const setPendingScrollMetric = useCallback(
+    (key: keyof ScrollMetrics, value: number) => {
+      const clamped = Math.min(1, Math.max(0, value));
+      const pending = pendingScrollMetricsRef.current;
+      if (Math.abs(pending[key] - clamped) < SCROLL_SYNC_EPSILON) {
+        return;
+      }
+      pending[key] = clamped;
+      scheduleScrollMetricsCommit();
+    },
+    [scheduleScrollMetricsCommit]
+  );
+
+  useEffect(() => {
     const getPageScrollProgress = () => {
       const doc = document.documentElement;
       const scrollableHeight = doc.scrollHeight - window.innerHeight;
@@ -390,7 +456,7 @@ function HomeContent() {
     };
 
     const handlePageScroll = () => {
-      setPageScrollProgress(getPageScrollProgress());
+      setPendingScrollMetric('page', getPageScrollProgress());
     };
 
     handlePageScroll();
@@ -400,7 +466,7 @@ function HomeContent() {
       window.removeEventListener('scroll', handlePageScroll);
       window.removeEventListener('resize', handlePageScroll);
     };
-  }, []);
+  }, [setPendingScrollMetric]);
 
   const startDrag = useCallback(() => {
     isDraggingRef.current = true;
@@ -606,14 +672,21 @@ function HomeContent() {
     }
   }, [getTimestampedFilename]);
 
+  const prewarmExportModules = useCallback(() => {
+    void import('../lib/clipboard-inline-html');
+    void import('../lib/docx-export');
+    void import('@zumer/snapdom');
+  }, []);
+
   const copyHtmlToClipboard = useCallback(async () => {
     const previewElement = previewRef.current;
     if (!previewElement) return;
 
-    const payload = buildInlineClipboardPayload(previewElement, currentTheme);
-    if (!payload.html) return;
-
     try {
+      const { buildInlineClipboardPayload } = await import('../lib/clipboard-inline-html');
+      const payload = buildInlineClipboardPayload(previewElement, currentTheme);
+      if (!payload.html) return;
+
       const htmlBlob = new Blob([payload.html], { type: 'text/html' });
       const textBlob = new Blob([payload.plainText], { type: 'text/plain' });
 
@@ -624,7 +697,14 @@ function HomeContent() {
         }),
       ]);
     } catch {
-      await navigator.clipboard.writeText(payload.html);
+      try {
+        const { buildInlineClipboardPayload } = await import('../lib/clipboard-inline-html');
+        const payload = buildInlineClipboardPayload(previewElement, currentTheme);
+        if (!payload.html) return;
+        await navigator.clipboard.writeText(payload.html);
+      } catch (error) {
+        console.error('Failed to copy inline HTML:', error);
+      }
     }
   }, [currentTheme]);
 
@@ -641,22 +721,38 @@ function HomeContent() {
   // Scroll synchronization handlers
   const handleEditorScroll = useCallback(
     (scrollPercentage: number) => {
-      setEditorScrollProgress(scrollPercentage);
+      setPendingScrollMetric('editor', scrollPercentage);
       if (viewMode === 'split') {
-        setPreviewScrollPercentage(scrollPercentage);
+        setPreviewScrollPercentage((previous) => {
+          if (
+            typeof previous === 'number' &&
+            Math.abs(previous - scrollPercentage) < SCROLL_SYNC_EPSILON
+          ) {
+            return previous;
+          }
+          return scrollPercentage;
+        });
       }
     },
-    [viewMode]
+    [setPendingScrollMetric, viewMode]
   );
 
   const handlePreviewScroll = useCallback(
     (scrollPercentage: number) => {
-      setPreviewScrollProgress(scrollPercentage);
+      setPendingScrollMetric('preview', scrollPercentage);
       if (viewMode === 'split') {
-        setEditorScrollPercentage(scrollPercentage);
+        setEditorScrollPercentage((previous) => {
+          if (
+            typeof previous === 'number' &&
+            Math.abs(previous - scrollPercentage) < SCROLL_SYNC_EPSILON
+          ) {
+            return previous;
+          }
+          return scrollPercentage;
+        });
       }
     },
-    [viewMode]
+    [setPendingScrollMetric, viewMode]
   );
 
   // Reset scroll sync when switching view modes
@@ -669,19 +765,45 @@ function HomeContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setEditorScrollPercentage(0);
     setPreviewScrollPercentage(0);
-    setPageScrollProgress(0);
-    setEditorScrollProgress(0);
-    setPreviewScrollProgress(0);
+    const reset: ScrollMetrics = { page: 0, editor: 0, preview: 0 };
+    pendingScrollMetricsRef.current = { ...reset };
+    if (scrollMetricsRafRef.current !== null) {
+      window.cancelAnimationFrame(scrollMetricsRafRef.current);
+      scrollMetricsRafRef.current = null;
+    }
+    setScrollMetrics(reset);
   }, []);
 
   const activePanelScrollProgress =
     viewMode === 'split'
-      ? Math.max(editorScrollProgress, previewScrollProgress)
+      ? Math.max(scrollMetrics.editor, scrollMetrics.preview)
       : viewMode === 'editor'
-        ? editorScrollProgress
-        : previewScrollProgress;
+        ? scrollMetrics.editor
+        : scrollMetrics.preview;
   const showScrollToTop =
-    Math.max(pageScrollProgress, activePanelScrollProgress) >= SCROLL_TOP_THRESHOLD;
+    Math.max(scrollMetrics.page, activePanelScrollProgress) >= SCROLL_TOP_THRESHOLD;
+
+  const toggleDesktopExportMenu = useCallback(() => {
+    setIsDesktopExportMenuOpen((prev) => {
+      const next = !prev;
+      if (next) {
+        prewarmExportModules();
+      }
+      return next;
+    });
+    setIsMobileExportMenuOpen(false);
+  }, [prewarmExportModules]);
+
+  const toggleMobileExportMenu = useCallback(() => {
+    setIsMobileExportMenuOpen((prev) => {
+      const next = !prev;
+      if (next) {
+        prewarmExportModules();
+      }
+      return next;
+    });
+    setIsDesktopExportMenuOpen(false);
+  }, [prewarmExportModules]);
 
   return (
     <>
@@ -776,10 +898,7 @@ function HomeContent() {
                       type="button"
                       ref={desktopExportMenuTriggerRef}
                       id={desktopExportMenuTriggerId}
-                      onClick={() => {
-                        setIsDesktopExportMenuOpen((prev) => !prev);
-                        setIsMobileExportMenuOpen(false);
-                      }}
+                      onClick={toggleDesktopExportMenu}
                       className={ui.home.buttons.secondary}
                       aria-label="Export actions"
                       title="Export actions"
@@ -934,10 +1053,7 @@ function HomeContent() {
                       type="button"
                       ref={mobileExportMenuTriggerRef}
                       id={mobileExportMenuTriggerId}
-                      onClick={() => {
-                        setIsMobileExportMenuOpen((prev) => !prev);
-                        setIsDesktopExportMenuOpen(false);
-                      }}
+                      onClick={toggleMobileExportMenu}
                       className={cn(ui.home.mobileActionButton, 'px-2.5 py-1.5 text-[11px]')}
                       aria-label="Export actions"
                       title="Export actions"

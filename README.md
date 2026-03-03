@@ -88,9 +88,24 @@ npm run start
 - `npm run start`: run production server
 - `npm run lint`: ESLint checks
 - `npm run typecheck`: TypeScript checks (`tsc --noEmit`)
+- `npm run perf:fixture`: generate a large markdown fixture (`scripts/perf-fixture.md`) for performance testing
 - `npm run format`: Prettier write
 - `npm run format:check`: Prettier check
 - `node scripts/xss-check.mjs`: lightweight XSS regression smoke test
+
+## Performance Baseline
+
+Use the fixture script to generate a repeatable large markdown document (~5k lines by default):
+
+```bash
+npm run perf:fixture
+```
+
+Optional arguments:
+
+```bash
+node scripts/perf-fixture.mjs <output-path> <section-count>
+```
 
 ## Repository Layout
 

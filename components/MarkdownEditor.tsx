@@ -17,6 +17,7 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(func
 ) {
   const internalRef = useRef<HTMLTextAreaElement>(null);
   const isScrollingSelfRef = useRef(false);
+  const scrollResetTimeoutRef = useRef<number | null>(null);
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
@@ -54,13 +55,19 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(func
 
     if (scrollHeight <= clientHeight) return;
 
-    isScrollingSelfRef.current = true;
-    textarea.scrollTop = scrollToPercentage * (scrollHeight - clientHeight);
+    const nextScrollTop = scrollToPercentage * (scrollHeight - clientHeight);
+    if (Math.abs(textarea.scrollTop - nextScrollTop) < 1) return;
 
-    // Reset flag after a short delay
-    setTimeout(() => {
+    isScrollingSelfRef.current = true;
+    textarea.scrollTop = nextScrollTop;
+
+    if (scrollResetTimeoutRef.current !== null) {
+      window.clearTimeout(scrollResetTimeoutRef.current);
+    }
+    scrollResetTimeoutRef.current = window.setTimeout(() => {
       isScrollingSelfRef.current = false;
-    }, 100);
+      scrollResetTimeoutRef.current = null;
+    }, 80);
   }, [scrollToPercentage, textareaRef]);
 
   // Add scroll event listener
@@ -71,6 +78,14 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(func
     textarea.addEventListener('scroll', handleScroll);
     return () => textarea.removeEventListener('scroll', handleScroll);
   }, [handleScroll, onScroll, textareaRef]);
+
+  useEffect(() => {
+    return () => {
+      if (scrollResetTimeoutRef.current !== null) {
+        window.clearTimeout(scrollResetTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Handle right-click context menu
   const handleContextMenu = useCallback((e: React.MouseEvent) => {

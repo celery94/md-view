@@ -38,6 +38,7 @@ Use this file as the implementation-accurate guide for contributors and coding a
   - `formatter.ts`: built-in markdown formatter used by editor shortcut/context menu
   - misc helpers: `cn.ts`, `slugify.ts`, `gtag.ts`, `seo-utils.ts`
 - `scripts/xss-check.mjs`: standalone XSS regression check (no test framework required)
+- `scripts/perf-fixture.mjs`: generates a large markdown fixture for performance validation
 - `public/`: static assets and metadata files (`manifest.json`, `robots.txt`, etc.)
 
 Do not modify `.next/` or `node_modules/`.
@@ -83,6 +84,7 @@ From `lib/url-import.ts` and `app/api/import-url/route.ts`:
 - Start production server: `npm run start`
 - Lint: `npm run lint`
 - Typecheck: `npm run typecheck`
+- Optional performance fixture generation: `npm run perf:fixture`
 - Optional security smoke check: `node scripts/xss-check.mjs`
 
 ## Coding Conventions

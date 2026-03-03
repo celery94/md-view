@@ -1,12 +1,12 @@
 'use client';
 
-import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Check, Copy as CopyIcon } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { createSlugger, getNodeText } from '../lib/slugify';
-import { getTheme, type Theme } from '../lib/themes';
+import { getTheme } from '../lib/themes';
 import { ui } from '../lib/ui-classes';
 
 interface MarkdownPreviewProps {
@@ -212,7 +212,7 @@ function createHeadingRenderer(
   };
 }
 
-const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(function MarkdownPreview(
+const MarkdownPreviewInner = forwardRef<HTMLDivElement, MarkdownPreviewProps>(function MarkdownPreview(
   {
     content,
     theme = 'default',
@@ -227,11 +227,21 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
   const [hlPlugin, setHlPlugin] = useState<any>(null);
   const currentTheme = getTheme(theme);
   const needsHighlight = useMemo(() => /```|~~~|`[^`]+`/.test(content), [content]);
-  const internalRef = useRef<HTMLDivElement>(null);
+  const internalRef = useRef<HTMLDivElement | null>(null);
   const isScrollingSelfRef = useRef(false);
+  const scrollResetTimeoutRef = useRef<number | null>(null);
 
-  // Use the forwarded ref or the internal ref
-  const previewRef = (ref as React.RefObject<HTMLDivElement>) || internalRef;
+  const setPreviewRefs = useCallback(
+    (node: HTMLDivElement | null) => {
+      internalRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }
+    },
+    [ref]
+  );
 
   const handleScroll = useCallback(
     (e: Event) => {
@@ -252,31 +262,46 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
 
   // Handle external scroll commands
   useEffect(() => {
-    if (scrollToPercentage === undefined || !previewRef.current) return;
+    if (scrollToPercentage === undefined) return;
 
-    const preview = previewRef.current;
+    const preview = internalRef.current;
+    if (!preview) return;
     const scrollHeight = preview.scrollHeight;
     const clientHeight = preview.clientHeight;
 
     if (scrollHeight <= clientHeight) return;
 
-    isScrollingSelfRef.current = true;
-    preview.scrollTop = scrollToPercentage * (scrollHeight - clientHeight);
+    const nextScrollTop = scrollToPercentage * (scrollHeight - clientHeight);
+    if (Math.abs(preview.scrollTop - nextScrollTop) < 1) return;
 
-    // Reset flag after a short delay
-    setTimeout(() => {
+    isScrollingSelfRef.current = true;
+    preview.scrollTop = nextScrollTop;
+
+    if (scrollResetTimeoutRef.current !== null) {
+      window.clearTimeout(scrollResetTimeoutRef.current);
+    }
+    scrollResetTimeoutRef.current = window.setTimeout(() => {
       isScrollingSelfRef.current = false;
-    }, 100);
-  }, [scrollToPercentage, previewRef]);
+      scrollResetTimeoutRef.current = null;
+    }, 80);
+  }, [scrollToPercentage]);
 
   // Add scroll event listener
   useEffect(() => {
-    const preview = previewRef.current;
+    const preview = internalRef.current;
     if (!preview || !onScroll) return;
 
     preview.addEventListener('scroll', handleScroll);
     return () => preview.removeEventListener('scroll', handleScroll);
-  }, [handleScroll, onScroll, previewRef]);
+  }, [handleScroll, onScroll]);
+
+  useEffect(() => {
+    return () => {
+      if (scrollResetTimeoutRef.current !== null) {
+        window.clearTimeout(scrollResetTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!needsHighlight || hlPlugin) {
@@ -364,7 +389,7 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
 
   return (
     <div
-      ref={previewRef}
+      ref={setPreviewRefs}
       className={containerClasses}
       role="region"
       aria-label="Markdown preview area"
@@ -383,6 +408,20 @@ const MarkdownPreview = forwardRef<HTMLDivElement, MarkdownPreviewProps>(functio
         </ReactMarkdown>
       </div>
     </div>
+  );
+});
+
+MarkdownPreviewInner.displayName = 'MarkdownPreview';
+
+const MarkdownPreview = memo(MarkdownPreviewInner, (prev, next) => {
+  return (
+    prev.content === next.content &&
+    prev.theme === next.theme &&
+    prev.onScroll === next.onScroll &&
+    prev.scrollToPercentage === next.scrollToPercentage &&
+    prev.variant === next.variant &&
+    prev.className === next.className &&
+    prev.contentClassName === next.contentClassName
   );
 });
 
