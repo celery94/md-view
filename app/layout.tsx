@@ -126,7 +126,8 @@ export default function RootLayout({
         <link rel="icon" href="/md-view-icon.svg" type="image/svg+xml" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="color-scheme" content="dark light" />
-        <meta name="google-adsense-account" content="ca-pub-5786030221199442" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5786030221199442"
+          crossOrigin="anonymous"></script>
       </head>
       <body className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} antialiased`}>
         {/* Google tag (gtag.js) */}
