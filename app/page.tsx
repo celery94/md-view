@@ -104,6 +104,75 @@ export function Example() {
 
 ![Preview](/image.png)
 `;
+
+const webAppStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'MD-View',
+  alternateName: 'Markdown Editor with Live Preview',
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Any',
+  url: 'https://www.md-view.com/',
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': 'https://www.md-view.com/',
+  },
+  inLanguage: 'en',
+  description:
+    'Free online markdown editor with live preview. Edit, preview, and export markdown with GitHub Flavored Markdown support, syntax highlighting, and responsive themes.',
+  image: 'https://www.md-view.com/og-image',
+  screenshot: 'https://www.md-view.com/og-image',
+  keywords: [
+    'markdown editor',
+    'live preview markdown',
+    'online markdown editor',
+    'github flavored markdown',
+    'markdown to html',
+    'markdown to pdf',
+    'syntax highlighting',
+  ],
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+    availability: 'https://schema.org/InStock',
+  },
+  browserRequirements: 'Requires JavaScript. Requires HTML5.',
+  softwareVersion: '1.0.0',
+  publisher: {
+    '@type': 'Organization',
+    name: 'MD-View',
+    url: 'https://www.md-view.com/',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://www.md-view.com/md-view-icon.svg',
+      width: 128,
+      height: 128,
+    },
+    sameAs: ['https://github.com/celery94/md-view'],
+  },
+  featureList: [
+    'Real-time markdown preview',
+    'GitHub Flavored Markdown support',
+    'Syntax highlighting',
+    'Import markdown files',
+    'Export HTML',
+    'Responsive interface',
+  ],
+  potentialAction: [
+    {
+      '@type': 'ViewAction',
+      target: 'https://www.md-view.com/',
+      name: 'Launch the markdown editor',
+    },
+    {
+      '@type': 'ReadAction',
+      target: 'https://www.md-view.com/guide',
+      name: 'Explore the MD-View guide',
+    },
+  ],
+} as const;
+
 function HomeContent() {
   const searchParams = useSearchParams();
   const [markdown, setMarkdown] = useState(initialMarkdown);
@@ -807,6 +876,10 @@ function HomeContent() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppStructuredData) }}
+      />
       <div className={ui.home.root}>
         {/* Premium Header */}
         <header className={ui.home.header}>

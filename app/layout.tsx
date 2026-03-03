@@ -87,7 +87,7 @@ export const metadata: Metadata = {
     siteName: 'MD-View',
     images: [
       {
-        url: '/og-image.png',
+        url: '/og-image',
         width: 1200,
         height: 630,
         alt: 'MD-View - Real-time Markdown Editor & Live Preview',
@@ -98,7 +98,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'MD-View - Real-time Markdown Editor & Live Preview',
     description: 'Edit markdown with live preview. Export HTML and print to PDF.',
-    images: ['/og-image.png'],
+    images: ['/og-image'],
     creator: '@mdview',
   },
   robots: {
@@ -115,74 +115,6 @@ export const metadata: Metadata = {
   category: 'technology',
 };
 
-const webAppStructuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'WebApplication',
-  name: 'MD-View',
-  alternateName: 'Markdown Editor with Live Preview',
-  applicationCategory: 'DeveloperApplication',
-  operatingSystem: 'Any',
-  url: 'https://www.md-view.com/',
-  mainEntityOfPage: {
-    '@type': 'WebPage',
-    '@id': 'https://www.md-view.com/',
-  },
-  inLanguage: 'en',
-  description:
-    'Free online markdown editor with live preview. Edit, preview, and export markdown with GitHub Flavored Markdown support, syntax highlighting, and responsive themes.',
-  image: 'https://www.md-view.com/og-image.png',
-  screenshot: 'https://www.md-view.com/og-image.png',
-  keywords: [
-    'markdown editor',
-    'live preview markdown',
-    'online markdown editor',
-    'github flavored markdown',
-    'markdown to html',
-    'markdown to pdf',
-    'syntax highlighting',
-  ],
-  offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'USD',
-    availability: 'https://schema.org/InStock',
-  },
-  browserRequirements: 'Requires JavaScript. Requires HTML5.',
-  softwareVersion: '1.0.0',
-  publisher: {
-    '@type': 'Organization',
-    name: 'MD-View',
-    url: 'https://www.md-view.com/',
-    logo: {
-      '@type': 'ImageObject',
-      url: 'https://www.md-view.com/md-view-icon.svg',
-      width: 128,
-      height: 128,
-    },
-    sameAs: ['https://github.com/celery94/md-view'],
-  },
-  featureList: [
-    'Real-time markdown preview',
-    'GitHub Flavored Markdown support',
-    'Syntax highlighting',
-    'Import markdown files',
-    'Export HTML',
-    'Responsive interface',
-  ],
-  potentialAction: [
-    {
-      '@type': 'ViewAction',
-      target: 'https://www.md-view.com/',
-      name: 'Launch the markdown editor',
-    },
-    {
-      '@type': 'ReadAction',
-      target: 'https://www.md-view.com/guide',
-      name: 'Explore the MD-View guide',
-    },
-  ],
-} as const;
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -192,16 +124,9 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/md-view-icon.svg" type="image/svg+xml" />
-        <link rel="canonical" href="https://www.md-view.com/" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="color-scheme" content="dark light" />
         <meta name="google-adsense-account" content="ca-pub-5786030221199442" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(webAppStructuredData),
-          }}
-        />
       </head>
       <body className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} antialiased`}>
         {/* Google tag (gtag.js) */}

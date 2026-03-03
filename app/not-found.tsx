@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '404 - Page Not Found | MD-View',
+  title: '404 - Page Not Found',
   description:
     'The page you are looking for could not be found. Return to MD-View markdown editor.',
   robots: {

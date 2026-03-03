@@ -26,6 +26,8 @@ Use this file as the implementation-accurate guide for contributors and coding a
   - `page.tsx`: primary editor/preview app shell
   - `api/import-url/route.ts`: server URL import endpoint
   - `guide/page.tsx`: feature and markdown usage guide page
+  - `robots.ts`: robots policy route (`/robots.txt`)
+  - `og-image.tsx`, `guide/og-image.tsx`: dynamic social preview images
   - `layout.tsx`: metadata, GA bootstrapping, fonts, global scripts
   - `globals.css`: global styles, markdown baseline styles, animations
 - `components/`
@@ -38,7 +40,7 @@ Use this file as the implementation-accurate guide for contributors and coding a
   - misc helpers: `cn.ts`, `slugify.ts`, `gtag.ts`
 - `scripts/xss-check.mjs`: standalone XSS regression check (no test framework required)
 - `scripts/perf-fixture.mjs`: generates a large markdown fixture for performance validation
-- `public/`: static assets and metadata files (`manifest.json`, `robots.txt`, etc.)
+- `public/`: static assets and metadata files (`manifest.json`, icons, etc.)
 
 Do not modify `.next/` or `node_modules/`.
 

@@ -9,7 +9,7 @@ const guideStructuredData = {
   headline: 'MD-View User Guide',
   description:
     'Master MD-View features including live preview, GitHub Flavored Markdown support, syntax highlighting, import/export flows, and keyboard shortcuts.',
-  image: 'https://www.md-view.com/og-image.png',
+  image: 'https://www.md-view.com/guide/og-image',
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': 'https://www.md-view.com/guide',
@@ -34,7 +34,7 @@ const guideStructuredData = {
 } as const;
 
 export const metadata: Metadata = {
-  title: 'Guide: Features & Markdown Basics | MD-View',
+  title: 'Guide: Features & Markdown Basics',
   description:
     'Learn MD-View features (live preview, GFM, syntax highlighting, import/export, local persistence) and a quick Markdown introduction with examples.',
   keywords: [
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     canonical: '/guide',
   },
   openGraph: {
-    title: 'Guide: Features & Markdown Basics | MD-View',
+    title: 'Guide: Features & Markdown Basics',
     description:
       'Master MD-View features, Markdown syntax, GitHub Flavored Markdown, and export workflows in this comprehensive guide.',
     type: 'article',
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     siteName: 'MD-View',
     images: [
       {
-        url: 'https://www.md-view.com/og-image.png',
+        url: 'https://www.md-view.com/guide/og-image',
         width: 1200,
         height: 630,
         alt: 'MD-View markdown editor guide preview',
@@ -71,10 +71,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Guide: Features & Markdown Basics | MD-View',
+    title: 'Guide: Features & Markdown Basics',
     description:
       'Learn how to get the most out of MD-View with live preview tips, markdown basics, and export workflows.',
-    images: ['https://www.md-view.com/og-image.png'],
+    images: ['https://www.md-view.com/guide/og-image'],
     creator: '@mdview',
   },
 };
@@ -105,7 +105,7 @@ export default function Guide() {
                     className="h-7 w-7 md:h-8 md:w-8 rounded-lg group-hover:scale-105 transition-transform"
                   />
                   <div className="hidden sm:block">
-                    <h1 className="text-lg md:text-xl font-bold text-slate-800">MD-View</h1>
+                    <p className="text-lg md:text-xl font-bold text-slate-800">MD-View</p>
                     <p className="text-xs text-slate-400 leading-tight">User Guide</p>
                   </div>
                 </Link>
