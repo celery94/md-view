@@ -117,7 +117,6 @@ node scripts/perf-fixture.mjs <output-path> <section-count>
   - `globals.css`: shared visual system and markdown baseline styles
 - `components/`
   - core UI: editor, preview, toolbar, view/theme selectors, footer
-  - utility components are present for future use (`QuickActionsMenu`, `TableOfContents`, `JsonLd`)
 - `lib/`
   - theme definitions and style payloads
   - clipboard inline-style exporter

@@ -30,13 +30,12 @@ Use this file as the implementation-accurate guide for contributors and coding a
   - `globals.css`: global styles, markdown baseline styles, animations
 - `components/`
   - Active in app shell: `MarkdownEditor`, `RichMarkdownEditor`, `MarkdownPreview`, `Toolbar`, theme/view selectors, `Footer`
-  - Utility but currently not wired into routes: `QuickActionsMenu`, `TableOfContents`, `JsonLd`
 - `lib/`
   - `themes.ts`: preview theme registry and CSS payloads
   - `clipboard-inline-html.ts`: inline-style clipboard/export HTML builder
   - `url-import.ts`: URL validation/fetch/extract/convert pipeline
   - `formatter.ts`: built-in markdown formatter used by editor shortcut/context menu
-  - misc helpers: `cn.ts`, `slugify.ts`, `gtag.ts`, `seo-utils.ts`
+  - misc helpers: `cn.ts`, `slugify.ts`, `gtag.ts`
 - `scripts/xss-check.mjs`: standalone XSS regression check (no test framework required)
 - `scripts/perf-fixture.mjs`: generates a large markdown fixture for performance validation
 - `public/`: static assets and metadata files (`manifest.json`, `robots.txt`, etc.)
