@@ -17,6 +17,7 @@ import {
   type TableCell as DocxTableCell,
   type TableRow as DocxTableRow,
 } from 'docx';
+import { replaceMermaidSvgWithPngImages } from './mermaid-utils';
 
 type DocxBlock = Paragraph | Table;
 
@@ -665,6 +666,7 @@ async function loadImageData(
 export async function buildDocxBlobFromPreview(previewElement: HTMLElement): Promise<Blob> {
   const clonedPreview = previewElement.cloneNode(true) as HTMLElement;
   clonedPreview.querySelectorAll('[data-no-export]').forEach((node) => node.remove());
+  await replaceMermaidSvgWithPngImages(clonedPreview);
   const contentRoot =
     clonedPreview.firstElementChild instanceof HTMLElement
       ? clonedPreview.firstElementChild

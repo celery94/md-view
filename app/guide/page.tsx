@@ -8,7 +8,7 @@ const guideStructuredData = {
   '@type': 'TechArticle',
   headline: 'MD-View User Guide',
   description:
-    'Master MD-View features including live preview, GitHub Flavored Markdown support, syntax highlighting, import/export flows, and keyboard shortcuts.',
+    'Master MD-View features including live preview, GitHub Flavored Markdown support, Mermaid diagrams, syntax highlighting, import/export flows, and keyboard shortcuts.',
   image: 'https://www.md-view.com/guide/og-image',
   mainEntityOfPage: {
     '@type': 'WebPage',
@@ -36,12 +36,13 @@ const guideStructuredData = {
 export const metadata: Metadata = {
   title: 'Guide: Features & Markdown Basics',
   description:
-    'Learn MD-View features (live preview, GFM, syntax highlighting, import/export, local persistence) and a quick Markdown introduction with examples.',
+    'Learn MD-View features (live preview, GFM, Mermaid diagrams, syntax highlighting, import/export, local persistence) and a quick Markdown introduction with examples.',
   keywords: [
     'markdown guide',
     'markdown basics',
     'gfm',
     'syntax highlighting',
+    'mermaid diagrams',
     'markdown tables',
     'task lists',
     'import export markdown',
@@ -193,7 +194,8 @@ export default function Guide() {
                     <h3 className="font-semibold text-slate-800">Syntax Highlighting</h3>
                   </div>
                   <p className="text-slate-500 text-sm leading-relaxed">
-                    Beautiful code syntax highlighting for 100+ programming languages.
+                    Beautiful code syntax highlighting for 100+ programming languages plus Mermaid
+                    diagram preview.
                   </p>
                 </div>
 
@@ -433,6 +435,18 @@ def calculate_words(text):
 markdown_content = "# Hello World"
 word_count = calculate_words(markdown_content)
 print(f"Word count: {word_count}")
+\`\`\``}</pre>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-800 mb-3">🧭 Mermaid Diagrams</h3>
+                    <div className="bg-gradient-to-b from-slate-50 to-slate-100/50 rounded-xl p-4 font-mono text-sm border border-slate-100">
+                      <pre className="text-slate-700">{`\`\`\`mermaid
+flowchart LR
+  Start([Start]) --> Draft[Write Markdown]
+  Draft --> Preview[Preview Diagram]
+  Preview --> Export[Export HTML or DOCX]
 \`\`\``}</pre>
                     </div>
                   </div>

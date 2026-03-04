@@ -18,6 +18,7 @@ Use this file as the implementation-accurate guide for contributors and coding a
 - Framework: Next.js 16 + React 19 + TypeScript 5
 - Styling: Tailwind CSS v4 (`@tailwindcss/postcss`, typography plugin)
 - Markdown render: `react-markdown` + `remark-gfm` + lazy `rehype-highlight`
+- Diagram render: lazy `mermaid` for fenced ` ```mermaid ` preview blocks
 - URL import pipeline: `fetch` + `jsdom` + `@mozilla/readability` + `turndown`
 
 ## Project Structure
@@ -64,6 +65,7 @@ Do not modify `.next/` or `node_modules/`.
   - copy inline HTML/plain text clipboard payload
 - Themes (9): `default`, `wechat-publish`, `dark`, `github`, `notion`, `medium`, `paper`, `minimal`, `terminal`
 - `wechat-publish` converts http(s) links to numbered bottom references across preview, HTML export, and clipboard HTML
+- Mermaid diagrams render from fenced ` ```mermaid ` blocks in preview and are preserved in HTML/PNG/clipboard/DOCX exports (clipboard/DOCX use PNG conversion)
 
 ## URL Import API Constraints
 

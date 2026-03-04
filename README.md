@@ -17,6 +17,7 @@ MD-View is a free, open-source markdown workspace with real-time preview, publis
 
 - Real-time markdown preview with `react-markdown` + `remark-gfm`
 - Syntax-highlighted fenced code blocks with language badge and copy button
+- Mermaid diagram preview via fenced ` ```mermaid ` blocks
 - 9 themes: `default`, `wechat-publish`, `dark`, `github`, `notion`, `medium`, `paper`, `minimal`, `terminal`
 - `wechat-publish` converts http(s) links to numbered bottom references in preview/export/copy HTML
 - Editor/preview/split modes with draggable split ratio and scroll sync
@@ -53,6 +54,7 @@ MD-View is a free, open-source markdown workspace with real-time preview, publis
 - TypeScript 5 (strict mode)
 - Tailwind CSS v4 + Typography plugin
 - `react-markdown`, `remark-gfm`, lazy `rehype-highlight`
+- lazy `mermaid` rendering for diagram blocks
 - `@mozilla/readability` + `jsdom` + `turndown` for URL import conversion
 - `@zumer/snapdom` for preview image export
 

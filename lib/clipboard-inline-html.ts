@@ -1,4 +1,5 @@
 import type { Theme } from './themes';
+import { replaceMermaidSvgWithPngImages } from './mermaid-utils';
 
 export type InlineThemeName = Theme['name'];
 
@@ -859,12 +860,13 @@ function getThemePalette(themeName: InlineThemeName): ThemePalette {
   return THEME_PALETTES[themeName] ?? THEME_PALETTES.default;
 }
 
-export function buildInlineClipboardPayload(
+export async function buildInlineClipboardPayload(
   previewRoot: HTMLElement,
   themeName: InlineThemeName
-): InlineClipboardPayload {
+): Promise<InlineClipboardPayload> {
   const clone = previewRoot.cloneNode(true) as HTMLElement;
   clone.querySelectorAll('[data-no-export]').forEach((node) => node.remove());
+  await replaceMermaidSvgWithPngImages(clone);
 
   const proseRoot = clone.querySelector('.prose');
   const contentRoot = proseRoot instanceof HTMLElement ? proseRoot : clone;

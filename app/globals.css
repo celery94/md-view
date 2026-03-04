@@ -243,6 +243,42 @@ body::before {
   touch-action: manipulation;
 }
 
+.markdown-preview .mdv-mermaid {
+  margin: 1.25rem 0;
+  border: 1px solid var(--mdv-border);
+  border-radius: 0.75rem;
+  background: var(--mdv-background);
+}
+
+.markdown-preview .mdv-mermaid .mdv-mermaid-diagram {
+  padding: 0.75rem;
+}
+
+.markdown-preview .mdv-mermaid .mdv-mermaid-diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+.markdown-preview .mdv-mermaid .mdv-mermaid-status {
+  margin: 0;
+  padding: 0.75rem 1rem 0;
+  font-size: 0.85rem;
+  color: var(--mdv-muted-foreground);
+}
+
+.markdown-preview .mdv-mermaid .mdv-mermaid-error {
+  margin: 0;
+  padding: 0.75rem 1rem 0;
+  font-size: 0.85rem;
+  color: #b91c1c;
+}
+
+.markdown-preview .mdv-mermaid .mdv-mermaid-fallback pre {
+  margin: 0.75rem;
+}
+
 /* Neutralize hljs background so container styling shows */
 .mdv-code .hljs {
   background: transparent !important;

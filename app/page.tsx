@@ -94,6 +94,15 @@ export function Example() {
 }
 \`\`\`
 
+## Mermaid diagram
+
+\`\`\`mermaid
+flowchart LR
+  Start([Start]) --> Write[Write Markdown]
+  Write --> Preview[Preview Diagram]
+  Preview --> Export[Export as HTML/DOCX]
+\`\`\`
+
 ## Table
 
 | Feature | Detail |
@@ -753,7 +762,7 @@ function HomeContent() {
 
     try {
       const { buildInlineClipboardPayload } = await import('../lib/clipboard-inline-html');
-      const payload = buildInlineClipboardPayload(previewElement, currentTheme);
+      const payload = await buildInlineClipboardPayload(previewElement, currentTheme);
       if (!payload.html) return;
 
       const htmlBlob = new Blob([payload.html], { type: 'text/html' });
@@ -768,7 +777,7 @@ function HomeContent() {
     } catch {
       try {
         const { buildInlineClipboardPayload } = await import('../lib/clipboard-inline-html');
-        const payload = buildInlineClipboardPayload(previewElement, currentTheme);
+        const payload = await buildInlineClipboardPayload(previewElement, currentTheme);
         if (!payload.html) return;
         await navigator.clipboard.writeText(payload.html);
       } catch (error) {
@@ -1397,4 +1406,10 @@ const inlineStyles = `
   th,td { border: 1px solid #d1d5db; padding: .5rem .75rem; }
   th { background: #f9fafb; }
   img { display:block; max-width: 480px; width: 100%; height: auto; margin: 1rem auto; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+  .mdv-mermaid { margin: 1.25rem 0; border: 1px solid #d1d5db; border-radius: 10px; background: #ffffff; }
+  .mdv-mermaid .mdv-mermaid-diagram { padding: .75rem; }
+  .mdv-mermaid .mdv-mermaid-diagram svg { display: block; width: 100%; height: auto; max-width: 100%; }
+  .mdv-mermaid .mdv-mermaid-status { margin: 0; padding: .75rem 1rem 0; color: #475569; font-size: .85rem; }
+  .mdv-mermaid .mdv-mermaid-error { margin: 0; padding: .75rem 1rem 0; color: #b91c1c; font-size: .85rem; }
+  .mdv-mermaid .mdv-mermaid-fallback pre { margin: .75rem; }
 `;

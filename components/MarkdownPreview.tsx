@@ -5,6 +5,7 @@ import { Check, Copy as CopyIcon } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { renderMermaidToSvg } from '../lib/mermaid-utils';
 import { createSlugger, getNodeText } from '../lib/slugify';
 import { getTheme } from '../lib/themes';
 import { ui } from '../lib/ui-classes';
@@ -129,12 +130,109 @@ function remarkWechatExternalReferences() {
   };
 }
 
-function CodeBlock({ className, children, ...props }: React.ComponentProps<'code'>) {
+function extractChildrenText(node: React.ReactNode): string {
+  if (typeof node === 'string' || typeof node === 'number') {
+    return String(node);
+  }
+  if (Array.isArray(node)) {
+    return node.map(extractChildrenText).join('');
+  }
+  if (React.isValidElement<{ children?: React.ReactNode }>(node)) {
+    return extractChildrenText(node.props.children);
+  }
+  return '';
+}
+
+function MermaidBlock({
+  source,
+  theme,
+  className,
+}: {
+  source: string;
+  theme: string;
+  className?: string;
+}) {
+  const [svgMarkup, setSvgMarkup] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isRendering, setIsRendering] = useState(false);
+  const normalizedSource = useMemo(() => source.trimEnd(), [source]);
+
+  useEffect(() => {
+    let active = true;
+
+    const render = async () => {
+      if (!normalizedSource) {
+        if (active) {
+          setSvgMarkup(null);
+          setErrorMessage('Mermaid diagram is empty.');
+          setIsRendering(false);
+        }
+        return;
+      }
+
+      setIsRendering(true);
+      setErrorMessage(null);
+      setSvgMarkup(null);
+
+      try {
+        const svg = await renderMermaidToSvg(normalizedSource, theme);
+        if (!active) return;
+        setSvgMarkup(svg);
+      } catch (error) {
+        if (!active) return;
+        const message = error instanceof Error ? error.message : 'Failed to render Mermaid diagram.';
+        setErrorMessage(message);
+      } finally {
+        if (active) {
+          setIsRendering(false);
+        }
+      }
+    };
+
+    void render();
+    return () => {
+      active = false;
+    };
+  }, [normalizedSource, theme]);
+
+  return (
+    <div className="mdv-mermaid" data-mdv-mermaid="true">
+      {svgMarkup ? (
+        <div
+          className="mdv-mermaid-diagram"
+          dangerouslySetInnerHTML={{ __html: svgMarkup }}
+        />
+      ) : (
+        <div className="mdv-mermaid-fallback">
+          {isRendering && <p className="mdv-mermaid-status">Rendering Mermaid diagram...</p>}
+          {errorMessage && (
+            <p className="mdv-mermaid-error" role="alert">
+              Mermaid render error: {errorMessage}
+            </p>
+          )}
+          <pre>
+            <code className={className}>
+              {normalizedSource}
+            </code>
+          </pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CodeBlock({
+  className,
+  children,
+  theme,
+  ...props
+}: React.ComponentProps<'code'> & { theme: string }) {
   const match = /language-(\w+)/.exec(className || '');
   const language = match?.[1]?.toLowerCase();
   const isInline = !language;
   const preRef = useRef<HTMLPreElement | null>(null);
   const [copied, setCopied] = useState(false);
+  const source = useMemo(() => extractChildrenText(children), [children]);
 
   const onCopy = async () => {
     try {
@@ -154,6 +252,16 @@ function CodeBlock({ className, children, ...props }: React.ComponentProps<'code
       <code className={className} {...props}>
         {children}
       </code>
+    );
+  }
+
+  if (language === 'mermaid') {
+    return (
+      <MermaidBlock
+        source={source}
+        theme={theme}
+        className={className}
+      />
     );
   }
 
@@ -336,7 +444,9 @@ const MarkdownPreviewInner = forwardRef<HTMLDivElement, MarkdownPreviewProps>(fu
       h4: createHeadingRenderer('h4', slugger),
       h5: createHeadingRenderer('h5', slugger),
       h6: createHeadingRenderer('h6', slugger),
-      code: CodeBlock,
+      code({ node: _node, ...props }) {
+        return <CodeBlock {...props} theme={theme} />;
+      },
       img({ node: _node, ...props }) {
         const merged = [
           'mx-auto my-4 max-w-[480px] w-full h-auto border border-gray-200 shadow-sm',
@@ -355,7 +465,7 @@ const MarkdownPreviewInner = forwardRef<HTMLDivElement, MarkdownPreviewProps>(fu
         );
       },
     } satisfies Components;
-  }, []);
+  }, [theme]);
 
   // Inject custom theme styles and syntax highlighting
   useEffect(() => {
