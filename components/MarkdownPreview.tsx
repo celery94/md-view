@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { renderMermaidToSvg } from '../lib/mermaid-utils';
-import { createSlugger, getNodeText } from '../lib/slugify';
+import { rehypeHeadingIds } from '../lib/slugify';
 import { getTheme } from '../lib/themes';
 import { ui } from '../lib/ui-classes';
 
@@ -342,23 +342,6 @@ function CodeBlock({
   );
 }
 
-function createHeadingRenderer(
-  Tag: React.ElementType,
-  slugger: (value: string) => string
-) {
-  return function Heading({ children, ...props }: any) {
-    const text = getNodeText(children);
-    const id = slugger(text);
-    const HeadingTag = Tag;
-
-    return (
-      <HeadingTag id={id} {...props}>
-        {children}
-      </HeadingTag>
-    );
-  };
-}
-
 const MarkdownPreviewInner = forwardRef<HTMLDivElement, MarkdownPreviewProps>(function MarkdownPreview(
   {
     content,
@@ -465,7 +448,10 @@ const MarkdownPreviewInner = forwardRef<HTMLDivElement, MarkdownPreviewProps>(fu
   }, [needsHighlight, hlPlugin]);
 
   const rehypePlugins = useMemo(
-    () => (needsHighlight && hlPlugin ? [hlPlugin] : []),
+    () => [
+      rehypeHeadingIds(),
+      ...(needsHighlight && hlPlugin ? [hlPlugin] : []),
+    ],
     [hlPlugin, needsHighlight]
   );
   const remarkPlugins = useMemo(
@@ -473,38 +459,28 @@ const MarkdownPreviewInner = forwardRef<HTMLDivElement, MarkdownPreviewProps>(fu
     [theme]
   );
 
-  const components = useMemo<Components>(() => {
-    const slugger = createSlugger();
-
-    return {
-      h1: createHeadingRenderer('h1', slugger),
-      h2: createHeadingRenderer('h2', slugger),
-      h3: createHeadingRenderer('h3', slugger),
-      h4: createHeadingRenderer('h4', slugger),
-      h5: createHeadingRenderer('h5', slugger),
-      h6: createHeadingRenderer('h6', slugger),
-      code({ node: _node, ...props }) {
-        return <CodeBlock {...props} theme={theme} />;
-      },
-      img({ node: _node, ...props }) {
-        const merged = [
-          'mx-auto my-4 max-w-[480px] w-full h-auto border border-gray-200 shadow-sm',
-          (props as any).className,
-        ]
-          .filter(Boolean)
-          .join(' ');
-        return (
-          <img
-            {...(props as any)}
-            className={merged}
-            loading="lazy"
-            decoding="async"
-            alt={(props as any).alt ?? ''}
-          />
-        );
-      },
-    } satisfies Components;
-  }, [theme]);
+  const components: Components = {
+    code({ node: _node, ...props }) {
+      return <CodeBlock {...props} theme={theme} />;
+    },
+    img({ node: _node, ...props }) {
+      const merged = [
+        'mx-auto my-4 max-w-[480px] w-full h-auto border border-gray-200 shadow-sm',
+        (props as any).className,
+      ]
+        .filter(Boolean)
+        .join(' ');
+      return (
+        <img
+          {...(props as any)}
+          className={merged}
+          loading="lazy"
+          decoding="async"
+          alt={(props as any).alt ?? ''}
+        />
+      );
+    },
+  };
 
   // Inject custom theme styles and syntax highlighting
   useEffect(() => {

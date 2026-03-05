@@ -17,11 +17,12 @@ import RichMarkdownEditor from '../components/RichMarkdownEditor';
 import MarkdownPreview from '../components/MarkdownPreview';
 import ThemeSelector from '../components/ThemeSelector';
 import CompactThemeSelector from '../components/CompactThemeSelector';
-import ViewModeSelector from '../components/ViewModeSelector';
-import Footer from '../components/Footer';
+import Sidebar from '../components/Sidebar';
+import { EditorTabs } from '../components/EditorTabs';
 import { getTheme } from '../lib/themes';
 import { replaceMermaidBlocksWithMarkdown } from '../lib/mermaid-utils';
 import { stripLeadingYamlFrontmatter } from '../lib/markdown-frontmatter';
+import { getNode, updateNode } from '../lib/space-db';
 import { cn } from '../lib/cn';
 import { ui } from '../lib/ui-classes';
 import type {
@@ -34,13 +35,12 @@ import {
   Loader2,
   FileText,
   FileCode,
-  RotateCw,
-  BookOpen,
-  Github,
   Image as ImageIcon,
   ClipboardCopy,
   ChevronDown,
   ChevronUp,
+  PanelLeft,
+  PanelLeftClose,
 } from 'lucide-react';
 
 type ViewMode = 'split' | 'editor' | 'preview';
@@ -159,7 +159,6 @@ const webAppStructuredData = {
       width: 128,
       height: 128,
     },
-    sameAs: ['https://github.com/celery94/md-view'],
   },
   featureList: [
     'Real-time markdown preview',
@@ -174,11 +173,6 @@ const webAppStructuredData = {
       '@type': 'ViewAction',
       target: 'https://www.md-view.com/',
       name: 'Launch the markdown editor',
-    },
-    {
-      '@type': 'ReadAction',
-      target: 'https://www.md-view.com/guide',
-      name: 'Explore the MD-View guide',
     },
   ],
 } as const;
@@ -212,8 +206,19 @@ function HomeContent() {
   const [urlImportError, setUrlImportError] = useState<string | null>(null);
   const [isDesktopExportMenuOpen, setIsDesktopExportMenuOpen] = useState(false);
   const [isMobileExportMenuOpen, setIsMobileExportMenuOpen] = useState(false);
+  /** When set, editor content is synced to this Space file in IndexedDB. */
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [activeFileId, setActiveFileId] = useState<string | null>(null);
+  /** Ordered list of open file IDs (tab order). */
+  const [openFiles, setOpenFiles] = useState<string[]>([]);
+  /** In-memory content for open tabs; synced on switch and on edit. */
+  const [contentByFileId, setContentByFileId] = useState<Record<string, string>>({});
+  /** File names for tab labels; set when opening a file. */
+  const [fileNamesById, setFileNamesById] = useState<Record<string, string>>({});
 
   const isDraggingRef = useRef(false);
+  const prevActiveFileIdRef = useRef<string | null>(null);
+  const markdownRef = useRef(initialMarkdown);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const previewRef = useRef<HTMLDivElement | null>(null);
@@ -234,6 +239,8 @@ function HomeContent() {
   const desktopExportMenuTriggerId = useId();
   const mobileExportMenuId = useId();
   const mobileExportMenuTriggerId = useId();
+
+  markdownRef.current = markdown;
 
   const { wordCount, lineCount, fileSizeKb } = useMemo(() => {
     const nextWordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
@@ -298,18 +305,51 @@ function HomeContent() {
           setViewMode(savedViewMode);
         }
       }
+      const savedSidebarOpen = localStorage.getItem('mdv:sidebarOpen');
+      if (savedSidebarOpen !== null) setSidebarOpen(savedSidebarOpen === 'true');
     } catch {}
   }, []);
 
-  // Persist with debounce
+  // Persist to localStorage only when no Space file is open (scratch buffer)
   useEffect(() => {
+    if (activeFileId != null) return;
     const t = setTimeout(() => {
       try {
         localStorage.setItem('mdv:content', markdown);
       } catch {}
     }, 300);
     return () => clearTimeout(t);
-  }, [markdown]);
+  }, [markdown, activeFileId]);
+
+  // When a Space file is open, debounce-save editor content to IndexedDB
+  useEffect(() => {
+    if (activeFileId == null) return;
+    const t = setTimeout(() => {
+      updateNode(activeFileId, { content: markdown }).catch(() => {});
+    }, 300);
+    return () => clearTimeout(t);
+  }, [markdown, activeFileId]);
+
+  // On activeFileId change: save current markdown to previous tab's cache, then load new tab or scratch
+  useEffect(() => {
+    const prev = prevActiveFileIdRef.current;
+    prevActiveFileIdRef.current = activeFileId;
+
+    if (prev != null && openFiles.includes(prev)) {
+      setContentByFileId((c) => ({ ...c, [prev]: markdownRef.current }));
+    }
+
+    if (activeFileId === null) {
+      try {
+        const saved = localStorage.getItem('mdv:content');
+        setMarkdown(saved ?? initialMarkdown);
+      } catch {
+        setMarkdown(initialMarkdown);
+      }
+    } else {
+      setMarkdown(contentByFileId[activeFileId] ?? '');
+    }
+  }, [activeFileId]); // eslint-disable-line react-hooks/exhaustive-deps -- openFiles/contentByFileId read intentionally for load
 
   // Persist split ratio
   useEffect(() => {
@@ -331,6 +371,17 @@ function HomeContent() {
       localStorage.setItem('mdv:viewMode', viewMode);
     } catch {}
   }, [viewMode]);
+
+  // Persist sidebar open state
+  useEffect(() => {
+    try {
+      localStorage.setItem('mdv:sidebarOpen', String(sidebarOpen));
+    } catch {}
+  }, [sidebarOpen]);
+
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen((prev) => !prev);
+  }, []);
 
   useEffect(() => {
     if (!isDesktopExportMenuOpen) {
@@ -583,15 +634,114 @@ function HomeContent() {
     fileInputRef.current?.click();
   }, []);
 
-  const onFileChosen = useCallback((file?: File | null) => {
-    if (!file) return;
-    setUrlImportError(null);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') setMarkdown(reader.result);
-    };
-    reader.readAsText(file);
+  const handleMarkdownChange = useCallback(
+    (value: string) => {
+      setMarkdown(value);
+      if (activeFileId != null) {
+        setContentByFileId((c) => ({ ...c, [activeFileId]: value }));
+      }
+    },
+    [activeFileId]
+  );
+
+  const onFileChosen = useCallback(
+    (file?: File | null) => {
+      if (!file) return;
+      setUrlImportError(null);
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') handleMarkdownChange(reader.result);
+      };
+      reader.readAsText(file);
+    },
+    [handleMarkdownChange]
+  );
+
+  const onSpaceFileSelect = useCallback(
+    async (id: string) => {
+      const node = await getNode(id);
+      if (!node || node.type !== 'file') return;
+      if (openFiles.includes(id)) {
+        setActiveFileId(id);
+        return;
+      }
+      setOpenFiles((prev) => (prev.includes(id) ? prev : [...prev, id]));
+      setContentByFileId((c) => ({ ...c, [id]: node.content ?? '' }));
+      setFileNamesById((n) => ({ ...n, [id]: node.name }));
+      setActiveFileId(id);
+    },
+    [openFiles]
+  );
+
+  const onSelectTab = useCallback((id: string) => {
+    setActiveFileId(id);
   }, []);
+
+  const onCloseTab = useCallback(
+    (id: string) => {
+      const closedIndex = openFiles.indexOf(id);
+      setOpenFiles((prev) => prev.filter((f) => f !== id));
+      setContentByFileId((c) => {
+        const next = { ...c };
+        delete next[id];
+        return next;
+      });
+      setFileNamesById((n) => {
+        const next = { ...n };
+        delete next[id];
+        return next;
+      });
+      if (id === activeFileId) {
+        const remaining = openFiles.filter((f) => f !== id);
+        const nextIndex = closedIndex > 0 ? closedIndex - 1 : 0;
+        const nextId = remaining[nextIndex] ?? null;
+        setActiveFileId(nextId);
+        if (nextId === null) {
+          try {
+            const saved = localStorage.getItem('mdv:content');
+            setMarkdown(saved ?? initialMarkdown);
+          } catch {
+            setMarkdown(initialMarkdown);
+          }
+        } else {
+          setMarkdown(contentByFileId[nextId] ?? '');
+        }
+      }
+    },
+    [activeFileId, openFiles, contentByFileId]
+  );
+
+  const onFileOrFolderDeleted = useCallback(
+    (id: string) => {
+      setOpenFiles((prev) => prev.filter((f) => f !== id));
+      setContentByFileId((c) => {
+        const next = { ...c };
+        delete next[id];
+        return next;
+      });
+      setFileNamesById((n) => {
+        const next = { ...n };
+        delete next[id];
+        return next;
+      });
+      if (id === activeFileId) {
+        const remaining = openFiles.filter((f) => f !== id);
+        const nextId = remaining[0] ?? null;
+        setActiveFileId(nextId);
+        if (nextId === null) {
+          try {
+            const saved = localStorage.getItem('mdv:content');
+            setMarkdown(saved ?? initialMarkdown);
+          } catch {
+            setMarkdown(initialMarkdown);
+          }
+        } else {
+          setMarkdown(contentByFileId[nextId] ?? '');
+        }
+      }
+    },
+    [activeFileId, openFiles, contentByFileId]
+  );
 
   // Handle file launched via OS file association (PWA File Handling API)
   useEffect(() => {
@@ -616,7 +766,10 @@ function HomeContent() {
     e.preventDefault();
   }, []);
 
-  const resetSample = useCallback(() => setMarkdown(initialMarkdown), []);
+  const resetSample = useCallback(
+    () => handleMarkdownChange(initialMarkdown),
+    [handleMarkdownChange]
+  );
 
   const importFromUrl = useCallback(
     async (rawUrl?: string) => {
@@ -651,7 +804,7 @@ function HomeContent() {
           return;
         }
 
-        setMarkdown(payload.markdown);
+        handleMarkdownChange(payload.markdown);
         setUrlToImport(payload.sourceUrl || nextUrl);
       } catch {
         setUrlImportError('Network error while importing URL.');
@@ -659,7 +812,7 @@ function HomeContent() {
         setIsImportingUrl(false);
       }
     },
-    [urlToImport]
+    [urlToImport, handleMarkdownChange]
   );
 
   useEffect(() => {
@@ -897,26 +1050,33 @@ function HomeContent() {
           <div className={ui.home.headerInner}>
             <div ref={navRowRef} className={ui.home.navRow}>
               <div className="flex min-w-0 items-center gap-2 md:gap-3">
-                <Link
-                  href="/"
-                  className={ui.home.brandLink}
-                  aria-label="MD-View Home"
-                  title="MD-View Home"
-                >
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white">
-                    <img src="/md-view-icon.svg" alt="MD-View logo" className="h-5 w-5" />
-                  </div>
-                  <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
-                    <h1 className="text-lg font-bold leading-tight tracking-tight text-slate-900">MD-View</h1>
-                  </div>
-                </Link>
-
-                <div className="hidden md:block">
-                  <ViewModeSelector
-                    currentMode={viewMode}
-                    onModeChange={setViewMode}
-                    showLabels={false}
-                  />
+                <div className={ui.home.brandLink}>
+                  <Link
+                    href="/"
+                    className="flex min-w-0 items-center gap-2 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/30 focus-visible:ring-offset-0"
+                    aria-label="MD-View Home"
+                    title="MD-View Home"
+                  >
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white">
+                      <img src="/md-view-icon.svg" alt="MD-View logo" className="h-5 w-5" />
+                    </div>
+                    <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
+                      <h1 className="text-lg font-bold leading-tight tracking-tight text-slate-900">MD-View</h1>
+                    </div>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={toggleSidebar}
+                    className={cn(ui.home.buttons.quietNav, 'hidden md:inline-flex')}
+                    aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+                    title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+                  >
+                    {sidebarOpen ? (
+                      <PanelLeftClose className="h-4 w-4" aria-hidden />
+                    ) : (
+                      <PanelLeft className="h-4 w-4" aria-hidden />
+                    )}
+                  </button>
                 </div>
 
                 {!isNavCompact && (
@@ -1058,36 +1218,6 @@ function HomeContent() {
                   </button>
                 </div>
 
-                <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white p-1">
-                  <Link
-                    href="/guide"
-                    className={ui.home.buttons.quietNav}
-                    title="Markdown guide and tips"
-                  >
-                    <BookOpen className="h-4 w-4" aria-hidden="true" />
-                    <span className="sr-only">Guide</span>
-                  </Link>
-                  <a
-                    href="https://github.com/celery94/md-view"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={ui.home.buttons.quietNav}
-                    aria-label="GitHub repository"
-                    title="Open GitHub repository"
-                  >
-                    <Github className="h-4 w-4" aria-hidden="true" />
-                    <span className="sr-only">GitHub</span>
-                  </a>
-                  <button
-                    onClick={resetSample}
-                    className={ui.home.buttons.quietNav}
-                    aria-label="Reset to sample content"
-                    title="Reset to sample markdown"
-                  >
-                    <RotateCw className="h-4 w-4" aria-hidden="true" />
-                    <span className="sr-only">Reset</span>
-                  </button>
-                </div>
               </div>
             </div>
             <div className="md:hidden">
@@ -1210,33 +1340,6 @@ function HomeContent() {
                     <ClipboardCopy className="h-3.5 w-3.5" aria-hidden="true" />
                     <span>Copy</span>
                   </button>
-                  <div className="flex items-center gap-0.5 rounded-lg border border-slate-200 bg-white p-0.5">
-                    <Link href="/guide" className={cn(ui.home.buttons.quietNav, 'p-1.5')} title="Guide">
-                      <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
-                      <span className="sr-only">Guide</span>
-                    </Link>
-                    <a
-                      href="https://github.com/celery94/md-view"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={cn(ui.home.buttons.quietNav, 'p-1.5')}
-                      aria-label="GitHub repository"
-                      title="GitHub"
-                    >
-                      <Github className="h-3.5 w-3.5" aria-hidden="true" />
-                      <span className="sr-only">GitHub</span>
-                    </a>
-                    <button
-                      type="button"
-                      onClick={resetSample}
-                      className={cn(ui.home.buttons.quietNav, 'p-1.5')}
-                      aria-label="Reset to sample content"
-                      title="Reset to sample markdown"
-                    >
-                      <RotateCw className="h-3.5 w-3.5" aria-hidden="true" />
-                      <span className="sr-only">Reset</span>
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -1263,12 +1366,20 @@ function HomeContent() {
 
         <main className={ui.home.main} role="main">
           <div className="flex w-full flex-1 flex-col">
-            <div
-              ref={containerRef}
-              className={cn(ui.home.container, {
-                'md:flex-row md:items-stretch md:gap-2 lg:gap-3': viewMode === 'split',
-              })}
-            >
+            <div className="flex flex-1 min-h-0 w-full pt-2 pb-3 pl-3 sm:pl-4 sm:pb-4 lg:pl-5 lg:pb-5">
+              <Sidebar
+                expanded={sidebarOpen}
+                onToggleExpanded={toggleSidebar}
+                activeFileId={activeFileId}
+                onSelectFile={onSpaceFileSelect}
+                onFileOrFolderDeleted={onFileOrFolderDeleted}
+              />
+              <div
+                ref={containerRef}
+                className={cn(ui.home.container, 'flex-1 min-w-0', {
+                  'md:flex-row md:items-stretch md:gap-2 lg:gap-3': viewMode === 'split',
+                })}
+              >
               {(viewMode === 'editor' || viewMode === 'split') && (
                 <section
                   className={ui.home.panel}
@@ -1290,12 +1401,21 @@ function HomeContent() {
                       Shift + Alt + F to format
                     </div>
                   </div>
+                  {openFiles.length > 0 && (
+                    <EditorTabs
+                      openFiles={openFiles}
+                      activeFileId={activeFileId}
+                      fileNamesById={fileNamesById}
+                      onSelectTab={onSelectTab}
+                      onCloseTab={onCloseTab}
+                    />
+                  )}
                   {/* Wrapper must be a flex container so nested editor (with flex-1) can stretch to available height. */}
                   <div className="flex flex-col flex-1 min-h-0">
                     <RichMarkdownEditor
                       ref={editorRef}
                       value={markdown}
-                      onChange={setMarkdown}
+                      onChange={handleMarkdownChange}
                       onScroll={handleEditorScroll}
                       scrollToPercentage={editorScrollPercentage}
                     />
@@ -1352,8 +1472,8 @@ function HomeContent() {
                       </div>
                     </div>
                   </div>
-                  {/* Wrapper must be a flex column so preview (flex-1) can stretch to available height. */}
-                  <div className="flex flex-col flex-1 min-h-0">
+                  {/* Wrapper must be a flex column so preview (flex-1) can stretch to available height. pr-4 keeps scrollbar spacing from panel edge (native-like gutter). */}
+                  <div className="flex flex-col flex-1 min-h-0 pr-4">
                     <MarkdownPreview
                       ref={previewRef}
                       content={previewMarkdown}
@@ -1364,6 +1484,7 @@ function HomeContent() {
                   </div>
                 </section>
               )}
+              </div>
             </div>
           </div>
         </main>
@@ -1379,8 +1500,6 @@ function HomeContent() {
             <ChevronUp className="h-5 w-5" aria-hidden="true" />
           </button>
         )}
-
-        <Footer />
       </div>
     </>
   );

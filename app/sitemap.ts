@@ -12,11 +12,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 1,
     },
-    {
-      url: `${baseUrl}/guide`,
-      lastModified,
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
   ];
 }
