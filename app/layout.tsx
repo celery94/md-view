@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     'responsive markdown editor',
     'dark mode markdown',
   ],
-  authors: [{ name: 'MD-View Team', url: 'https://github.com/celery94/md-view' }],
+  authors: [{ name: 'MD-View Team' }],
   creator: 'MD-View',
   publisher: 'MD-View',
   formatDetection: {

@@ -98,6 +98,7 @@ From `lib/url-import.ts` and `app/api/import-url/route.ts`:
 - Keep component names PascalCase and utility names descriptive.
 - Keep imports ordered: external first, then internal.
 - Prefer Tailwind utilities and existing `ui` class maps in `lib/ui-classes.ts`.
+- When adding or changing UI, follow `docs/UI-STYLE-GUIDE.md` to keep visual and interaction consistency and avoid UI drift.
 - Keep syntax highlighting styles local; do not add CDN style dependencies.
 - When adding UI behavior, keep desktop/mobile parity explicit.
 

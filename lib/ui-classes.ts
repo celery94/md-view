@@ -19,7 +19,7 @@ export const ui = {
     main: 'relative flex flex-1 min-h-0 flex-col gap-0',
 
     container:
-      'relative flex w-full flex-1 min-h-0 flex-col items-stretch gap-3 bg-transparent px-3 pb-3 pt-2 sm:px-4 sm:pb-4 lg:gap-4 lg:px-5 lg:pb-5',
+      'relative flex w-full flex-1 min-h-0 flex-col items-stretch gap-3 bg-transparent px-3 sm:px-4 lg:gap-4 lg:px-5',
 
     panel:
       'relative flex w-full flex-1 min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-300/55 bg-white/86 p-0 shadow-[0_18px_45px_-30px_rgba(15,23,42,0.65)] ring-1 ring-white/60 backdrop-blur-md',
@@ -37,6 +37,32 @@ export const ui = {
       quietNav:
         'inline-flex items-center justify-center gap-1.5 rounded-lg border border-transparent p-2 text-xs font-medium text-slate-500 transition-colors duration-150 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-700 active:scale-[0.95] md:p-2.5',
     },
+  },
+
+  sidebar: {
+    root:
+      'hidden md:flex flex-col shrink-0 border-r border-slate-200 bg-white/95 backdrop-blur-md transition-[width] duration-200 ease-out',
+    header:
+      'flex flex-shrink-0 items-center justify-between gap-3 border-b border-slate-200/65 bg-gradient-to-r from-white to-slate-100/60 px-5 py-3',
+    body: 'flex min-h-0 flex-1 flex-col overflow-auto px-4 py-2',
+    footer: 'flex flex-shrink-0 justify-center border-t border-slate-200/65 py-2',
+    treeRow:
+      'flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm transition-colors duration-150 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-1',
+    treeRowSelected: 'bg-cyan-50 text-slate-900',
+    empty: 'text-sm text-slate-400',
+  },
+
+  modal: {
+    backdrop:
+      'fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px]',
+    panel:
+      'relative w-full max-w-md rounded-xl border border-slate-300/70 bg-white/95 p-5 shadow-[0_16px_36px_-22px_rgba(15,23,42,0.8)] ring-1 ring-black/5 backdrop-blur-md',
+    title: 'text-sm font-semibold tracking-tight text-slate-800',
+    input:
+      'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-1',
+    footer: 'mt-4 flex justify-end gap-2',
+    dangerButton:
+      'inline-flex items-center gap-1.5 rounded-lg border border-rose-300 px-3.5 py-2 text-xs font-medium text-rose-700 transition-colors duration-150 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/35 focus-visible:ring-offset-2 md:text-sm',
   },
 
   preview: {
