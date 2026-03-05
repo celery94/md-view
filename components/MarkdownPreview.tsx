@@ -20,7 +20,7 @@ interface MarkdownPreviewProps {
   contentClassName?: string;
 }
 
-const WECHAT_REFERENCE_ID_PREFIX = 'mdv-wechat-ref-';
+const WECHAT_REFERENCE_HEADING_PATTERN = /^(参考|参考资料|references?|sources?)$/i;
 
 interface MarkdownAstNode {
   type: string;
@@ -36,97 +36,131 @@ interface MarkdownAstNode {
   };
 }
 
-function isWechatExternalLink(url: string | undefined): url is string {
-  return typeof url === 'string' && /^https?:\/\//i.test(url.trim());
+function getMarkdownAstText(node: MarkdownAstNode | undefined): string {
+  if (!node) {
+    return '';
+  }
+  if (typeof node.value === 'string') {
+    return node.value;
+  }
+  if (!Array.isArray(node.children)) {
+    return '';
+  }
+  return node.children.map((child) => getMarkdownAstText(child)).join('');
 }
 
-function remarkWechatExternalReferences() {
+function appendNodeClass(node: MarkdownAstNode, className: string): void {
+  const existingClassName = node.data?.hProperties?.className;
+  const mergedClassName = [
+    ...(typeof existingClassName === 'string'
+      ? existingClassName.split(/\s+/)
+      : Array.isArray(existingClassName)
+        ? existingClassName
+        : []),
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  node.data = {
+    ...(node.data ?? {}),
+    hProperties: {
+      ...(node.data?.hProperties ?? {}),
+      className: mergedClassName,
+    },
+  };
+}
+
+function toReferenceMetaText(nodes: MarkdownAstNode[]): string {
+  const raw = nodes.map((node) => getMarkdownAstText(node)).join('');
+  return raw.replace(/^[\s\u00a0]*[—–\-:：|]+[\s\u00a0]*/, '').trim();
+}
+
+function shouldDisplayOriginalReferenceUrl(linkNode: MarkdownAstNode, url: string): boolean {
+  const linkText = getMarkdownAstText(linkNode).trim();
+  return linkText !== url;
+}
+
+function remarkWechatReferenceSection() {
   return (tree: MarkdownAstNode) => {
     if (!Array.isArray(tree.children)) {
       return;
     }
 
-    const references: string[] = [];
-    const indexByUrl = new Map<string, number>();
+    for (let i = 0; i < tree.children.length; i += 1) {
+      const node = tree.children[i];
+      if (node.type !== 'heading') {
+        continue;
+      }
 
-    const visit = (node: MarkdownAstNode): void => {
-      if (node.type === 'link' && isWechatExternalLink(node.url)) {
-        const normalizedUrl = node.url.trim();
-        let index = indexByUrl.get(normalizedUrl);
+      const headingText = getMarkdownAstText(node).trim();
+      if (!WECHAT_REFERENCE_HEADING_PATTERN.test(headingText)) {
+        continue;
+      }
 
-        if (!index) {
-          index = references.length + 1;
-          indexByUrl.set(normalizedUrl, index);
-          references.push(normalizedUrl);
+      appendNodeClass(node, 'mdv-wechat-manual-reference-title');
+
+      const nextNode = tree.children[i + 1];
+      if (!nextNode || nextNode.type !== 'list') {
+        continue;
+      }
+
+      appendNodeClass(nextNode, 'mdv-wechat-manual-reference-list');
+
+      nextNode.children?.forEach((listItem) => {
+        if (listItem.type !== 'listItem') {
+          return;
         }
 
-        node.url = `#${WECHAT_REFERENCE_ID_PREFIX}${index}`;
-        node.children = [...(node.children ?? []), { type: 'text', value: ` [${index}]` }];
-        node.data = {
-          ...(node.data ?? {}),
-          hProperties: {
-            ...(node.data?.hProperties ?? {}),
-            className: 'mdv-wechat-inline-reference',
-          },
-        };
-      }
+        appendNodeClass(listItem, 'mdv-wechat-manual-reference-item');
 
-      node.children?.forEach(visit);
-    };
+        const paragraph = listItem.children?.find((child) => child.type === 'paragraph');
+        if (!paragraph || !Array.isArray(paragraph.children)) {
+          return;
+        }
 
-    tree.children.forEach(visit);
+        const linkIndex = paragraph.children.findIndex((child) => child.type === 'link');
+        if (linkIndex < 0) {
+          return;
+        }
 
-    if (references.length === 0) {
-      return;
-    }
+        const linkNode = paragraph.children[linkIndex];
+        appendNodeClass(linkNode, 'mdv-wechat-manual-reference-link');
+        const originalUrl = (linkNode.url ?? '').trim();
 
-    const listItems: MarkdownAstNode[] = references.map((url, idx) => ({
-      type: 'listItem',
-      spread: false,
-      children: [
-        {
-          type: 'paragraph',
-          children: [
-            {
-              type: 'link',
-              url,
-              data: {
-                hProperties: {
-                  id: `${WECHAT_REFERENCE_ID_PREFIX}${idx + 1}`,
-                  className: 'mdv-wechat-reference-link',
-                },
+        const metaText = toReferenceMetaText(paragraph.children.slice(linkIndex + 1));
+        const nextChildren: MarkdownAstNode[] = [linkNode];
+
+        if (originalUrl && shouldDisplayOriginalReferenceUrl(linkNode, originalUrl)) {
+          const urlNode: MarkdownAstNode = {
+            type: 'link',
+            url: originalUrl,
+            data: {
+              hProperties: {
+                className: 'mdv-wechat-manual-reference-url',
               },
-              children: [{ type: 'text', value: url }],
             },
-          ],
-        },
-      ],
-    }));
+            children: [{ type: 'text', value: originalUrl }],
+          };
+          nextChildren.push({ type: 'break' }, urlNode);
+        }
 
-    tree.children.push(
-      {
-        type: 'heading',
-        depth: 3,
-        data: {
-          hProperties: {
-            className: 'mdv-wechat-reference-title',
-          },
-        },
-        children: [{ type: 'text', value: '外链引用' }],
-      },
-      {
-        type: 'list',
-        ordered: true,
-        spread: false,
-        start: 1,
-        data: {
-          hProperties: {
-            className: 'mdv-wechat-reference-list',
-          },
-        },
-        children: listItems,
-      }
-    );
+        if (metaText) {
+          const metaNode: MarkdownAstNode = {
+            type: 'emphasis',
+            children: [{ type: 'text', value: metaText }],
+            data: {
+              hProperties: {
+                className: 'mdv-wechat-manual-reference-meta',
+              },
+            },
+          };
+          nextChildren.push({ type: 'break' }, metaNode);
+        }
+
+        paragraph.children = nextChildren;
+      });
+    }
   };
 }
 
@@ -435,7 +469,7 @@ const MarkdownPreviewInner = forwardRef<HTMLDivElement, MarkdownPreviewProps>(fu
     [hlPlugin, needsHighlight]
   );
   const remarkPlugins = useMemo(
-    () => (theme === 'wechat-publish' ? [remarkGfm, remarkWechatExternalReferences] : [remarkGfm]),
+    () => (theme === 'wechat-publish' ? [remarkGfm, remarkWechatReferenceSection] : [remarkGfm]),
     [theme]
   );
 

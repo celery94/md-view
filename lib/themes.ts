@@ -284,27 +284,61 @@ export const themes: Theme[] = [
           color: #047857;
           border-bottom-color: rgba(4, 120, 87, 0.65);
         }
-        .wechat-theme a.mdv-wechat-inline-reference {
-          border-bottom-style: dashed;
-        }
-        .wechat-theme .mdv-wechat-reference-title {
-          margin-top: 1.35em;
-          padding: 0;
+        .wechat-theme .mdv-wechat-manual-reference-title {
+          margin-top: 1.5rem;
+          margin-bottom: 0.55rem;
           border: 0;
           background: transparent;
           color: #0f172a;
-          font-size: 0.98rem;
         }
-        .wechat-theme .mdv-wechat-reference-list {
-          margin: 0.5em 0 1em;
-          padding-left: 1.25rem;
-          font-size: 0.84rem;
+        .wechat-theme .mdv-wechat-manual-reference-list {
+          margin: 0.12rem 0 0.9rem;
+          padding: 0;
+          list-style: none;
+          border-top: 1px solid #e5e7eb;
         }
-        .wechat-theme .mdv-wechat-reference-list li::marker {
-          color: #64748b;
+        .wechat-theme .mdv-wechat-manual-reference-item {
+          margin: 0;
+          padding: 0.45rem 0;
+          border-bottom: 1px solid #e5e7eb;
+          list-style: none;
         }
-        .wechat-theme .mdv-wechat-reference-link {
+        .wechat-theme .mdv-wechat-manual-reference-item > p {
+          margin: 0;
+          text-align: left;
+        }
+        .wechat-theme .mdv-wechat-manual-reference-link {
+          border-bottom: 0;
+          padding-bottom: 0;
+          text-decoration: none;
+          font-weight: 600;
+          display: inline;
           word-break: break-all;
+        }
+        .wechat-theme .mdv-wechat-manual-reference-link:hover {
+          border-bottom: 0;
+          text-decoration: underline;
+          text-decoration-thickness: 1px;
+        }
+        .wechat-theme .mdv-wechat-manual-reference-url {
+          color: #64748b;
+          border-bottom: 0;
+          text-decoration: none;
+          font-size: 0.76rem;
+          line-height: 1.45;
+          word-break: break-all;
+        }
+        .wechat-theme .mdv-wechat-manual-reference-url:hover {
+          color: #475569;
+          border-bottom: 0;
+          text-decoration: underline;
+          text-decoration-thickness: 1px;
+        }
+        .wechat-theme .mdv-wechat-manual-reference-meta {
+          color: #6b7280;
+          font-style: normal;
+          font-size: 0.78rem;
+          line-height: 1.45;
         }
         .wechat-theme :not(pre) > code {
           font-size: 0.84rem;

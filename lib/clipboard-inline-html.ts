@@ -805,6 +805,93 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     applyStyle(node, emStyles);
   });
 
+  root.querySelectorAll('.mdv-wechat-manual-reference-title').forEach((node) => {
+    if (!(node instanceof HTMLElement)) {
+      return;
+    }
+    applyStyle(node, {
+      'margin-top': '1.5em',
+      'margin-bottom': '0.55em',
+      border: '0',
+      background: 'transparent',
+      color: '#0f172a',
+    });
+  });
+
+  root.querySelectorAll('.mdv-wechat-manual-reference-list').forEach((node) => {
+    if (!(node instanceof HTMLElement)) {
+      return;
+    }
+    applyStyle(node, {
+      margin: '0.12em 0 0.9em',
+      padding: '0',
+      'list-style': 'none',
+      'border-top': '1px solid #e5e7eb',
+    });
+  });
+
+  root.querySelectorAll('.mdv-wechat-manual-reference-item').forEach((node) => {
+    if (!(node instanceof HTMLElement)) {
+      return;
+    }
+    applyStyle(node, {
+      margin: '0',
+      padding: '0.45em 0',
+      'border-bottom': '1px solid #e5e7eb',
+      'list-style': 'none',
+    });
+  });
+
+  root.querySelectorAll('.mdv-wechat-manual-reference-item > p').forEach((node) => {
+    if (!(node instanceof HTMLElement)) {
+      return;
+    }
+    applyStyle(node, {
+      margin: '0',
+      'text-align': 'left',
+    });
+  });
+
+  root.querySelectorAll('.mdv-wechat-manual-reference-link').forEach((node) => {
+    if (!(node instanceof HTMLElement)) {
+      return;
+    }
+    applyStyle(node, {
+      'border-bottom': '0',
+      'text-decoration': 'none',
+      'font-weight': '600',
+      'padding-bottom': '0',
+      display: 'inline',
+      'word-break': 'break-all',
+    });
+  });
+
+  root.querySelectorAll('.mdv-wechat-manual-reference-url').forEach((node) => {
+    if (!(node instanceof HTMLElement)) {
+      return;
+    }
+    applyStyle(node, {
+      color: '#64748b',
+      'border-bottom': '0',
+      'text-decoration': 'none',
+      'font-size': '0.76em',
+      'line-height': '1.45',
+      'word-break': 'break-all',
+    });
+  });
+
+  root.querySelectorAll('.mdv-wechat-manual-reference-meta').forEach((node) => {
+    if (!(node instanceof HTMLElement)) {
+      return;
+    }
+    applyStyle(node, {
+      color: '#6b7280',
+      'font-style': 'normal',
+      'font-size': '0.78em',
+      'line-height': '1.45',
+    });
+  });
+
   root.querySelectorAll('kbd').forEach((node) => {
     if (!(node instanceof HTMLElement)) {
       return;
@@ -830,10 +917,6 @@ function cleanupAttributes(root: HTMLElement): void {
       const attrName = attribute.name.toLowerCase();
 
       if (attrName === 'style') {
-        return;
-      }
-
-      if (attrName === 'id' && /^mdv-wechat-ref-\d+$/.test(attribute.value)) {
         return;
       }
 
