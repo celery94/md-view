@@ -20,6 +20,7 @@ import CompactThemeSelector from '../components/CompactThemeSelector';
 import ViewModeSelector from '../components/ViewModeSelector';
 import Footer from '../components/Footer';
 import { getTheme } from '../lib/themes';
+import { replaceMermaidBlocksWithMarkdown } from '../lib/mermaid-utils';
 import { stripLeadingYamlFrontmatter } from '../lib/markdown-frontmatter';
 import { cn } from '../lib/cn';
 import { ui } from '../lib/ui-classes';
@@ -260,6 +261,7 @@ function HomeContent() {
 
     const clone = previewElement.cloneNode(true) as HTMLElement;
     clone.querySelectorAll('[data-no-export]').forEach((el) => el.remove());
+    replaceMermaidBlocksWithMarkdown(clone);
 
     const htmlContent = clone.innerHTML;
     const plainText = clone.innerText;

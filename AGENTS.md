@@ -65,7 +65,9 @@ Do not modify `.next/` or `node_modules/`.
   - copy inline HTML/plain text clipboard payload
 - Themes (9): `default`, `wechat-publish`, `dark`, `github`, `notion`, `medium`, `paper`, `minimal`, `terminal`
 - `wechat-publish` converts http(s) links to numbered bottom references across preview, HTML export, and clipboard HTML
-- Mermaid diagrams render from fenced ` ```mermaid ` blocks in preview and are preserved in HTML/PNG/clipboard/DOCX exports (clipboard/DOCX use PNG conversion)
+- Mermaid diagrams render from fenced ` ```mermaid ` blocks in preview
+- HTML/clipboard/DOCX exports convert Mermaid blocks back to original fenced markdown source
+- PNG export captures the rendered preview (including Mermaid diagrams)
 
 ## URL Import API Constraints
 

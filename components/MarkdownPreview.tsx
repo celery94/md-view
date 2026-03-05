@@ -155,13 +155,14 @@ function MermaidBlock({
   const [svgMarkup, setSvgMarkup] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState(false);
-  const normalizedSource = useMemo(() => source.trimEnd(), [source]);
+  const normalizedSource = useMemo(() => source.replace(/\r\n/g, '\n'), [source]);
+  const renderSource = useMemo(() => normalizedSource.trimEnd(), [normalizedSource]);
 
   useEffect(() => {
     let active = true;
 
     const render = async () => {
-      if (!normalizedSource) {
+      if (!renderSource) {
         if (active) {
           setSvgMarkup(null);
           setErrorMessage('Mermaid diagram is empty.');
@@ -175,7 +176,7 @@ function MermaidBlock({
       setSvgMarkup(null);
 
       try {
-        const svg = await renderMermaidToSvg(normalizedSource, theme);
+        const svg = await renderMermaidToSvg(renderSource, theme);
         if (!active) return;
         setSvgMarkup(svg);
       } catch (error) {
@@ -193,10 +194,14 @@ function MermaidBlock({
     return () => {
       active = false;
     };
-  }, [normalizedSource, theme]);
+  }, [renderSource, theme]);
 
   return (
-    <div className="mdv-mermaid" data-mdv-mermaid="true">
+    <div
+      className="mdv-mermaid"
+      data-mdv-mermaid="true"
+      data-mdv-mermaid-source={renderSource}
+    >
       {svgMarkup ? (
         <div
           className="mdv-mermaid-diagram"
@@ -212,7 +217,7 @@ function MermaidBlock({
           )}
           <pre>
             <code className={className}>
-              {normalizedSource}
+              {renderSource}
             </code>
           </pre>
         </div>

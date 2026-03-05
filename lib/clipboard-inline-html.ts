@@ -1,5 +1,5 @@
 import type { Theme } from './themes';
-import { replaceMermaidSvgWithPngImages } from './mermaid-utils';
+import { replaceMermaidBlocksWithMarkdown } from './mermaid-utils';
 
 export type InlineThemeName = Theme['name'];
 
@@ -866,7 +866,7 @@ export async function buildInlineClipboardPayload(
 ): Promise<InlineClipboardPayload> {
   const clone = previewRoot.cloneNode(true) as HTMLElement;
   clone.querySelectorAll('[data-no-export]').forEach((node) => node.remove());
-  await replaceMermaidSvgWithPngImages(clone);
+  replaceMermaidBlocksWithMarkdown(clone);
 
   const proseRoot = clone.querySelector('.prose');
   const contentRoot = proseRoot instanceof HTMLElement ? proseRoot : clone;
