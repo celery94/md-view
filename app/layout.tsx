@@ -126,20 +126,29 @@ export default function RootLayout({
         <link rel="icon" href="/md-view-icon.svg" type="image/svg+xml" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="color-scheme" content="dark light" />
-        <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
-          crossOrigin="anonymous"></script>
       </head>
       <body className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} antialiased`}>
-        {/* Google tag (gtag.js) */}
+        <Script id="gtag-stub" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
+          `}
+        </Script>
+
+        <Script
+          id="adsense-src"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
+          strategy="lazyOnload"
+          crossOrigin="anonymous"
+        />
+
         <Script
           id="gtag-src"
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="gtag-init" strategy="afterInteractive">
+        <Script id="gtag-init" strategy="lazyOnload">
           {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', '${GA_ID}');
           `}

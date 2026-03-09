@@ -3,10 +3,12 @@ type MermaidTheme = 'default' | 'dark' | 'neutral';
 const DARK_THEMES = new Set(['dark', 'terminal']);
 const NEUTRAL_THEMES = new Set(['paper']);
 const MERMAID_BLOCK_SELECTOR = '.mdv-mermaid[data-mdv-mermaid-source]';
+const MAX_CACHED_DIAGRAMS = 50;
 
 let mermaidPromise: Promise<(typeof import('mermaid'))['default']> | null = null;
 let initializedTheme: MermaidTheme | null = null;
 let renderCounter = 0;
+const mermaidSvgCache = new Map<string, Promise<string>>();
 
 function toMermaidTheme(theme: string): MermaidTheme {
   if (DARK_THEMES.has(theme)) return 'dark';
@@ -41,9 +43,35 @@ function buildMermaidFence(source: string): string {
 }
 
 export async function renderMermaidToSvg(source: string, themeName: string): Promise<string> {
-  const mermaid = await getMermaid(toMermaidTheme(themeName));
-  const { svg } = await mermaid.render(nextRenderId(), source);
-  return svg;
+  const theme = toMermaidTheme(themeName);
+  const cacheKey = `${theme}::${source}`;
+  const cachedSvg = mermaidSvgCache.get(cacheKey);
+
+  if (cachedSvg) {
+    return cachedSvg;
+  }
+
+  const renderPromise = (async () => {
+    const mermaid = await getMermaid(theme);
+    const { svg } = await mermaid.render(nextRenderId(), source);
+    return svg;
+  })();
+
+  mermaidSvgCache.set(cacheKey, renderPromise);
+
+  if (mermaidSvgCache.size > MAX_CACHED_DIAGRAMS) {
+    const oldestKey = mermaidSvgCache.keys().next().value;
+    if (typeof oldestKey === 'string') {
+      mermaidSvgCache.delete(oldestKey);
+    }
+  }
+
+  try {
+    return await renderPromise;
+  } catch (error) {
+    mermaidSvgCache.delete(cacheKey);
+    throw error;
+  }
 }
 
 export function replaceMermaidBlocksWithMarkdown(root: ParentNode): void {

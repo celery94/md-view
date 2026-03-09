@@ -22,6 +22,7 @@ import Footer from '../components/Footer';
 import { getTheme } from '../lib/themes';
 import { replaceMermaidBlocksWithMarkdown } from '../lib/mermaid-utils';
 import { stripLeadingYamlFrontmatter } from '../lib/markdown-frontmatter';
+import { useDebouncedValue } from '../lib/use-debounced-value';
 import { cn } from '../lib/cn';
 import { ui } from '../lib/ui-classes';
 import type {
@@ -49,6 +50,15 @@ type ViewMode = 'split' | 'editor' | 'preview';
 const SCROLL_TOP_THRESHOLD = 0.25;
 const URL_IMPORT_QUERY_KEY = 'url';
 const SCROLL_SYNC_EPSILON = 0.001;
+const NAV_COMPACT_BREAKPOINT_PX = 1180;
+const LARGE_DOCUMENT_CHAR_THRESHOLD = 12000;
+const VERY_LARGE_DOCUMENT_CHAR_THRESHOLD = 24000;
+const LARGE_DOCUMENT_LINE_THRESHOLD = 320;
+const VERY_LARGE_DOCUMENT_LINE_THRESHOLD = 640;
+const MODERATE_PREVIEW_DEBOUNCE_MS = 90;
+const HEAVY_PREVIEW_DEBOUNCE_MS = 180;
+const FAST_STATS_DEBOUNCE_MS = 120;
+const HEAVY_STATS_DEBOUNCE_MS = 240;
 
 interface ScrollMetrics {
   page: number;
@@ -188,11 +198,6 @@ const webAppStructuredData = {
 function HomeContent() {
   const searchParams = useSearchParams();
   const [markdown, setMarkdown] = useState(initialMarkdown);
-  const deferredMarkdown = useDeferredValue(markdown);
-  const previewMarkdown = useMemo(
-    () => stripLeadingYamlFrontmatter(deferredMarkdown),
-    [deferredMarkdown]
-  );
   const [currentTheme, setCurrentTheme] = useState('default');
   const [viewMode, setViewMode] = useState<ViewMode>('split');
   const [ratio, setRatio] = useState<number>(0.5);
@@ -247,16 +252,50 @@ function HomeContent() {
   const mobileUtilityMenuId = useId();
   const mobileUtilityMenuTriggerId = useId();
 
+  const documentPerformance = useMemo(() => {
+    const charCount = markdown.length;
+    const lineCount = (markdown.match(/\n/g)?.length ?? 0) + 1;
+    const mermaidBlockCount = markdown.match(/```mermaid\b/gi)?.length ?? 0;
+    const codeFenceCount = Math.floor((markdown.match(/```|~~~/g)?.length ?? 0) / 2);
+    const isVeryLargeDocument =
+      charCount >= VERY_LARGE_DOCUMENT_CHAR_THRESHOLD ||
+      lineCount >= VERY_LARGE_DOCUMENT_LINE_THRESHOLD;
+    const isLargeDocument =
+      isVeryLargeDocument ||
+      charCount >= LARGE_DOCUMENT_CHAR_THRESHOLD ||
+      lineCount >= LARGE_DOCUMENT_LINE_THRESHOLD;
+    const hasHeavyPreviewBlocks = mermaidBlockCount > 0 || codeFenceCount >= 6;
+
+    return {
+      isLargeDocument,
+      previewDebounceMs: isVeryLargeDocument
+        ? HEAVY_PREVIEW_DEBOUNCE_MS
+        : isLargeDocument || (hasHeavyPreviewBlocks && charCount >= 6000)
+          ? MODERATE_PREVIEW_DEBOUNCE_MS
+          : 0,
+      statsDebounceMs: isVeryLargeDocument ? HEAVY_STATS_DEBOUNCE_MS : FAST_STATS_DEBOUNCE_MS,
+      deferHeavyPreviewBlocks: isLargeDocument || hasHeavyPreviewBlocks,
+    };
+  }, [markdown]);
+
+  const debouncedPreviewMarkdown = useDebouncedValue(markdown, documentPerformance.previewDebounceMs);
+  const deferredPreviewMarkdown = useDeferredValue(debouncedPreviewMarkdown);
+  const previewMarkdown = useMemo(
+    () => stripLeadingYamlFrontmatter(deferredPreviewMarkdown),
+    [deferredPreviewMarkdown]
+  );
+  const statsMarkdown = useDebouncedValue(markdown, documentPerformance.statsDebounceMs);
+
   const { wordCount, lineCount, fileSizeKb } = useMemo(() => {
-    const nextWordCount = markdown.split(/\s+/).filter((word) => word.length > 0).length;
-    const nextLineCount = markdown.split('\n').length;
-    const nextFileSizeKb = Math.max(1, Math.round(new Blob([markdown]).size / 1024));
+    const nextWordCount = statsMarkdown.split(/\s+/).filter((word) => word.length > 0).length;
+    const nextLineCount = statsMarkdown.split('\n').length;
+    const nextFileSizeKb = Math.max(1, Math.round(new Blob([statsMarkdown]).size / 1024));
     return {
       wordCount: nextWordCount,
       lineCount: nextLineCount,
       fileSizeKb: nextFileSizeKb,
     };
-  }, [markdown]);
+  }, [statsMarkdown]);
 
   const getSerializablePreview = useCallback(() => {
     const theme = getTheme(currentTheme);
@@ -488,41 +527,16 @@ function HomeContent() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isMobileUtilityMenuOpen]);
 
-  // Observe nav row size to decide if we need to collapse text labels into icon-only.
   useEffect(() => {
-    const el = navRowRef.current;
-    if (!el) return;
-
     const measure = () => {
-      if (!el) return;
-      // Below md breakpoint we stack the navigation, so keep full labels visible
-      if (window.innerWidth < 768) {
-        setIsNavCompact(false);
-        return;
-      }
-      // Between md and lg widths, collapse labels to keep layout tidy
-      if (window.innerWidth < 1000) {
-        setIsNavCompact(true);
-        return;
-      }
-      // Otherwise rely on actual overflow detection
-      const shouldCompact = el.scrollWidth > el.clientWidth + 4; // small tolerance
-      setIsNavCompact(shouldCompact);
+      const width = window.innerWidth;
+      setIsNavCompact(width >= 768 && width < NAV_COMPACT_BREAKPOINT_PX);
     };
 
-    measure(); // initial
-
-    let raf: number | null = null;
-    const ro = new ResizeObserver(() => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(measure);
-    });
-    ro.observe(el);
-    window.addEventListener('resize', measure);
+    measure();
+    window.addEventListener('resize', measure, { passive: true });
     return () => {
-      ro.disconnect();
       window.removeEventListener('resize', measure);
-      if (raf) cancelAnimationFrame(raf);
     };
   }, []);
 
@@ -623,12 +637,9 @@ function HomeContent() {
       setPendingScrollMetric('page', getPageScrollProgress());
     };
 
-    handlePageScroll();
     window.addEventListener('scroll', handlePageScroll, { passive: true });
-    window.addEventListener('resize', handlePageScroll);
     return () => {
       window.removeEventListener('scroll', handlePageScroll);
-      window.removeEventListener('resize', handlePageScroll);
     };
   }, [setPendingScrollMetric]);
 
@@ -1541,6 +1552,7 @@ function HomeContent() {
                       theme={currentTheme}
                       onScroll={handlePreviewScroll}
                       scrollToPercentage={previewScrollPercentage}
+                      deferHeavyBlocks={documentPerformance.deferHeavyPreviewBlocks}
                     />
                   </div>
                 </section>

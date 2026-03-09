@@ -16,6 +16,7 @@ interface MarkdownPreviewProps {
   onScroll?: (scrollPercentage: number) => void;
   scrollToPercentage?: number;
   variant?: 'app' | 'document';
+  deferHeavyBlocks?: boolean;
   className?: string;
   contentClassName?: string;
 }
@@ -180,10 +181,12 @@ function extractChildrenText(node: React.ReactNode): string {
 function MermaidBlock({
   source,
   theme,
+  deferRendering = false,
   className,
 }: {
   source: string;
   theme: string;
+  deferRendering?: boolean;
   className?: string;
 }) {
   const [svgMarkup, setSvgMarkup] = useState<string | null>(null);
@@ -194,6 +197,12 @@ function MermaidBlock({
 
   useEffect(() => {
     let active = true;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let idleId: number | null = null;
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
 
     const render = async () => {
       if (!renderSource) {
@@ -224,11 +233,35 @@ function MermaidBlock({
       }
     };
 
-    void render();
+    const scheduleRender = () => {
+      if (deferRendering) {
+        if (typeof idleWindow.requestIdleCallback === 'function') {
+          idleId = idleWindow.requestIdleCallback(() => {
+            void render();
+          }, { timeout: 400 });
+          return;
+        }
+
+        timeoutId = globalThis.setTimeout(() => {
+          void render();
+        }, 120);
+        return;
+      }
+
+      void render();
+    };
+
+    scheduleRender();
     return () => {
       active = false;
+      if (timeoutId !== null) {
+        globalThis.clearTimeout(timeoutId);
+      }
+      if (idleId !== null && typeof idleWindow.cancelIdleCallback === 'function') {
+        idleWindow.cancelIdleCallback(idleId);
+      }
     };
-  }, [renderSource, theme]);
+  }, [deferRendering, renderSource, theme]);
 
   return (
     <div
@@ -264,8 +297,9 @@ function CodeBlock({
   className,
   children,
   theme,
+  deferHeavyBlocks = false,
   ...props
-}: React.ComponentProps<'code'> & { theme: string }) {
+}: React.ComponentProps<'code'> & { theme: string; deferHeavyBlocks?: boolean }) {
   const match = /language-(\w+)/.exec(className || '');
   const language = match?.[1]?.toLowerCase();
   const isInline = !language;
@@ -299,6 +333,7 @@ function CodeBlock({
       <MermaidBlock
         source={source}
         theme={theme}
+        deferRendering={deferHeavyBlocks}
         className={className}
       />
     );
@@ -366,6 +401,7 @@ const MarkdownPreviewInner = forwardRef<HTMLDivElement, MarkdownPreviewProps>(fu
     onScroll,
     scrollToPercentage,
     variant = 'app',
+    deferHeavyBlocks = false,
     className,
     contentClassName,
   },
@@ -456,13 +492,38 @@ const MarkdownPreviewInner = forwardRef<HTMLDivElement, MarkdownPreviewProps>(fu
     }
 
     let active = true;
-    import('rehype-highlight').then((m) => {
-      if (active) setHlPlugin(() => (m as any).default ?? (m as any));
-    });
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let idleId: number | null = null;
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    const loadHighlight = () => {
+      import('rehype-highlight').then((m) => {
+        if (active) setHlPlugin(() => (m as any).default ?? (m as any));
+      });
+    };
+
+    if (deferHeavyBlocks) {
+      if (typeof idleWindow.requestIdleCallback === 'function') {
+        idleId = idleWindow.requestIdleCallback(loadHighlight, { timeout: 500 });
+      } else {
+        timeoutId = globalThis.setTimeout(loadHighlight, 120);
+      }
+    } else {
+      loadHighlight();
+    }
+
     return () => {
       active = false;
+      if (timeoutId !== null) {
+        globalThis.clearTimeout(timeoutId);
+      }
+      if (idleId !== null && typeof idleWindow.cancelIdleCallback === 'function') {
+        idleWindow.cancelIdleCallback(idleId);
+      }
     };
-  }, [needsHighlight, hlPlugin]);
+  }, [deferHeavyBlocks, needsHighlight, hlPlugin]);
 
   const rehypePlugins = useMemo(
     () => (needsHighlight && hlPlugin ? [hlPlugin] : []),
@@ -484,7 +545,7 @@ const MarkdownPreviewInner = forwardRef<HTMLDivElement, MarkdownPreviewProps>(fu
       h5: createHeadingRenderer('h5', slugger),
       h6: createHeadingRenderer('h6', slugger),
       code({ node: _node, ...props }) {
-        return <CodeBlock {...props} theme={theme} />;
+        return <CodeBlock {...props} theme={theme} deferHeavyBlocks={deferHeavyBlocks} />;
       },
       img({ node: _node, ...props }) {
         const merged = [
@@ -504,7 +565,7 @@ const MarkdownPreviewInner = forwardRef<HTMLDivElement, MarkdownPreviewProps>(fu
         );
       },
     } satisfies Components;
-  }, [theme]);
+  }, [deferHeavyBlocks, theme]);
 
   // Inject custom theme styles and syntax highlighting
   useEffect(() => {
@@ -569,6 +630,7 @@ const MarkdownPreview = memo(MarkdownPreviewInner, (prev, next) => {
     prev.onScroll === next.onScroll &&
     prev.scrollToPercentage === next.scrollToPercentage &&
     prev.variant === next.variant &&
+    prev.deferHeavyBlocks === next.deferHeavyBlocks &&
     prev.className === next.className &&
     prev.contentClassName === next.contentClassName
   );
