@@ -41,13 +41,13 @@ export const ui = {
 
   preview: {
     code: {
-      wrapper: 'relative group mdv-code overflow-hidden',
+      wrapper: 'relative group mdv-code overflow-hidden rounded-[18px] ring-1 ring-black/5',
       header:
-        'mdv-code-header flex items-center justify-between gap-2 px-4 py-2',
+        'mdv-code-header flex items-center justify-between gap-3 px-4 py-2.5',
       languageBadge:
-        'language-badge select-none text-[11px] font-semibold uppercase tracking-[0.08em]',
+        'language-badge inline-flex items-center rounded-full border border-current/10 bg-transparent px-2.5 py-1 select-none text-[10px] font-semibold uppercase tracking-[0.14em]',
       copyButton:
-        'copy-button inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 active:scale-[0.97]',
+        'copy-button inline-flex items-center gap-1.5 rounded-full border border-current/15 bg-transparent px-2.5 py-1 text-xs font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 active:scale-[0.97]',
     },
   },
 } as const;

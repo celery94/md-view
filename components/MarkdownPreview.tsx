@@ -178,6 +178,23 @@ function extractChildrenText(node: React.ReactNode): string {
   return '';
 }
 
+function formatLanguageLabel(language?: string): string {
+  if (!language) {
+    return 'Code';
+  }
+
+  return language
+    .split(/[-_]/)
+    .map((segment) => {
+      if (segment.length <= 3) {
+        return segment.toUpperCase();
+      }
+
+      return `${segment.charAt(0).toUpperCase()}${segment.slice(1)}`;
+    })
+    .join(' ');
+}
+
 function MermaidBlock({
   source,
   theme,
@@ -306,6 +323,7 @@ function CodeBlock({
   const preRef = useRef<HTMLPreElement | null>(null);
   const [copied, setCopied] = useState(false);
   const source = useMemo(() => extractChildrenText(children), [children]);
+  const languageLabel = useMemo(() => formatLanguageLabel(language), [language]);
 
   const onCopy = async () => {
     try {
@@ -346,9 +364,10 @@ function CodeBlock({
         className={ui.preview.code.header}
         data-no-export="true"
       >
-        <span className={ui.preview.code.languageBadge}>
-          {language || 'code'}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-current/70 opacity-70" aria-hidden="true" />
+          <span className={ui.preview.code.languageBadge}>{languageLabel}</span>
+        </div>
         <button
           type="button"
           onClick={onCopy}
@@ -368,8 +387,8 @@ function CodeBlock({
           )}
         </button>
       </div>
-      <pre ref={preRef}>
-        <code className={className} {...props}>
+      <pre ref={preRef} className="mdv-code-body">
+        <code className={['mdv-code-content', className].filter(Boolean).join(' ')} {...props}>
           {children}
         </code>
       </pre>

@@ -79,13 +79,16 @@ export const themes: Theme[] = [
         box-shadow: 0 10px 20px -16px rgba(2, 6, 23, 0.55);
       }
       .default-theme .mdv-code .mdv-code-header {
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.78));
         border-bottom-color: rgba(148, 163, 184, 0.18);
       }
       .default-theme .mdv-code .language-badge {
         color: #94a3b8;
+        background: rgba(148, 163, 184, 0.08);
       }
       .default-theme .mdv-code .copy-button {
         color: #94a3b8;
+        background: rgba(255, 255, 255, 0.04);
       }
       .default-theme .mdv-code .copy-button:hover {
         background: rgba(255, 255, 255, 0.08);
@@ -575,13 +578,16 @@ export const themes: Theme[] = [
         background: linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
       }
       .dark-theme .mdv-code .mdv-code-header {
+        background: linear-gradient(180deg, rgba(11, 18, 32, 0.92), rgba(15, 23, 42, 0.84));
         border-bottom-color: rgba(71, 85, 105, 0.5);
       }
       .dark-theme .mdv-code .language-badge {
         color: #94a3b8;
+        background: rgba(148, 163, 184, 0.08);
       }
       .dark-theme .mdv-code .copy-button {
         color: #94a3b8;
+        background: rgba(255, 255, 255, 0.04);
       }
       .dark-theme .mdv-code .copy-button:hover {
         background: rgba(255, 255, 255, 0.06);
@@ -744,13 +750,16 @@ export const themes: Theme[] = [
         background: #f6f8fa;
       }
       .github-theme .mdv-code .mdv-code-header {
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
         border-bottom-color: #d0d7de;
       }
       .github-theme .mdv-code .language-badge {
         color: #57606a;
+        background: rgba(208, 215, 222, 0.35);
       }
       .github-theme .mdv-code .copy-button {
         color: #57606a;
+        background: rgba(255, 255, 255, 0.8);
       }
       .github-theme .mdv-code .copy-button:hover {
         background: rgba(208, 215, 222, 0.4);

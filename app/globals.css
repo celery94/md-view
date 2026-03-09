@@ -226,11 +226,27 @@ textarea,
 /* Code block header bar */
 .markdown-preview .mdv-code {
   border-radius: 0.75rem;
-  margin: 1.25rem 0;
+  margin: 1.4rem 0;
+  overflow: hidden;
+  box-shadow: 0 18px 38px -30px rgba(15, 23, 42, 0.75);
 }
 
 .markdown-preview .mdv-code .mdv-code-header {
   border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  backdrop-filter: blur(16px);
+}
+
+.markdown-preview .mdv-code .language-badge {
+  letter-spacing: 0.14em;
+}
+
+.markdown-preview .mdv-code .mdv-code-body {
+  padding: 1.05rem 1.15rem !important;
+}
+
+.markdown-preview .mdv-code .mdv-code-content {
+  display: block;
+  min-width: max-content;
 }
 
 .markdown-preview .mdv-code pre::-webkit-scrollbar {
@@ -252,6 +268,11 @@ textarea,
 
 .markdown-preview .mdv-code .copy-button {
   touch-action: manipulation;
+  white-space: nowrap;
+}
+
+.markdown-preview .mdv-code .copy-button:hover {
+  transform: translateY(-1px);
 }
 
 .markdown-preview .mdv-mermaid {
