@@ -2,15 +2,17 @@
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const badgeClass =
+    'group hidden items-center gap-1.5 rounded-full border border-slate-300/65 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm transition-all duration-200 hover:bg-white sm:inline-flex';
 
   return (
-    <footer className="relative mt-auto overflow-hidden border-t border-slate-300/50 bg-gradient-to-b from-white/75 to-slate-100/65 backdrop-blur">
+    <footer className="relative mt-auto overflow-hidden border-t border-slate-300/45 bg-white/80 backdrop-blur">
       {/* Subtle top glow line */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/35 to-transparent" />
 
-      <div className="relative w-full px-6 py-5 sm:px-8 lg:px-10">
-        <div className="flex flex-col items-center justify-between gap-5 sm:flex-row">
-          <div className="flex items-center gap-2.5 text-sm font-medium text-slate-500">
+      <div className="relative w-full px-4 py-4 sm:px-8 sm:py-5 lg:px-10">
+        <div className="flex flex-col items-center justify-between gap-3 sm:flex-row sm:gap-5">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-slate-500 sm:justify-start sm:gap-2.5">
             <span>©</span>
             <span>{currentYear}</span>
             <span className="bg-gradient-to-r from-slate-800 to-cyan-800 bg-clip-text font-semibold text-transparent">
@@ -20,9 +22,12 @@ export default function Footer() {
             <span className="text-slate-400">Free and open source</span>
           </div>
 
+          <p className="text-center text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400 sm:hidden">
+            No registration. Privacy first. Always free.
+          </p>
+
           <div className="flex flex-wrap items-center justify-center gap-2">
-            {/* No registration badge */}
-            <span className="group inline-flex items-center gap-1.5 rounded-full border border-slate-300/65 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm transition-all duration-200 hover:border-cyan-300/60 hover:bg-white hover:shadow">
+            <span className={`${badgeClass} hover:border-cyan-300/60 hover:shadow`}>
               <svg className="h-3.5 w-3.5 text-cyan-600" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
@@ -33,8 +38,7 @@ export default function Footer() {
               No registration
             </span>
 
-            {/* Privacy first badge */}
-            <span className="group inline-flex items-center gap-1.5 rounded-full border border-slate-300/65 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm transition-all duration-200 hover:border-cyan-300/60 hover:bg-white hover:shadow">
+            <span className={`${badgeClass} hover:border-cyan-300/60 hover:shadow`}>
               <svg className="h-3.5 w-3.5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
@@ -45,8 +49,7 @@ export default function Footer() {
               Privacy first
             </span>
 
-            {/* Always free badge */}
-            <span className="group inline-flex items-center gap-1.5 rounded-full border border-slate-300/65 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm transition-all duration-200 hover:border-amber-300/70 hover:bg-white hover:shadow">
+            <span className={`${badgeClass} hover:border-amber-300/70 hover:shadow`}>
               <svg className="h-3.5 w-3.5 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                 <path

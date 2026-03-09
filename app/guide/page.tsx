@@ -80,6 +80,12 @@ export const metadata: Metadata = {
   },
 };
 
+const guidePanelClass =
+  'rounded-[28px] border border-slate-300/55 bg-white/86 shadow-[0_18px_45px_-30px_rgba(15,23,42,0.65)] ring-1 ring-white/60 backdrop-blur-md';
+
+const guideCardClass =
+  'rounded-2xl border border-slate-300/55 bg-white/86 shadow-[0_16px_38px_-30px_rgba(15,23,42,0.58)] ring-1 ring-white/60 backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-200/80 hover:shadow-[0_20px_44px_-32px_rgba(8,145,178,0.35)]';
+
 export default function Guide() {
   return (
     <>
@@ -87,16 +93,16 @@ export default function Guide() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(guideStructuredData) }}
       />
-      <div className="h-screen flex flex-col bg-gradient-to-b from-slate-50 via-white to-slate-50/80">
+      <div className="h-screen flex flex-col bg-transparent">
         {/* Header - consistent with main page */}
-        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shadow-[0_1px_3px_rgb(15_23_42/0.04)]">
+        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
           <div className="max-w-full mx-auto px-3 sm:px-4 md:px-6">
             <div className="flex items-center justify-between h-14 md:h-16">
               {/* Left section - Logo and title */}
               <div className="flex items-center gap-2 md:gap-4">
                 <Link
                   href="/"
-                  className="flex items-center gap-2 md:gap-3 group rounded-xl p-1.5 md:p-2 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="group flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 transition-colors duration-150 hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:ring-offset-2 md:gap-3 md:px-3 md:py-2"
                   aria-label="MD-View Home"
                   title="MD-View Home"
                 >
@@ -123,7 +129,7 @@ export default function Guide() {
               <div className="flex items-center gap-2 md:gap-3">
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-1.5 px-4 md:px-5 py-2 bg-gradient-to-b from-slate-800 to-slate-900 text-white text-sm font-semibold rounded-xl shadow-md shadow-slate-900/10 hover:from-slate-700 hover:to-slate-800 hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-cyan-700 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-cyan-900/10 transition-colors duration-150 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/35 focus:ring-offset-2 md:px-5"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   <span className="hidden sm:inline">Back to</span>
@@ -138,12 +144,12 @@ export default function Guide() {
         <main className="flex-1 overflow-auto">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
             {/* Hero section */}
-            <div className="bg-white shadow-sm rounded-2xl p-6 md:p-8 mb-8 border border-slate-200/60">
+            <div className={`${guidePanelClass} mb-8 p-6 md:p-8`}>
               <div className="text-center">
-                <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-4">
+                <h1 className="mb-4 bg-gradient-to-r from-slate-900 via-cyan-900 to-slate-700 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
                   MD-View User Guide
                 </h1>
-                <p className="text-lg text-slate-500 max-w-3xl mx-auto leading-relaxed">
+                <p className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-600">
                   Master MD-View powerful features and learn Markdown fundamentals. From real-time
                   preview to advanced GitHub Flavored Markdown syntax.
                 </p>
@@ -162,7 +168,7 @@ export default function Guide() {
                 Key Features
               </h2>
               <div className="grid gap-4 md:gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                <div className="bg-white border border-slate-200/60 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-slate-300/80 transition-all duration-200">
+                <div className={`${guideCardClass} p-5`}>
                   <div className="flex items-center gap-3 mb-3">
                     <div className="p-2 bg-gradient-to-br from-sky-100 to-sky-50 rounded-lg shadow-sm">
                       <Zap className="h-5 w-5 text-sky-600" />
@@ -174,7 +180,7 @@ export default function Guide() {
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-200/60 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-slate-300/80 transition-all duration-200">
+                <div className={`${guideCardClass} p-5`}>
                   <div className="flex items-center gap-3 mb-3">
                     <div className="p-2 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-lg shadow-sm">
                       <Code className="h-5 w-5 text-emerald-600" />
@@ -186,7 +192,7 @@ export default function Guide() {
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-200/60 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-slate-300/80 transition-all duration-200">
+                <div className={`${guideCardClass} p-5`}>
                   <div className="flex items-center gap-3 mb-3">
                     <div className="p-2 bg-gradient-to-br from-violet-100 to-violet-50 rounded-lg shadow-sm">
                       <Code className="h-5 w-5 text-violet-600" />
@@ -199,7 +205,7 @@ export default function Guide() {
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-200/60 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-slate-300/80 transition-all duration-200">
+                <div className={`${guideCardClass} p-5`}>
                   <div className="flex items-center gap-3 mb-3">
                     <div className="p-2 bg-gradient-to-br from-amber-100 to-amber-50 rounded-lg shadow-sm">
                       <Download className="h-5 w-5 text-amber-600" />
@@ -211,7 +217,7 @@ export default function Guide() {
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-200/60 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-slate-300/80 transition-all duration-200">
+                <div className={`${guideCardClass} p-5`}>
                   <div className="flex items-center gap-3 mb-3">
                     <div className="p-2 bg-gradient-to-br from-sky-100 to-sky-50 rounded-lg shadow-sm">
                       <Smartphone className="h-5 w-5 text-sky-600" />
@@ -223,7 +229,7 @@ export default function Guide() {
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-200/60 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-slate-300/80 transition-all duration-200">
+                <div className={`${guideCardClass} p-5`}>
                   <div className="flex items-center gap-3 mb-3">
                     <div className="p-2 bg-gradient-to-br from-rose-100 to-rose-50 rounded-lg shadow-sm">
                       <Shield className="h-5 w-5 text-rose-600" />
@@ -239,7 +245,7 @@ export default function Guide() {
 
             {/* Quick Start Workflow */}
             <section className="mb-12">
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/60">
+              <div className={`${guidePanelClass} p-6 md:p-8`}>
                 <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2.5">
                   <div className="p-1.5 bg-emerald-100 rounded-lg">
                     <Upload className="h-5 w-5 text-emerald-600" />
@@ -247,28 +253,28 @@ export default function Guide() {
                   Quick Start Workflow
                 </h2>
                 <div className="grid gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                  <div className="text-center p-4 rounded-xl bg-slate-50/80 border border-slate-100">
+                  <div className="rounded-2xl border border-slate-200/70 bg-slate-50/70 p-4 text-center shadow-inner">
                     <div className="w-12 h-12 bg-gradient-to-br from-sky-100 to-sky-200 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
                       <span className="text-sky-700 font-bold text-lg">1</span>
                     </div>
                     <h3 className="font-semibold text-slate-800 mb-2">Start Typing</h3>
                     <p className="text-sm text-slate-500">Type markdown in the left editor panel</p>
                   </div>
-                  <div className="text-center p-4 rounded-xl bg-slate-50/80 border border-slate-100">
+                  <div className="rounded-2xl border border-slate-200/70 bg-slate-50/70 p-4 text-center shadow-inner">
                     <div className="w-12 h-12 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
                       <span className="text-emerald-700 font-bold text-lg">2</span>
                     </div>
                     <h3 className="font-semibold text-slate-800 mb-2">Live Preview</h3>
                     <p className="text-sm text-slate-500">Watch live preview update in real-time</p>
                   </div>
-                  <div className="text-center p-4 rounded-xl bg-slate-50/80 border border-slate-100">
+                  <div className="rounded-2xl border border-slate-200/70 bg-slate-50/70 p-4 text-center shadow-inner">
                     <div className="w-12 h-12 bg-gradient-to-br from-violet-100 to-violet-200 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
                       <span className="text-violet-700 font-bold text-lg">3</span>
                     </div>
                     <h3 className="font-semibold text-slate-800 mb-2">Import Files</h3>
                     <p className="text-sm text-slate-500">Load existing .md files with one click</p>
                   </div>
-                  <div className="text-center p-4 rounded-xl bg-slate-50/80 border border-slate-100">
+                  <div className="rounded-2xl border border-slate-200/70 bg-slate-50/70 p-4 text-center shadow-inner">
                     <div className="w-12 h-12 bg-gradient-to-br from-amber-100 to-amber-200 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
                       <span className="text-amber-700 font-bold text-lg">4</span>
                     </div>
@@ -287,7 +293,7 @@ export default function Guide() {
               className="mb-12"
               aria-labelledby="export-html-pdf-heading"
             >
-              <div className="bg-gradient-to-r from-sky-50/80 to-indigo-50/80 rounded-2xl p-6 md:p-8 border border-sky-200/60 shadow-sm">
+              <div className={`${guidePanelClass} bg-gradient-to-r from-white/80 via-cyan-50/60 to-amber-50/40 p-6 md:p-8`}>
                 <h2
                   id="export-html-pdf-heading"
                   className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-2.5"
@@ -321,7 +327,7 @@ export default function Guide() {
               className="mb-12"
               aria-labelledby="markdown-basics-heading"
             >
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/60">
+              <div className={`${guidePanelClass} p-6 md:p-8`}>
                 <h2
                   id="markdown-basics-heading"
                   className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2.5"
@@ -335,7 +341,7 @@ export default function Guide() {
                   <p className="text-slate-600 mb-6 leading-relaxed">
                     Get started with these essential Markdown syntax patterns:
                   </p>
-                  <div className="bg-gradient-to-b from-slate-50 to-slate-100/50 rounded-xl p-5 font-mono text-sm overflow-x-auto border border-slate-100">
+                  <div className="overflow-x-auto rounded-2xl border border-slate-200/70 bg-gradient-to-b from-slate-50/95 to-white p-5 font-mono text-sm shadow-inner">
                     <pre className="text-slate-700 whitespace-pre-wrap leading-relaxed">{`# Heading 1
 ## Heading 2
 ### Heading 3
@@ -367,7 +373,7 @@ Horizontal rule above this line`}</pre>
 
             {/* GitHub Flavored Markdown */}
             <section id="github-flavored-markdown" className="mb-12" aria-labelledby="gfm-heading">
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/60">
+              <div className={`${guidePanelClass} p-6 md:p-8`}>
                 <h2
                   id="gfm-heading"
                   className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2.5"
@@ -460,7 +466,7 @@ flowchart LR
               className="mb-12"
               aria-labelledby="tips-limitations-heading"
             >
-              <div className="bg-gradient-to-r from-amber-50/80 to-orange-50/80 border border-amber-200/60 rounded-2xl p-6 md:p-8 shadow-sm">
+              <div className={`${guidePanelClass} bg-gradient-to-r from-white/80 via-amber-50/55 to-orange-50/45 p-6 md:p-8`}>
                 <h2
                   id="tips-limitations-heading"
                   className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2.5"
@@ -471,28 +477,28 @@ flowchart LR
                   Tips & Limitations
                 </h2>
                 <div className="grid gap-4 md:grid-cols-2">
-                  <div className="bg-white rounded-xl p-4 border border-amber-200/60 shadow-sm">
+                  <div className="rounded-2xl border border-slate-200/70 bg-white/88 p-4 shadow-sm shadow-slate-900/5 ring-1 ring-white/60">
                     <h3 className="font-semibold text-slate-800 mb-2">🔒 Security</h3>
                     <p className="text-sm text-slate-600 leading-relaxed">
                       Raw HTML in markdown is sanitized to prevent XSS attacks while preserving safe
                       formatting.
                     </p>
                   </div>
-                  <div className="bg-white rounded-xl p-4 border border-amber-200/60 shadow-sm">
+                  <div className="rounded-2xl border border-slate-200/70 bg-white/88 p-4 shadow-sm shadow-slate-900/5 ring-1 ring-white/60">
                     <h3 className="font-semibold text-slate-800 mb-2">💾 Local Storage</h3>
                     <p className="text-sm text-slate-600 leading-relaxed">
                       Your content is saved locally in your browser. Clear browser data to reset
                       everything.
                     </p>
                   </div>
-                  <div className="bg-white rounded-xl p-4 border border-amber-200/60 shadow-sm">
+                  <div className="rounded-2xl border border-slate-200/70 bg-white/88 p-4 shadow-sm shadow-slate-900/5 ring-1 ring-white/60">
                     <h3 className="font-semibold text-slate-800 mb-2">📱 Responsive</h3>
                     <p className="text-sm text-slate-600 leading-relaxed">
                       Switch between split, editor-only, and preview-only modes for optimal mobile
                       experience.
                     </p>
                   </div>
-                  <div className="bg-white rounded-xl p-4 border border-amber-200/60 shadow-sm">
+                  <div className="rounded-2xl border border-slate-200/70 bg-white/88 p-4 shadow-sm shadow-slate-900/5 ring-1 ring-white/60">
                     <h3 className="font-semibold text-slate-800 mb-2">⌨️ Keyboard Shortcuts</h3>
                     <p className="text-sm text-slate-600 leading-relaxed">
                       Use Cmd/Ctrl + 1, 2, 3 to quickly switch between editor, split, and preview
@@ -504,15 +510,15 @@ flowchart LR
             </section>
 
             {/* Call to action */}
-            <div className="text-center bg-white rounded-2xl p-8 shadow-sm border border-slate-200/60">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-4">Ready to Start Writing?</h2>
+            <div className={`${guidePanelClass} p-8 text-center`}>
+              <h2 className="mb-4 bg-gradient-to-r from-slate-900 via-cyan-900 to-slate-700 bg-clip-text text-2xl font-bold text-transparent">Ready to Start Writing?</h2>
               <p className="text-slate-500 mb-6 max-w-2xl mx-auto leading-relaxed">
                 Now that you know the features and syntax, return to the editor and start creating
                 amazing markdown content!
               </p>
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 px-7 py-3 bg-gradient-to-b from-slate-800 to-slate-900 text-white text-lg font-semibold rounded-xl shadow-lg shadow-slate-900/15 hover:from-slate-700 hover:to-slate-800 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2"
+                className="inline-flex items-center gap-2 rounded-xl bg-cyan-700 px-7 py-3 text-lg font-semibold text-white shadow-lg shadow-cyan-900/15 transition-colors duration-150 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/35 focus:ring-offset-2"
               >
                 <ArrowLeft className="h-5 w-5" />
                 Open MD-View Editor

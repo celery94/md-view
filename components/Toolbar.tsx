@@ -1,6 +1,6 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useEffect, useId, useRef, useState } from 'react';
 import {
   Bold,
   Italic,
@@ -17,6 +17,7 @@ import {
   Image as ImageIcon,
   Undo,
   Redo,
+  MoreHorizontal,
 } from 'lucide-react';
 
 interface ToolbarProps {
@@ -38,10 +39,13 @@ interface ToolbarProps {
 }
 
 const buttonClass =
-  'rounded-lg border border-transparent p-2 text-slate-500 transition-all duration-200 hover:border-slate-300/60 hover:bg-white hover:text-slate-800 active:scale-[0.95] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-1';
+  'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-transparent text-slate-500 transition-all duration-200 hover:border-slate-300/70 hover:bg-white hover:text-slate-800 active:scale-[0.95] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-1';
 
-const dividerClass =
-  'mx-1.5 h-5 w-px bg-gradient-to-b from-transparent via-slate-300/70 to-transparent';
+const buttonGroupClass =
+  'flex items-center gap-0.5 rounded-xl border border-slate-200/70 bg-white/80 p-1 shadow-sm shadow-slate-900/5';
+
+const menuItemClass =
+  'flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35';
 
 function Toolbar({
   onBold,
@@ -60,70 +64,171 @@ function Toolbar({
   onUndo,
   onRedo,
 }: ToolbarProps) {
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const moreMenuRef = useRef<HTMLDivElement | null>(null);
+  const moreMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const moreMenuId = useId();
+  const moreMenuTriggerId = useId();
+
+  useEffect(() => {
+    if (!isMoreMenuOpen) {
+      return;
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target as Node)) {
+        setIsMoreMenuOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') {
+        return;
+      }
+      event.preventDefault();
+      setIsMoreMenuOpen(false);
+      moreMenuTriggerRef.current?.focus();
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isMoreMenuOpen]);
+
+  const handleOverflowAction = (action: () => void) => {
+    action();
+    setIsMoreMenuOpen(false);
+  };
+
   return (
-    <div className="flex flex-wrap items-center gap-0.5 border-b border-slate-200/65 bg-gradient-to-r from-slate-100/70 via-white to-slate-100/50 px-3 py-2">
-      {/* Undo/Redo Group */}
-      <button type="button" onClick={onUndo} className={buttonClass} title="Undo">
-        <Undo className="h-4 w-4" />
-      </button>
-      <button type="button" onClick={onRedo} className={buttonClass} title="Redo">
-        <Redo className="h-4 w-4" />
-      </button>
+    <div className="flex items-center gap-2 border-b border-slate-200/65 bg-gradient-to-r from-slate-100/80 via-white to-slate-100/50 px-3 py-2">
+      <div className={buttonGroupClass}>
+        <button type="button" onClick={onUndo} className={buttonClass} title="Undo">
+          <Undo className="h-4 w-4" />
+        </button>
+        <button type="button" onClick={onRedo} className={buttonClass} title="Redo">
+          <Redo className="h-4 w-4" />
+        </button>
+      </div>
 
-      <div className={dividerClass} />
+      <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className={buttonGroupClass}>
+          <button type="button" onClick={onBold} className={buttonClass} title="Bold">
+            <Bold className="h-4 w-4" />
+          </button>
+          <button type="button" onClick={onItalic} className={buttonClass} title="Italic">
+            <Italic className="h-4 w-4" />
+          </button>
+          <button type="button" onClick={onCode} className={buttonClass} title="Inline Code">
+            <Code className="h-4 w-4" />
+          </button>
+        </div>
 
-      {/* Text Formatting Group */}
-      <button type="button" onClick={onBold} className={buttonClass} title="Bold">
-        <Bold className="h-4 w-4" />
-      </button>
-      <button type="button" onClick={onItalic} className={buttonClass} title="Italic">
-        <Italic className="h-4 w-4" />
-      </button>
-      <button type="button" onClick={onStrikethrough} className={buttonClass} title="Strikethrough">
-        <Strikethrough className="h-4 w-4" />
-      </button>
-      <button type="button" onClick={onCode} className={buttonClass} title="Inline Code">
-        <Code className="h-4 w-4" />
-      </button>
+        <div className={buttonGroupClass}>
+          <button type="button" onClick={onH1} className={buttonClass} title="Heading 1">
+            <Heading1 className="h-4 w-4" />
+          </button>
+          <button type="button" onClick={onList} className={buttonClass} title="Bulleted List">
+            <List className="h-4 w-4" />
+          </button>
+          <button type="button" onClick={onLink} className={buttonClass} title="Link">
+            <Link className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
 
-      <div className={dividerClass} />
-
-      {/* Headings Group */}
-      <button type="button" onClick={onH1} className={buttonClass} title="Heading 1">
-        <Heading1 className="h-4 w-4" />
-      </button>
-      <button type="button" onClick={onH2} className={buttonClass} title="Heading 2">
-        <Heading2 className="h-4 w-4" />
-      </button>
-      <button type="button" onClick={onH3} className={buttonClass} title="Heading 3">
-        <Heading3 className="h-4 w-4" />
-      </button>
-
-      <div className={dividerClass} />
-
-      {/* Lists and Structure Group */}
-      <button type="button" onClick={onList} className={buttonClass} title="Bulleted List">
-        <List className="h-4 w-4" />
-      </button>
-      <button type="button" onClick={onOrderedList} className={buttonClass} title="Numbered List">
-        <ListOrdered className="h-4 w-4" />
-      </button>
-      <button type="button" onClick={onQuote} className={buttonClass} title="Blockquote">
-        <Quote className="h-4 w-4" />
-      </button>
-
-      <div className={dividerClass} />
-
-      {/* Media and Links Group */}
-      <button type="button" onClick={onLink} className={buttonClass} title="Link">
-        <Link className="h-4 w-4" />
-      </button>
-      <button type="button" onClick={onImage} className={buttonClass} title="Image">
-        <ImageIcon className="h-4 w-4" />
-      </button>
-      <button type="button" onClick={onTable} className={buttonClass} title="Table">
-        <Table className="h-4 w-4" />
-      </button>
+      <div ref={moreMenuRef} className="relative shrink-0">
+        <button
+          type="button"
+          ref={moreMenuTriggerRef}
+          id={moreMenuTriggerId}
+          onClick={() => setIsMoreMenuOpen((prev) => !prev)}
+          className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-200/70 bg-white/85 px-3 text-xs font-semibold text-slate-600 shadow-sm shadow-slate-900/5 transition-colors duration-200 hover:bg-white hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-1"
+          title="More formatting options"
+          aria-label="More formatting options"
+          aria-haspopup="menu"
+          aria-expanded={isMoreMenuOpen}
+          aria-controls={isMoreMenuOpen ? moreMenuId : undefined}
+        >
+          <MoreHorizontal className="h-4 w-4" />
+          <span className="hidden sm:inline">More</span>
+        </button>
+        {isMoreMenuOpen && (
+          <div
+            className="absolute right-0 top-full z-20 mt-2 w-52 rounded-xl border border-slate-300/70 bg-white/95 p-1.5 shadow-lg ring-1 ring-black/5 backdrop-blur-md"
+            role="menu"
+            id={moreMenuId}
+            aria-labelledby={moreMenuTriggerId}
+          >
+            <button
+              type="button"
+              onClick={() => handleOverflowAction(onH2)}
+              className={menuItemClass}
+              role="menuitem"
+            >
+              <Heading2 className="h-4 w-4 text-slate-500" />
+              <span>Heading 2</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleOverflowAction(onH3)}
+              className={menuItemClass}
+              role="menuitem"
+            >
+              <Heading3 className="h-4 w-4 text-slate-500" />
+              <span>Heading 3</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleOverflowAction(onOrderedList)}
+              className={menuItemClass}
+              role="menuitem"
+            >
+              <ListOrdered className="h-4 w-4 text-slate-500" />
+              <span>Numbered List</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleOverflowAction(onQuote)}
+              className={menuItemClass}
+              role="menuitem"
+            >
+              <Quote className="h-4 w-4 text-slate-500" />
+              <span>Blockquote</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleOverflowAction(onStrikethrough)}
+              className={menuItemClass}
+              role="menuitem"
+            >
+              <Strikethrough className="h-4 w-4 text-slate-500" />
+              <span>Strikethrough</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleOverflowAction(onImage)}
+              className={menuItemClass}
+              role="menuitem"
+            >
+              <ImageIcon className="h-4 w-4 text-slate-500" />
+              <span>Image</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleOverflowAction(onTable)}
+              className={menuItemClass}
+              role="menuitem"
+            >
+              <Table className="h-4 w-4 text-slate-500" />
+              <span>Table</span>
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
