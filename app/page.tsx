@@ -51,6 +51,7 @@ const SCROLL_TOP_THRESHOLD = 0.25;
 const URL_IMPORT_QUERY_KEY = 'url';
 const SCROLL_SYNC_EPSILON = 0.001;
 const NAV_COMPACT_BREAKPOINT_PX = 1180;
+const LOCAL_FILE_POLL_INTERVAL_MS = 1000;
 const LARGE_DOCUMENT_CHAR_THRESHOLD = 12000;
 const VERY_LARGE_DOCUMENT_CHAR_THRESHOLD = 24000;
 const LARGE_DOCUMENT_LINE_THRESHOLD = 320;
@@ -59,12 +60,103 @@ const MODERATE_PREVIEW_DEBOUNCE_MS = 90;
 const HEAVY_PREVIEW_DEBOUNCE_MS = 180;
 const FAST_STATS_DEBOUNCE_MS = 120;
 const HEAVY_STATS_DEBOUNCE_MS = 240;
+const MARKDOWN_FILE_EXTENSIONS = ['.md', '.markdown', '.mdown', '.mkd', '.mkdn', '.mdwn'];
+const MARKDOWN_PICKER_TYPES = [
+  {
+    description: 'Markdown files',
+    accept: {
+      'text/markdown': MARKDOWN_FILE_EXTENSIONS,
+      'text/plain': ['.txt'],
+    },
+  },
+];
+const LOCAL_FILE_WATCHING_MESSAGE = 'Watching this local file for changes on disk.';
+const LOCAL_FILE_FALLBACK_MESSAGE =
+  'Auto-reload is unavailable because this file was opened without a persistent local file handle.';
+const LOCAL_FILE_KEEP_CURRENT_MESSAGE =
+  'Keeping the current editor content. Newer disk changes will prompt again.';
 
 interface ScrollMetrics {
   page: number;
   editor: number;
   preview: number;
 }
+
+type LocalFileWatchMode = 'observer' | 'polling' | 'none';
+type LocalFileSource = 'launch' | 'picker' | 'input' | 'drop';
+type LocalFileAccessState =
+  | 'idle'
+  | 'watching'
+  | 'imported'
+  | 'permission-lost'
+  | 'deleted'
+  | 'error';
+
+interface LocalFileSession {
+  handle: FileSystemFileHandle | null;
+  fileName: string | null;
+  source: LocalFileSource | null;
+  diskBaselineMarkdown: string | null;
+  lastModified: number | null;
+  size: number | null;
+  watchMode: LocalFileWatchMode;
+  accessState: LocalFileAccessState;
+  message: string | null;
+  ignoredExternalSignature: string | null;
+}
+
+interface PendingExternalUpdate {
+  fileName: string;
+  markdown: string;
+  lastModified: number;
+  size: number;
+  signature: string;
+}
+
+interface LocalFileStatusBanner {
+  tone: 'info' | 'warning' | 'error' | 'neutral';
+  role: 'status' | 'alert';
+  title: string;
+  detail: string;
+}
+
+interface FileSystemObserver {
+  disconnect(): void;
+  observe(handle: FileSystemFileHandle): Promise<void> | void;
+  unobserve?(handle: FileSystemFileHandle): void;
+}
+
+interface FileSystemObserverConstructor {
+  new (callback: (records: unknown[]) => void): FileSystemObserver;
+}
+
+declare global {
+  interface Window {
+    FileSystemObserver?: FileSystemObserverConstructor;
+    showOpenFilePicker?: (options?: {
+      excludeAcceptAllOption?: boolean;
+      id?: string;
+      multiple?: boolean;
+      types?: Array<{
+        accept: Record<string, string[]>;
+        description?: string;
+      }>;
+    }) => Promise<FileSystemFileHandle[]>;
+  }
+}
+
+const EMPTY_LOCAL_FILE_SESSION: LocalFileSession = {
+  handle: null,
+  fileName: null,
+  source: null,
+  diskBaselineMarkdown: null,
+  lastModified: null,
+  size: null,
+  watchMode: 'none',
+  accessState: 'idle',
+  message: null,
+  ignoredExternalSignature: null,
+};
 
 const initialMarkdown = `# MD-View: Focused Markdown workspace
 
@@ -221,6 +313,10 @@ function HomeContent() {
   const [isMobileExportMenuOpen, setIsMobileExportMenuOpen] = useState(false);
   const [isDesktopUtilityMenuOpen, setIsDesktopUtilityMenuOpen] = useState(false);
   const [isMobileUtilityMenuOpen, setIsMobileUtilityMenuOpen] = useState(false);
+  const [localFileSession, setLocalFileSession] = useState<LocalFileSession>(EMPTY_LOCAL_FILE_SESSION);
+  const [pendingExternalUpdate, setPendingExternalUpdate] = useState<PendingExternalUpdate | null>(
+    null
+  );
 
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -237,6 +333,10 @@ function HomeContent() {
   const mobileUtilityMenuRef = useRef<HTMLDivElement | null>(null);
   const mobileUtilityMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
   const autoImportedFromQueryRef = useRef(false);
+  const latestMarkdownRef = useRef(markdown);
+  const localFileSessionRef = useRef(localFileSession);
+  const pendingExternalUpdateRef = useRef(pendingExternalUpdate);
+  const hasUnsavedDiskChangesRef = useRef(false);
   const pendingScrollMetricsRef = useRef<ScrollMetrics>({
     page: 0,
     editor: 0,
@@ -251,6 +351,8 @@ function HomeContent() {
   const desktopUtilityMenuTriggerId = useId();
   const mobileUtilityMenuId = useId();
   const mobileUtilityMenuTriggerId = useId();
+  const hasUnsavedDiskChanges =
+    localFileSession.diskBaselineMarkdown !== null && markdown !== localFileSession.diskBaselineMarkdown;
 
   const documentPerformance = useMemo(() => {
     const charCount = markdown.length;
@@ -296,6 +398,124 @@ function HomeContent() {
       fileSizeKb: nextFileSizeKb,
     };
   }, [statsMarkdown]);
+
+  useEffect(() => {
+    latestMarkdownRef.current = markdown;
+  }, [markdown]);
+
+  useEffect(() => {
+    localFileSessionRef.current = localFileSession;
+  }, [localFileSession]);
+
+  useEffect(() => {
+    pendingExternalUpdateRef.current = pendingExternalUpdate;
+  }, [pendingExternalUpdate]);
+
+  useEffect(() => {
+    hasUnsavedDiskChangesRef.current = hasUnsavedDiskChanges;
+  }, [hasUnsavedDiskChanges]);
+
+  const clearLocalFileSession = useCallback(() => {
+    setPendingExternalUpdate(null);
+    setLocalFileSession(EMPTY_LOCAL_FILE_SESSION);
+  }, []);
+
+  const setLocalFileError = useCallback(
+    (fileName: string | null, message: string, accessState: Extract<LocalFileAccessState, 'deleted' | 'permission-lost' | 'error'>) => {
+      setPendingExternalUpdate(null);
+      setLocalFileSession((prev) => ({
+        ...EMPTY_LOCAL_FILE_SESSION,
+        fileName: fileName ?? prev.fileName,
+        accessState,
+        message,
+      }));
+    },
+    []
+  );
+
+  const setDiskBackedSession = useCallback(
+    async ({
+      file,
+      handle,
+      source,
+      watchMode,
+      accessState,
+      message,
+    }: {
+      accessState: LocalFileAccessState;
+      file: File;
+      handle: FileSystemFileHandle | null;
+      message: string | null;
+      source: LocalFileSource;
+      watchMode: LocalFileWatchMode;
+    }) => {
+      const nextMarkdown = await file.text();
+      setUrlImportError(null);
+      setPendingExternalUpdate(null);
+      setMarkdown(nextMarkdown);
+      setLocalFileSession({
+        handle,
+        fileName: file.name,
+        source,
+        diskBaselineMarkdown: nextMarkdown,
+        lastModified: file.lastModified,
+        size: file.size,
+        watchMode,
+        accessState,
+        message,
+        ignoredExternalSignature: null,
+      });
+    },
+    []
+  );
+
+  const openImportedFile = useCallback(
+    async (file?: File | null, source: Extract<LocalFileSource, 'input' | 'drop'> = 'input') => {
+      if (!file) return;
+
+      try {
+        await setDiskBackedSession({
+          file,
+          handle: null,
+          source,
+          watchMode: 'none',
+          accessState: 'imported',
+          message: LOCAL_FILE_FALLBACK_MESSAGE,
+        });
+      } catch {
+        setLocalFileError(file.name, 'Unable to read the selected file.', 'error');
+      }
+    },
+    [setDiskBackedSession, setLocalFileError]
+  );
+
+  const openWatchedFile = useCallback(
+    async (handle: FileSystemFileHandle, source: Extract<LocalFileSource, 'launch' | 'picker'>) => {
+      try {
+        const file = await handle.getFile();
+        await setDiskBackedSession({
+          file,
+          handle,
+          source,
+          watchMode: typeof window.FileSystemObserver === 'function' ? 'observer' : 'polling',
+          accessState: 'watching',
+          message: LOCAL_FILE_WATCHING_MESSAGE,
+        });
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return;
+        }
+
+        if (error instanceof DOMException && error.name === 'NotAllowedError') {
+          setLocalFileError(handle.name, 'Read access to this file was denied.', 'permission-lost');
+          return;
+        }
+
+        setLocalFileError(handle.name, 'Unable to open this local file.', 'error');
+      }
+    },
+    [setDiskBackedSession, setLocalFileError]
+  );
 
   const getSerializablePreview = useCallback(() => {
     const theme = getTheme(currentTheme);
@@ -674,44 +894,281 @@ function HomeContent() {
     };
   }, [stopDrag]);
 
-  const onPickFile = useCallback(() => {
-    fileInputRef.current?.click();
-  }, []);
+  const onPickFile = useCallback(async () => {
+    if (typeof window.showOpenFilePicker === 'function') {
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          excludeAcceptAllOption: false,
+          id: 'md-view-markdown-open',
+          multiple: false,
+          types: MARKDOWN_PICKER_TYPES,
+        });
+        if (handle) {
+          await openWatchedFile(handle, 'picker');
+        }
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return;
+        }
+      }
+    }
 
-  const onFileChosen = useCallback((file?: File | null) => {
-    if (!file) return;
-    setUrlImportError(null);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') setMarkdown(reader.result);
-    };
-    reader.readAsText(file);
-  }, []);
+    fileInputRef.current?.click();
+  }, [openWatchedFile]);
+
+  const onFileChosen = useCallback(
+    (file?: File | null) => {
+      void openImportedFile(file, 'input');
+    },
+    [openImportedFile]
+  );
 
   // Handle file launched via OS file association (PWA File Handling API)
   useEffect(() => {
     if (typeof window === 'undefined' || !window.launchQueue) return;
     window.launchQueue.setConsumer(async (params) => {
       if (params.files.length === 0) return;
-      const file = await params.files[0].getFile();
-      onFileChosen(file);
+      await openWatchedFile(params.files[0], 'launch');
     });
-  }, [onFileChosen]);
+  }, [openWatchedFile]);
+
+  const reconcileExternalFileChange = useCallback(async (file: File) => {
+    const session = localFileSessionRef.current;
+    if (!session.fileName) {
+      return;
+    }
+
+    const signature = `${file.lastModified}:${file.size}`;
+    if (signature === session.ignoredExternalSignature) {
+      return;
+    }
+
+    const nextMarkdown = await file.text();
+    const currentMarkdown = latestMarkdownRef.current;
+
+    if (nextMarkdown === currentMarkdown) {
+      setPendingExternalUpdate(null);
+      setLocalFileSession((prev) => {
+        if (!prev.fileName || prev.fileName !== file.name) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          diskBaselineMarkdown: nextMarkdown,
+          lastModified: file.lastModified,
+          size: file.size,
+          accessState: prev.handle ? 'watching' : prev.accessState,
+          message: prev.handle ? LOCAL_FILE_WATCHING_MESSAGE : prev.message,
+          ignoredExternalSignature: null,
+        };
+      });
+      return;
+    }
+
+    if (!localFileSessionRef.current.diskBaselineMarkdown || !hasUnsavedDiskChangesRef.current) {
+      setPendingExternalUpdate(null);
+      setMarkdown(nextMarkdown);
+      setLocalFileSession((prev) => {
+        if (!prev.fileName || prev.fileName !== file.name) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          diskBaselineMarkdown: nextMarkdown,
+          lastModified: file.lastModified,
+          size: file.size,
+          accessState: prev.handle ? 'watching' : prev.accessState,
+          message: prev.handle ? LOCAL_FILE_WATCHING_MESSAGE : prev.message,
+          ignoredExternalSignature: null,
+        };
+      });
+      return;
+    }
+
+    if (pendingExternalUpdateRef.current?.signature === signature) {
+      return;
+    }
+
+    setPendingExternalUpdate({
+      fileName: file.name,
+      markdown: nextMarkdown,
+      lastModified: file.lastModified,
+      size: file.size,
+      signature,
+    });
+  }, []);
+
+  const checkWatchedFileForChanges = useCallback(async () => {
+    const session = localFileSessionRef.current;
+    if (!session.handle || session.watchMode === 'none') {
+      return;
+    }
+
+    try {
+      const file = await session.handle.getFile();
+      const fileChanged =
+        file.lastModified !== session.lastModified || file.size !== session.size;
+
+      if (!fileChanged) {
+        return;
+      }
+
+      await reconcileExternalFileChange(file);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'NotFoundError') {
+        setLocalFileError(
+          session.fileName,
+          'This file was moved or deleted, so auto-reload has stopped.',
+          'deleted'
+        );
+        return;
+      }
+
+      if (error instanceof DOMException && error.name === 'NotAllowedError') {
+        setLocalFileError(
+          session.fileName,
+          'Read access to this file is no longer available.',
+          'permission-lost'
+        );
+        return;
+      }
+
+      setLocalFileError(
+        session.fileName,
+        'Auto-reload stopped because the file could no longer be read.',
+        'error'
+      );
+    }
+  }, [reconcileExternalFileChange, setLocalFileError]);
+
+  useEffect(() => {
+    if (!localFileSession.handle || localFileSession.watchMode === 'none') {
+      return;
+    }
+
+    let isCancelled = false;
+    let isChecking = false;
+    let observer: FileSystemObserver | null = null;
+
+    const runCheck = async () => {
+      if (isCancelled || isChecking) {
+        return;
+      }
+
+      if (document.hidden || !document.hasFocus()) {
+        return;
+      }
+
+      isChecking = true;
+      try {
+        await checkWatchedFileForChanges();
+      } finally {
+        isChecking = false;
+      }
+    };
+
+    const intervalId = window.setInterval(() => {
+      void runCheck();
+    }, LOCAL_FILE_POLL_INTERVAL_MS);
+
+    if (
+      localFileSession.watchMode === 'observer' &&
+      typeof window.FileSystemObserver === 'function'
+    ) {
+      observer = new window.FileSystemObserver(() => {
+        void runCheck();
+      });
+
+      Promise.resolve(observer.observe(localFileSession.handle)).catch(() => {});
+    }
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        void runCheck();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleVisibilityChange);
+    void runCheck();
+
+    return () => {
+      isCancelled = true;
+      window.clearInterval(intervalId);
+      observer?.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleVisibilityChange);
+    };
+  }, [checkWatchedFileForChanges, localFileSession.handle, localFileSession.watchMode]);
 
   const onDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
       const f = e.dataTransfer.files?.[0];
-      onFileChosen(f);
+      void openImportedFile(f, 'drop');
     },
-    [onFileChosen]
+    [openImportedFile]
   );
 
   const onDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
   }, []);
 
-  const resetSample = useCallback(() => setMarkdown(initialMarkdown), []);
+  const resetSample = useCallback(() => {
+    clearLocalFileSession();
+    setMarkdown(initialMarkdown);
+  }, [clearLocalFileSession]);
+
+  const reloadFromDisk = useCallback(() => {
+    const pending = pendingExternalUpdateRef.current;
+    if (!pending) {
+      return;
+    }
+
+    setPendingExternalUpdate(null);
+    setMarkdown(pending.markdown);
+    setLocalFileSession((prev) => {
+      if (prev.fileName !== pending.fileName) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        diskBaselineMarkdown: pending.markdown,
+        lastModified: pending.lastModified,
+        size: pending.size,
+        accessState: prev.handle ? 'watching' : prev.accessState,
+        message: prev.handle ? LOCAL_FILE_WATCHING_MESSAGE : prev.message,
+        ignoredExternalSignature: null,
+      };
+    });
+  }, []);
+
+  const keepCurrentText = useCallback(() => {
+    const pending = pendingExternalUpdateRef.current;
+    if (!pending) {
+      return;
+    }
+
+    setPendingExternalUpdate(null);
+    setLocalFileSession((prev) => {
+      if (prev.fileName !== pending.fileName) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        lastModified: pending.lastModified,
+        size: pending.size,
+        accessState: prev.handle ? 'watching' : prev.accessState,
+        message: LOCAL_FILE_KEEP_CURRENT_MESSAGE,
+        ignoredExternalSignature: pending.signature,
+      };
+    });
+  }, []);
 
   const importFromUrl = useCallback(
     async (rawUrl?: string) => {
@@ -746,6 +1203,7 @@ function HomeContent() {
           return;
         }
 
+        clearLocalFileSession();
         setMarkdown(payload.markdown);
         setUrlToImport(payload.sourceUrl || nextUrl);
       } catch {
@@ -754,7 +1212,7 @@ function HomeContent() {
         setIsImportingUrl(false);
       }
     },
-    [urlToImport]
+    [clearLocalFileSession, urlToImport]
   );
 
   useEffect(() => {
@@ -1007,6 +1465,67 @@ function HomeContent() {
     setIsMobileExportMenuOpen(false);
     setIsDesktopUtilityMenuOpen(false);
   }, []);
+
+  const localFileStatusBanner = useMemo<LocalFileStatusBanner | null>(() => {
+    if (pendingExternalUpdate && localFileSession.fileName) {
+      return {
+        tone: 'warning',
+        role: 'alert',
+        title: 'File changed on disk',
+        detail: `${localFileSession.fileName} was updated outside the app. Reload from disk or keep your current edits.`,
+      };
+    }
+
+    if (!localFileSession.fileName || localFileSession.accessState === 'idle') {
+      return null;
+    }
+
+    switch (localFileSession.accessState) {
+      case 'watching':
+        return {
+          tone: 'info',
+          role: 'status',
+          title: `Watching ${localFileSession.fileName}`,
+          detail: localFileSession.message ?? LOCAL_FILE_WATCHING_MESSAGE,
+        };
+      case 'imported':
+        return {
+          tone: 'neutral',
+          role: 'status',
+          title: `Imported ${localFileSession.fileName}`,
+          detail: localFileSession.message ?? LOCAL_FILE_FALLBACK_MESSAGE,
+        };
+      case 'permission-lost':
+        return {
+          tone: 'error',
+          role: 'alert',
+          title: 'Local file access lost',
+          detail:
+            localFileSession.message ??
+            'Read access to this file is no longer available. Reopen it to resume auto-reload.',
+        };
+      case 'deleted':
+        return {
+          tone: 'error',
+          role: 'alert',
+          title: 'Local file unavailable',
+          detail:
+            localFileSession.message ??
+            'This file was moved or deleted. Reopen it to resume auto-reload.',
+        };
+      case 'error':
+        return {
+          tone: 'error',
+          role: 'alert',
+          title: 'Local file watch stopped',
+          detail:
+            localFileSession.message ??
+            'This file could not be monitored for external changes.',
+        };
+      default:
+        return null;
+    }
+  }, [localFileSession, pendingExternalUpdate]);
 
   return (
     <>
@@ -1442,12 +1961,66 @@ function HomeContent() {
               </p>
             )}
 
+            {localFileStatusBanner && (
+              <div
+                className={cn(
+                  'mt-2 rounded-2xl border px-3 py-3 text-sm shadow-sm shadow-slate-900/5',
+                  localFileStatusBanner.tone === 'info' &&
+                    'border-cyan-200/70 bg-cyan-50/90 text-cyan-900',
+                  localFileStatusBanner.tone === 'warning' &&
+                    'border-amber-200/70 bg-amber-50/95 text-amber-900',
+                  localFileStatusBanner.tone === 'error' &&
+                    'border-rose-200/70 bg-rose-50/95 text-rose-900',
+                  localFileStatusBanner.tone === 'neutral' &&
+                    'border-slate-200/70 bg-slate-50/90 text-slate-700'
+                )}
+                role={localFileStatusBanner.role}
+              >
+                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                  <div className="min-w-0">
+                    <p className="font-semibold tracking-tight">{localFileStatusBanner.title}</p>
+                    <p className="mt-1 text-xs leading-5 text-current/80">
+                      {localFileStatusBanner.detail}
+                    </p>
+                    {localFileSession.handle && hasUnsavedDiskChanges && !pendingExternalUpdate && (
+                      <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.14em] text-current/65">
+                        Unsaved local edits are only stored in the browser until you export or save
+                        elsewhere.
+                      </p>
+                    )}
+                  </div>
+
+                  {pendingExternalUpdate && (
+                    <div className="flex shrink-0 flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={reloadFromDisk}
+                        className="inline-flex items-center justify-center rounded-xl border border-amber-300/80 bg-white/90 px-3 py-2 text-xs font-semibold text-amber-900 transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/45"
+                      >
+                        Reload from disk
+                      </button>
+                      <button
+                        type="button"
+                        onClick={keepCurrentText}
+                        className="inline-flex items-center justify-center rounded-xl border border-amber-200/80 bg-amber-100/80 px-3 py-2 text-xs font-semibold text-amber-900 transition-colors hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/45"
+                      >
+                        Keep current text
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             <input
               ref={fileInputRef}
               type="file"
               accept=".md,.markdown,text/markdown,text/plain"
               className="hidden"
-              onChange={(e) => onFileChosen(e.target.files?.[0] ?? null)}
+              onChange={(e) => {
+                onFileChosen(e.target.files?.[0] ?? null);
+                e.target.value = '';
+              }}
               aria-label="File input for markdown files"
             />
           </div>
