@@ -340,7 +340,7 @@ export const themes: Theme[] = [
         }
         .wechat-theme .mdv-code .mdv-code-header {
           border-bottom-color: #d0d7de;
-          padding: 0.3rem 0.5rem;
+          padding: 0.2rem 0.5rem;
         }
         .wechat-theme .mdv-code .language-badge {
           color: #57606a;
@@ -357,15 +357,15 @@ export const themes: Theme[] = [
           color: #24292f;
         }
         .wechat-theme pre {
-          margin: 1em 0;
-          padding: 16px;
+          margin: 0.85em 0;
+          padding: 0.65rem 0.85rem;
           border: 0;
           border-radius: 0;
           background: transparent;
           box-shadow: none;
         }
         .wechat-theme pre code {
-          font-size: 13px;
+          font-size: 12.5px;
           line-height: 1.45;
           color: #24292f;
         }

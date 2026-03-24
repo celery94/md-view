@@ -124,8 +124,8 @@ const THEME_PALETTES: Record<string, ThemePalette> = {
     preColor: '#24292f',
     preBorder: '#d0d7de',
     preBorderRadius: '6px',
-    prePadding: '16px',
-    preCodeFontSize: '13px',
+    prePadding: '0.65rem 0.85rem',
+    preCodeFontSize: '12.5px',
     blockquoteBorder: '#d0d7de',
     blockquoteBackground: 'transparent',
     blockquoteColor: '#59636e',
@@ -620,36 +620,30 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
     });
   });
 
-  // Style the .mdv-code wrapper as the single bordered box; remove border from the inner pre.
+  // Flatten .mdv-code wrappers: move all styling onto the inner <pre> and unwrap the
+  // outer <div> so rich-text editors (e.g. WeChat) see a single bordered element.
   root.querySelectorAll('.mdv-code').forEach((node) => {
     if (!(node instanceof HTMLElement)) {
       return;
     }
-    applyStyle(node, {
-      margin: '1.1em 0',
-      border: `1px solid ${palette.preBorder || palette.codeBorder}`,
-      'border-radius': palette.preBorderRadius || '8px',
-      'background-color': palette.preBackground || palette.codeBackground,
-      overflow: 'hidden',
-    });
-    node.querySelectorAll('pre').forEach((pre) => {
-      if (!(pre instanceof HTMLElement)) {
-        return;
-      }
+    const pre = node.querySelector('pre');
+    if (pre instanceof HTMLElement) {
       applyStyle(pre, {
-        margin: '0',
+        margin: '1.1em 0',
         padding: palette.prePadding || '14px 16px',
-        border: '0',
-        'border-radius': '0',
-        background: 'transparent',
+        'background-color': palette.preBackground || palette.codeBackground,
         color: palette.preColor || palette.codeText,
+        border: `1px solid ${palette.preBorder || palette.codeBorder}`,
+        'border-radius': palette.preBorderRadius || '8px',
         'font-family': MONO_FONT_STACK,
         'font-size': '14px',
         'line-height': '1.6',
         'white-space': 'pre',
         'overflow-x': 'auto',
       });
-    });
+      node.parentNode?.insertBefore(pre, node);
+    }
+    node.remove();
   });
 
   root.querySelectorAll('code').forEach((node) => {
