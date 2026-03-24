@@ -506,6 +506,44 @@ function applyStyle(element: HTMLElement, declarations: Record<string, string>):
   element.setAttribute('style', styleText(declarations));
 }
 
+function createNormalizedClipboardCodeBlock(sourcePre: HTMLElement): HTMLElement {
+  const pre = document.createElement('pre');
+  const code = document.createElement('code');
+  const codeText = (sourcePre.querySelector('code')?.textContent ?? sourcePre.textContent ?? '').replace(/\r\n/g, '\n');
+
+  code.textContent = codeText;
+  pre.appendChild(code);
+
+  return pre;
+}
+
+function normalizeClipboardCodeBlocks(root: HTMLElement): void {
+  const handledPreBlocks = new Set<HTMLElement>();
+
+  root.querySelectorAll('.mdv-code').forEach((node) => {
+    if (!(node instanceof HTMLElement)) {
+      return;
+    }
+
+    const pre = node.querySelector('pre');
+    if (!(pre instanceof HTMLElement)) {
+      node.remove();
+      return;
+    }
+
+    handledPreBlocks.add(pre);
+    node.replaceWith(createNormalizedClipboardCodeBlock(pre));
+  });
+
+  root.querySelectorAll('pre').forEach((node) => {
+    if (!(node instanceof HTMLElement) || handledPreBlocks.has(node)) {
+      return;
+    }
+
+    node.replaceWith(createNormalizedClipboardCodeBlock(node));
+  });
+}
+
 const DEFAULT_HEADING_SIZES: Record<HeadingTag, string> = {
   h1: '2em',
   h2: '1.6em',
@@ -597,7 +635,12 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
       'font-family': MONO_FONT_STACK,
       'font-size': '14px',
       'line-height': '1.6',
-      'white-space': 'pre',
+      'white-space': 'pre-wrap',
+      'word-break': 'normal',
+      'overflow-wrap': 'normal',
+      'tab-size': '2',
+      'font-variant-ligatures': 'none',
+      'font-feature-settings': "'liga' 0, 'calt' 0",
       'overflow-x': 'auto',
     });
   });
@@ -616,7 +659,12 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
       'font-size': palette.preCodeFontSize || '1em',
       'line-height': '1.6',
       display: 'block',
-      'white-space': 'pre',
+      'white-space': 'pre-wrap',
+      'word-break': 'normal',
+      'overflow-wrap': 'normal',
+      'tab-size': '2',
+      'font-variant-ligatures': 'none',
+      'font-feature-settings': "'liga' 0, 'calt' 0",
     });
   });
 
@@ -638,7 +686,12 @@ function applyInlineStyles(root: HTMLElement, palette: ThemePalette): void {
         'font-family': MONO_FONT_STACK,
         'font-size': '14px',
         'line-height': '1.6',
-        'white-space': 'pre',
+        'white-space': 'pre-wrap',
+        'word-break': 'normal',
+        'overflow-wrap': 'normal',
+        'tab-size': '2',
+        'font-variant-ligatures': 'none',
+        'font-feature-settings': "'liga' 0, 'calt' 0",
         'overflow-x': 'auto',
       });
       node.parentNode?.insertBefore(pre, node);
@@ -981,6 +1034,7 @@ export async function buildInlineClipboardPayload(
 
   const plainText = normalizePlainText(contentRoot.innerText || contentRoot.textContent || '');
 
+  normalizeClipboardCodeBlocks(fragmentRoot);
   applyInlineStyles(fragmentRoot, getThemePalette(themeName));
   cleanupAttributes(fragmentRoot);
 
