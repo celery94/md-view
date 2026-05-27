@@ -3,32 +3,27 @@
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const badgeClass =
-    'group hidden items-center gap-1.5 rounded-full border border-slate-300/65 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm transition-all duration-200 hover:bg-white sm:inline-flex';
+    'group hidden items-center gap-1.5 rounded-full border border-[#dddddd] bg-white px-3 py-1.5 text-xs font-medium text-[#6a6a6a] transition-all duration-200 hover:border-[#c1c1c1] hover:bg-white sm:inline-flex';
 
   return (
-    <footer className="relative mt-auto overflow-hidden border-t border-slate-300/45 bg-white/80 backdrop-blur">
-      {/* Subtle top glow line */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/35 to-transparent" />
-
+    <footer className="relative mt-auto overflow-hidden border-t border-[#dddddd] bg-white">
       <div className="relative w-full px-4 py-4 sm:px-8 sm:py-5 lg:px-10">
         <div className="flex flex-col items-center justify-between gap-3 sm:flex-row sm:gap-5">
-          <div className="flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-slate-500 sm:justify-start sm:gap-2.5">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-[#6a6a6a] sm:justify-start sm:gap-2.5">
             <span>©</span>
             <span>{currentYear}</span>
-            <span className="bg-gradient-to-r from-slate-800 to-cyan-800 bg-clip-text font-semibold text-transparent">
-              MD-View
-            </span>
-            <span className="text-slate-200">•</span>
-            <span className="text-slate-400">Free and open source</span>
+            <span className="font-semibold text-[#222222]">MD-View</span>
+            <span className="text-[#ebebeb]">•</span>
+            <span className="text-[#929292]">Free and open source</span>
           </div>
 
-          <p className="text-center text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400 sm:hidden">
+          <p className="text-center text-[11px] font-medium uppercase tracking-[0.16em] text-[#929292] sm:hidden">
             No registration. Privacy first. Always free.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className={`${badgeClass} hover:border-cyan-300/60 hover:shadow`}>
-              <svg className="h-3.5 w-3.5 text-cyan-600" fill="currentColor" viewBox="0 0 20 20">
+            <span className={`${badgeClass} hover:border-[#c1c1c1]`}>
+              <svg className="h-3.5 w-3.5 text-[#222222]" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
                   d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -38,8 +33,8 @@ export default function Footer() {
               No registration
             </span>
 
-            <span className={`${badgeClass} hover:border-cyan-300/60 hover:shadow`}>
-              <svg className="h-3.5 w-3.5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+            <span className={`${badgeClass} hover:border-[#c1c1c1]`}>
+              <svg className="h-3.5 w-3.5 text-[#222222]" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
                   d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -49,8 +44,8 @@ export default function Footer() {
               Privacy first
             </span>
 
-            <span className={`${badgeClass} hover:border-amber-300/70 hover:shadow`}>
-              <svg className="h-3.5 w-3.5 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+            <span className={`${badgeClass} hover:border-[#c1c1c1]`}>
+              <svg className="h-3.5 w-3.5 text-[#222222]" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                 <path
                   fillRule="evenodd"

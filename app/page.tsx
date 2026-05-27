@@ -1545,11 +1545,11 @@ function HomeContent() {
                   aria-label="MD-View Home"
                   title="MD-View Home"
                 >
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px]">
                     <img src="/md-view-icon.svg" alt="MD-View logo" className="h-5 w-5" />
                   </div>
                   <div className={`${isNavCompact ? 'hidden lg:block' : 'block'} text-left`}>
-                    <h1 className="text-lg font-bold leading-tight tracking-tight text-slate-900">MD-View</h1>
+                    <h1 className="text-lg font-bold leading-tight tracking-tight text-[#222222]">MD-View</h1>
                   </div>
                 </Link>
 
@@ -1563,20 +1563,20 @@ function HomeContent() {
 
                 {!isNavCompact && (
                   <div className={ui.home.statPill}>
-                    <span className="text-cyan-700">{wordCount}</span>
-                    <span className="text-slate-400">words</span>
-                    <span className="mx-1 h-3 w-px bg-slate-200/60" />
-                    <span className="text-slate-700">{lineCount}</span>
-                    <span className="text-slate-400">lines</span>
-                    <span className="mx-1 h-3 w-px bg-slate-200/60" />
-                    <span className="text-amber-700">{fileSizeKb}</span>
-                    <span className="text-slate-400">KB</span>
+                    <span className="text-[#ff385c]">{wordCount}</span>
+                    <span className="text-[#929292]">words</span>
+                    <span className="mx-1 h-3 w-px bg-[#ebebeb]" />
+                    <span className="text-[#222222]">{lineCount}</span>
+                    <span className="text-[#929292]">lines</span>
+                    <span className="mx-1 h-3 w-px bg-[#ebebeb]" />
+                    <span className="text-[#222222]">{fileSizeKb}</span>
+                    <span className="text-[#929292]">KB</span>
                   </div>
                 )}
               </div>
 
               <div className="hidden md:flex items-center gap-3">
-                <div className="flex min-w-[19rem] max-w-[32rem] items-center gap-2 rounded-2xl border border-slate-200/80 bg-white/95 px-3 py-2 shadow-sm shadow-slate-900/5">
+                <div className="flex min-w-[19rem] max-w-[32rem] items-center gap-2 rounded-full border border-[#dddddd] bg-white px-3 py-2">
                   <input
                     type="url"
                     value={urlToImport}
@@ -1588,13 +1588,13 @@ function HomeContent() {
                     }}
                     placeholder="https://example.com/article"
                     aria-label="URL to import as markdown"
-                    className="min-w-0 flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                    className="min-w-0 flex-1 bg-transparent text-sm text-[#222222] outline-none placeholder:text-[#929292]"
                     disabled={isImportingUrl}
                   />
                   <button
                     onClick={() => void importFromUrl()}
                     disabled={isImportingUrl}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-cyan-200/70 bg-cyan-50/90 px-3 py-1.5 text-xs font-semibold text-cyan-700 transition-all hover:border-cyan-300 hover:bg-cyan-100 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-[#ff385c] px-3 py-1.5 text-xs font-medium text-white transition-all hover:bg-[#e00b41] disabled:cursor-not-allowed disabled:opacity-60"
                     aria-label="Import URL content"
                     title="Fetch URL content and convert to markdown"
                   >
@@ -1609,7 +1609,7 @@ function HomeContent() {
                   </button>
                 </div>
 
-                <div className="flex items-center gap-1 rounded-2xl border border-slate-200/80 bg-white/95 p-1.5 shadow-sm shadow-slate-900/5">
+                <div className="flex items-center gap-1 rounded-[8px] border border-[#dddddd] bg-white p-1.5">
                   <button
                     onClick={onPickFile}
                     className={ui.home.buttons.primary}
@@ -1645,7 +1645,7 @@ function HomeContent() {
                     </button>
                     {isDesktopExportMenuOpen && (
                       <div
-                        className="absolute right-0 top-full z-50 mt-2 w-52 rounded-xl border border-slate-300/70 bg-white/95 p-1.5 shadow-lg ring-1 ring-black/5 backdrop-blur-md"
+                        className="absolute right-0 top-full z-50 mt-2 w-52 rounded-[14px] border border-[#dddddd] bg-white p-1.5 shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_rgba(0,0,0,0.04),0_4px_8px_rgba(0,0,0,0.1)]"
                         role="menu"
                         id={desktopExportMenuId}
                         aria-labelledby={desktopExportMenuTriggerId}
@@ -1653,47 +1653,47 @@ function HomeContent() {
                         <button
                           type="button"
                           onClick={() => handleDesktopExportAction(() => void copyHtmlToClipboard())}
-                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                           role="menuitem"
                         >
-                          <ClipboardCopy className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <ClipboardCopy className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                           <span>Copy rich HTML</span>
                         </button>
-                        <div className="my-1 h-px bg-slate-200/80" />
+                        <div className="my-1 h-px bg-[#ebebeb]" />
                         <button
                           type="button"
                           onClick={() => handleDesktopExportAction(exportMarkdown)}
-                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                           role="menuitem"
                         >
-                          <FileText className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <FileText className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                           <span>Export as Markdown</span>
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDesktopExportAction(exportHtml)}
-                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                           role="menuitem"
                         >
-                          <FileCode className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <FileCode className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                           <span>Export as HTML</span>
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDesktopExportAction(exportDocx)}
-                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                           role="menuitem"
                         >
-                          <FileText className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <FileText className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                           <span>Export as DOCX</span>
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDesktopExportAction(exportImage)}
-                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                           role="menuitem"
                         >
-                          <ImageIcon className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <ImageIcon className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                           <span>Export as Image</span>
                         </button>
                       </div>
@@ -1707,7 +1707,7 @@ function HomeContent() {
                     ref={desktopUtilityMenuTriggerRef}
                     id={desktopUtilityMenuTriggerId}
                     onClick={toggleDesktopUtilityMenu}
-                    className="inline-flex items-center gap-1.5 rounded-2xl border border-slate-200/80 bg-white/95 px-3 py-2 text-xs font-medium text-slate-600 shadow-sm shadow-slate-900/5 transition-colors duration-150 hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-2 md:px-3.5 md:text-sm"
+                    className="inline-flex items-center gap-1.5 rounded-[8px] border border-[#dddddd] bg-white px-3 py-2 text-xs font-medium text-[#6a6a6a] transition-colors duration-150 hover:bg-[#f7f7f7] hover:text-[#222222] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35 focus-visible:ring-offset-2 md:px-3.5 md:text-sm"
                     aria-label="More workspace actions"
                     title="More workspace actions"
                     aria-haspopup="menu"
@@ -1719,38 +1719,38 @@ function HomeContent() {
                   </button>
                   {isDesktopUtilityMenuOpen && (
                     <div
-                      className="absolute right-0 top-full z-50 mt-2 w-48 rounded-xl border border-slate-300/70 bg-white/95 p-1.5 shadow-lg ring-1 ring-black/5 backdrop-blur-md"
+                      className="absolute right-0 top-full z-50 mt-2 w-48 rounded-[14px] border border-[#dddddd] bg-white p-1.5 shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_rgba(0,0,0,0.04),0_4px_8px_rgba(0,0,0,0.1)]"
                       role="menu"
                       id={desktopUtilityMenuId}
                       aria-labelledby={desktopUtilityMenuTriggerId}
                     >
                       <Link
                         href="/guide"
-                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                         role="menuitem"
                         onClick={() => setIsDesktopUtilityMenuOpen(false)}
                       >
-                        <BookOpen className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                        <BookOpen className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                         <span>Open guide</span>
                       </Link>
                       <a
                         href="https://github.com/celery94/md-view"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                         role="menuitem"
                         onClick={() => setIsDesktopUtilityMenuOpen(false)}
                       >
-                        <Github className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                        <Github className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                         <span>Open GitHub</span>
                       </a>
                       <button
                         type="button"
                         onClick={() => handleDesktopUtilityAction(resetSample)}
-                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                         role="menuitem"
                       >
-                        <RotateCw className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                        <RotateCw className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                         <span>Reset sample</span>
                       </button>
                     </div>
@@ -1759,18 +1759,18 @@ function HomeContent() {
               </div>
             </div>
             <div className="md:hidden">
-              <div className="flex flex-col gap-2.5 rounded-2xl border border-slate-200/80 bg-white/90 p-2.5 shadow-sm shadow-slate-900/5">
-                <div className="rounded-2xl border border-slate-200/70 bg-slate-50/75 p-2">
+              <div className="flex flex-col gap-2.5 rounded-[14px] border border-[#dddddd] bg-white p-2.5">
+                <div className="rounded-[14px] border border-[#ebebeb] bg-[#f7f7f7] p-2">
                   <div className="mb-2 flex items-center gap-2 px-1">
-                    <div className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-cyan-100 text-cyan-700">
+                    <div className="inline-flex h-8 w-8 items-center justify-center rounded-[8px] bg-[#ffd1da] text-[#ff385c]">
                       <Link2 className="h-4 w-4" aria-hidden="true" />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-slate-700">Import from URL</p>
-                      <p className="text-[11px] text-slate-500">Fetch article content into markdown</p>
+                      <p className="text-xs font-semibold text-[#222222]">Import from URL</p>
+                      <p className="text-[11px] text-[#6a6a6a]">Fetch article content into markdown</p>
                     </div>
                   </div>
-                  <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200/80 bg-white px-2.5 py-2">
+                  <div className="flex min-w-0 items-center gap-2 rounded-full border border-[#dddddd] bg-white px-2.5 py-2">
                     <input
                       type="url"
                       value={urlToImport}
@@ -1782,13 +1782,13 @@ function HomeContent() {
                       }}
                       placeholder="Paste URL"
                       aria-label="URL to import as markdown"
-                      className="min-w-0 flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                      className="min-w-0 flex-1 bg-transparent text-sm text-[#222222] outline-none placeholder:text-[#929292]"
                       disabled={isImportingUrl}
                     />
                     <button
                       onClick={() => void importFromUrl()}
                       disabled={isImportingUrl}
-                      className="inline-flex items-center gap-1 rounded-xl border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-cyan-700 transition-colors hover:bg-cyan-100 disabled:opacity-60"
+                      className="inline-flex items-center gap-1 rounded-full bg-[#ff385c] px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#e00b41] disabled:opacity-60"
                       aria-label="Import URL"
                     >
                       {isImportingUrl ? (
@@ -1837,7 +1837,7 @@ function HomeContent() {
                       </button>
                       {isMobileExportMenuOpen && (
                         <div
-                          className="absolute left-0 top-full z-50 mt-2 w-56 rounded-xl border border-slate-300/70 bg-white/95 p-1.5 shadow-lg ring-1 ring-black/5 backdrop-blur-md"
+                          className="absolute left-0 top-full z-50 mt-2 w-56 rounded-[14px] border border-[#dddddd] bg-white p-1.5 shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_rgba(0,0,0,0.04),0_4px_8px_rgba(0,0,0,0.1)]"
                           role="menu"
                           id={mobileExportMenuId}
                           aria-labelledby={mobileExportMenuTriggerId}
@@ -1845,47 +1845,47 @@ function HomeContent() {
                           <button
                             type="button"
                             onClick={() => handleMobileExportAction(() => void copyHtmlToClipboard())}
-                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                             role="menuitem"
                           >
-                            <ClipboardCopy className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                            <ClipboardCopy className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                             <span>Copy rich HTML</span>
                           </button>
-                          <div className="my-1 h-px bg-slate-200/80" />
+                          <div className="my-1 h-px bg-[#ebebeb]" />
                           <button
                             type="button"
                             onClick={() => handleMobileExportAction(exportMarkdown)}
-                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                             role="menuitem"
                           >
-                            <FileText className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                            <FileText className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                             <span>Export as Markdown</span>
                           </button>
                           <button
                             type="button"
                             onClick={() => handleMobileExportAction(exportHtml)}
-                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                             role="menuitem"
                           >
-                            <FileCode className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                            <FileCode className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                             <span>Export as HTML</span>
                           </button>
                           <button
                             type="button"
                             onClick={() => handleMobileExportAction(exportDocx)}
-                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                             role="menuitem"
                           >
-                            <FileText className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                            <FileText className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                             <span>Export as DOCX</span>
                           </button>
                           <button
                             type="button"
                             onClick={() => handleMobileExportAction(exportImage)}
-                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                             role="menuitem"
                           >
-                            <ImageIcon className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                            <ImageIcon className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                             <span>Export as Image</span>
                           </button>
                         </div>
@@ -1911,38 +1911,38 @@ function HomeContent() {
                     </button>
                     {isMobileUtilityMenuOpen && (
                       <div
-                        className="absolute right-0 top-full z-50 mt-2 w-48 rounded-xl border border-slate-300/70 bg-white/95 p-1.5 shadow-lg ring-1 ring-black/5 backdrop-blur-md"
+                        className="absolute right-0 top-full z-50 mt-2 w-48 rounded-[14px] border border-[#dddddd] bg-white p-1.5 shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_rgba(0,0,0,0.04),0_4px_8px_rgba(0,0,0,0.1)]"
                         role="menu"
                         id={mobileUtilityMenuId}
                         aria-labelledby={mobileUtilityMenuTriggerId}
                       >
                         <Link
                           href="/guide"
-                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                           role="menuitem"
                           onClick={() => setIsMobileUtilityMenuOpen(false)}
                         >
-                          <BookOpen className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <BookOpen className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                           <span>Open guide</span>
                         </Link>
                         <a
                           href="https://github.com/celery94/md-view"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                           role="menuitem"
                           onClick={() => setIsMobileUtilityMenuOpen(false)}
                         >
-                          <Github className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <Github className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                           <span>Open GitHub</span>
                         </a>
                         <button
                           type="button"
                           onClick={() => handleMobileUtilityAction(resetSample)}
-                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35"
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                           role="menuitem"
                         >
-                          <RotateCw className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                          <RotateCw className="h-4 w-4 text-[#6a6a6a]" aria-hidden="true" />
                           <span>Reset sample</span>
                         </button>
                       </div>
@@ -1954,7 +1954,7 @@ function HomeContent() {
 
             {urlImportError && (
               <p
-                className="mt-2 rounded-xl border border-rose-200/70 bg-rose-50/90 px-3 py-2 text-xs text-rose-700"
+                className="mt-2 rounded-[8px] border border-[#ffd1da] bg-[#fff5f5] px-3 py-2 text-xs text-[#c13515]"
                 role="alert"
               >
                 {urlImportError}
@@ -1964,15 +1964,15 @@ function HomeContent() {
             {localFileStatusBanner && (
               <div
                 className={cn(
-                  'mt-2 rounded-2xl border px-3 py-3 text-sm shadow-sm shadow-slate-900/5',
+                  'mt-2 rounded-[14px] border px-3 py-3 text-sm',
                   localFileStatusBanner.tone === 'info' &&
-                    'border-cyan-200/70 bg-cyan-50/90 text-cyan-900',
+                    'border-[#dddddd] bg-[#f7f7f7] text-[#222222]',
                   localFileStatusBanner.tone === 'warning' &&
-                    'border-amber-200/70 bg-amber-50/95 text-amber-900',
+                    'border-amber-200 bg-amber-50 text-amber-900',
                   localFileStatusBanner.tone === 'error' &&
-                    'border-rose-200/70 bg-rose-50/95 text-rose-900',
+                    'border-[#ffd1da] bg-[#fff5f5] text-[#c13515]',
                   localFileStatusBanner.tone === 'neutral' &&
-                    'border-slate-200/70 bg-slate-50/90 text-slate-700'
+                    'border-[#dddddd] bg-[#f7f7f7] text-[#222222]'
                 )}
                 role={localFileStatusBanner.role}
               >
@@ -1995,14 +1995,14 @@ function HomeContent() {
                       <button
                         type="button"
                         onClick={reloadFromDisk}
-                        className="inline-flex items-center justify-center rounded-xl border border-amber-300/80 bg-white/90 px-3 py-2 text-xs font-semibold text-amber-900 transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/45"
+                        className="inline-flex items-center justify-center rounded-[8px] border border-[#222222] bg-white px-3 py-2 text-xs font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                       >
                         Reload from disk
                       </button>
                       <button
                         type="button"
                         onClick={keepCurrentText}
-                        className="inline-flex items-center justify-center rounded-xl border border-amber-200/80 bg-amber-100/80 px-3 py-2 text-xs font-semibold text-amber-900 transition-colors hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/45"
+                        className="inline-flex items-center justify-center rounded-[8px] border border-[#dddddd] bg-[#f7f7f7] px-3 py-2 text-xs font-medium text-[#222222] transition-colors hover:bg-[#f2f2f2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35"
                       >
                         Keep current text
                       </button>
@@ -2046,12 +2046,12 @@ function HomeContent() {
                   onDragOver={onDragOver}
                   aria-label="Markdown editor section"
                 >
-                  <div className="flex flex-shrink-0 items-center justify-between gap-3 border-b border-slate-200/65 bg-gradient-to-r from-white to-slate-100/60 px-5 py-3">
+                  <div className="flex flex-shrink-0 items-center justify-between gap-3 border-b border-[#ebebeb] bg-white px-5 py-3">
                     <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-gradient-to-br from-cyan-500 to-teal-500 shadow-sm shadow-cyan-500/30" />
-                      <h2 className="text-sm font-semibold tracking-tight text-slate-800">Editor</h2>
+                      <div className="h-2 w-2 rounded-full bg-[#ff385c]" />
+                      <h2 className="text-sm font-semibold tracking-tight text-[#222222]">Editor</h2>
                     </div>
-                    <div className="hidden lg:inline text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">
+                    <div className="hidden lg:inline text-[11px] font-medium uppercase tracking-[0.14em] text-[#929292]">
                       Shift + Alt + F to format
                     </div>
                   </div>
@@ -2071,7 +2071,7 @@ function HomeContent() {
               {viewMode === 'split' && (
                 <div
                   onMouseDown={startDrag}
-                  className="group hidden md:flex w-2 cursor-col-resize select-none items-stretch justify-center rounded-full transition-colors hover:bg-cyan-100/60"
+                  className="group hidden md:flex w-2 cursor-col-resize select-none items-stretch justify-center rounded-full transition-colors hover:bg-[#ffd1da]/40"
                   aria-label="Resize editor and preview panels"
                   role="separator"
                   aria-orientation="vertical"
@@ -2079,7 +2079,7 @@ function HomeContent() {
                   title="Drag to resize panels"
                 >
                   <div
-                    className="h-full w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent group-hover:via-cyan-400"
+                    className="h-full w-px bg-gradient-to-b from-transparent via-[#dddddd] to-transparent group-hover:via-[#ff385c]"
                     aria-hidden="true"
                   />
                 </div>
@@ -2095,10 +2095,10 @@ function HomeContent() {
                   }
                   aria-label="Markdown preview section"
                 >
-                  <div className="flex flex-shrink-0 items-center justify-between gap-3 border-b border-slate-200/65 bg-gradient-to-r from-white to-slate-100/60 px-5 py-3">
+                  <div className="flex flex-shrink-0 items-center justify-between gap-3 border-b border-[#ebebeb] bg-white px-5 py-3">
                     <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 shadow-sm shadow-amber-500/35"></div>
-                      <h2 className="text-sm font-semibold tracking-tight text-slate-700">
+                      <div className="h-2 w-2 rounded-full bg-[#ff385c]"></div>
+                      <h2 className="text-sm font-semibold tracking-tight text-[#222222]">
                         Preview
                       </h2>
                     </div>
@@ -2138,7 +2138,7 @@ function HomeContent() {
           <button
             type="button"
             onClick={handleScrollToTop}
-            className="fixed bottom-4 right-4 z-40 inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-300/80 bg-white/90 text-slate-700 shadow-[0_12px_28px_-16px_rgba(15,23,42,0.85)] backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-300/80 hover:bg-white hover:text-cyan-700 hover:shadow-[0_14px_32px_-16px_rgba(8,145,178,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-2 sm:bottom-6 sm:right-6"
+            className="fixed bottom-4 right-4 z-40 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#dddddd] bg-white text-[#222222] shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_rgba(0,0,0,0.04),0_4px_8px_rgba(0,0,0,0.1)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#ff385c] hover:text-[#ff385c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35 focus-visible:ring-offset-2 sm:bottom-6 sm:right-6"
             aria-label="Scroll to top"
             title="Scroll to top"
           >

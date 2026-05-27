@@ -39,13 +39,13 @@ interface ToolbarProps {
 }
 
 const buttonClass =
-  'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-transparent text-slate-500 transition-all duration-200 hover:border-slate-300/70 hover:bg-white hover:text-slate-800 active:scale-[0.95] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-1';
+  'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-transparent text-[#6a6a6a] transition-all duration-200 hover:bg-[#f7f7f7] hover:text-[#222222] active:scale-[0.95] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35 focus-visible:ring-offset-1';
 
 const buttonGroupClass =
-  'flex items-center gap-0.5 rounded-xl border border-slate-200/70 bg-white/80 p-1 shadow-sm shadow-slate-900/5';
+  'flex items-center gap-0.5 rounded-[14px] border border-[#dddddd] bg-white p-1';
 
 const menuItemClass =
-  'flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35';
+  'flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-[#222222] transition-colors hover:bg-[#f7f7f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35';
 
 function Toolbar({
   onBold,
@@ -104,7 +104,7 @@ function Toolbar({
   };
 
   return (
-    <div className="flex items-center gap-2 border-b border-slate-200/65 bg-gradient-to-r from-slate-100/80 via-white to-slate-100/50 px-3 py-2">
+    <div className="flex items-center gap-2 border-b border-[#ebebeb] bg-white px-3 py-2">
       <div className={buttonGroupClass}>
         <button type="button" onClick={onUndo} className={buttonClass} title="Undo">
           <Undo className="h-4 w-4" />
@@ -146,7 +146,7 @@ function Toolbar({
           ref={moreMenuTriggerRef}
           id={moreMenuTriggerId}
           onClick={() => setIsMoreMenuOpen((prev) => !prev)}
-          className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-200/70 bg-white/85 px-3 text-xs font-semibold text-slate-600 shadow-sm shadow-slate-900/5 transition-colors duration-200 hover:bg-white hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/35 focus-visible:ring-offset-1"
+          className="inline-flex h-9 items-center gap-1.5 rounded-[14px] border border-[#dddddd] bg-white px-3 text-xs font-semibold text-[#6a6a6a] transition-colors duration-200 hover:bg-[#f7f7f7] hover:text-[#222222] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff385c]/35 focus-visible:ring-offset-1"
           title="More formatting options"
           aria-label="More formatting options"
           aria-haspopup="menu"
@@ -158,7 +158,7 @@ function Toolbar({
         </button>
         {isMoreMenuOpen && (
           <div
-            className="absolute right-0 top-full z-20 mt-2 w-52 rounded-xl border border-slate-300/70 bg-white/95 p-1.5 shadow-lg ring-1 ring-black/5 backdrop-blur-md"
+            className="absolute right-0 top-full z-20 mt-2 w-52 rounded-[14px] border border-[#dddddd] bg-white p-1.5 shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_rgba(0,0,0,0.04),0_4px_8px_rgba(0,0,0,0.1)]"
             role="menu"
             id={moreMenuId}
             aria-labelledby={moreMenuTriggerId}
@@ -169,7 +169,7 @@ function Toolbar({
               className={menuItemClass}
               role="menuitem"
             >
-              <Heading2 className="h-4 w-4 text-slate-500" />
+              <Heading2 className="h-4 w-4 text-[#6a6a6a]" />
               <span>Heading 2</span>
             </button>
             <button
@@ -178,7 +178,7 @@ function Toolbar({
               className={menuItemClass}
               role="menuitem"
             >
-              <Heading3 className="h-4 w-4 text-slate-500" />
+              <Heading3 className="h-4 w-4 text-[#6a6a6a]" />
               <span>Heading 3</span>
             </button>
             <button
@@ -187,7 +187,7 @@ function Toolbar({
               className={menuItemClass}
               role="menuitem"
             >
-              <ListOrdered className="h-4 w-4 text-slate-500" />
+              <ListOrdered className="h-4 w-4 text-[#6a6a6a]" />
               <span>Numbered List</span>
             </button>
             <button
@@ -196,7 +196,7 @@ function Toolbar({
               className={menuItemClass}
               role="menuitem"
             >
-              <Quote className="h-4 w-4 text-slate-500" />
+              <Quote className="h-4 w-4 text-[#6a6a6a]" />
               <span>Blockquote</span>
             </button>
             <button
@@ -205,7 +205,7 @@ function Toolbar({
               className={menuItemClass}
               role="menuitem"
             >
-              <Strikethrough className="h-4 w-4 text-slate-500" />
+              <Strikethrough className="h-4 w-4 text-[#6a6a6a]" />
               <span>Strikethrough</span>
             </button>
             <button
@@ -214,7 +214,7 @@ function Toolbar({
               className={menuItemClass}
               role="menuitem"
             >
-              <ImageIcon className="h-4 w-4 text-slate-500" />
+              <ImageIcon className="h-4 w-4 text-[#6a6a6a]" />
               <span>Image</span>
             </button>
             <button
@@ -223,7 +223,7 @@ function Toolbar({
               className={menuItemClass}
               role="menuitem"
             >
-              <Table className="h-4 w-4 text-slate-500" />
+              <Table className="h-4 w-4 text-[#6a6a6a]" />
               <span>Table</span>
             </button>
           </div>

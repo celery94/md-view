@@ -228,7 +228,7 @@ const RichMarkdownEditorInner = forwardRef<HTMLTextAreaElement, RichMarkdownEdit
     const onImage = useCallback(() => applyStyle('image'), [applyStyle]);
 
     return (
-      <div className="flex w-full min-h-0 flex-1 flex-col overflow-hidden border-t border-slate-200/55 bg-gradient-to-b from-white to-slate-50/35">
+      <div className="flex w-full min-h-0 flex-1 flex-col overflow-hidden border-t border-[#ebebeb] bg-white">
         <Toolbar
           onBold={onBold}
           onItalic={onItalic}

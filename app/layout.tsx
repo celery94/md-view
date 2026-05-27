@@ -1,18 +1,19 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import Script from 'next/script';
-import { Space_Grotesk, IBM_Plex_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
+import { JetBrains_Mono } from 'next/font/google';
 import Analytics from '../components/Analytics';
 import { GA_ID, ADSENSE_ID } from '../lib/gtag';
 import './globals.css';
 
-const spaceGrotesk = Space_Grotesk({
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-geist-sans',
   display: 'swap',
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-geist-mono',
   weight: ['400', '500', '600'],
@@ -124,10 +125,10 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/md-view-icon.svg" type="image/svg+xml" />
-        <meta name="theme-color" content="#0f172a" />
+        <meta name="theme-color" content="#ffffff" />
         <meta name="color-scheme" content="dark light" />
       </head>
-      <body className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} antialiased`}>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
         <Script id="gtag-stub" strategy="beforeInteractive">
           {`
             window.dataLayer = window.dataLayer || [];

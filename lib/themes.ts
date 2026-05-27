@@ -18,18 +18,18 @@ export const themes: Theme[] = [
     displayName: 'Default',
     description: 'Clean and detailed design',
     classes: {
-      container: 'h-full overflow-auto bg-gradient-to-b from-white to-slate-50 p-6 sm:p-10',
+      container: 'h-full overflow-auto bg-white p-6 sm:p-10',
       prose: `${lightProseClass} default-theme`,
     },
     customStyles: `
       .default-theme {
-        color: #1f2937;
+        color: #3f3f3f;
         font-size: 1.04rem;
         line-height: 1.75;
       }
       .default-theme :where(h1, h2, h3, h4, h5, h6) {
-        color: #0f172a;
-        font-weight: 760;
+        color: #222222;
+        font-weight: 600;
         letter-spacing: -0.01em;
         line-height: 1.22;
         margin-top: 2.25rem;
@@ -53,34 +53,34 @@ export const themes: Theme[] = [
         padding-left: 1.35rem;
       }
       .default-theme li::marker {
-        color: #64748b;
+        color: #929292;
       }
       .default-theme a {
-        color: #0f766e;
+        color: #ff385c;
         text-decoration: underline;
-        text-decoration-thickness: 1.5px;
+        text-decoration-thickness: 1px;
         text-underline-offset: 2px;
       }
       .default-theme a:hover {
-        color: #155e75;
+        color: #e00b41;
       }
       .default-theme :not(pre) > code {
         font-size: 0.84rem;
-        color: #0f172a;
-        background: #e2e8f0;
-        border: 1px solid #cbd5e1;
-        border-radius: 0.42rem;
+        color: #222222;
+        background: #f7f7f7;
+        border: 1px solid #dddddd;
+        border-radius: 8px;
         padding: 0.14rem 0.42rem;
       }
       .default-theme .mdv-code {
-        border: 1px solid #1e293b;
-        border-radius: 0.75rem;
-        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-        box-shadow: 0 10px 20px -16px rgba(2, 6, 23, 0.55);
+        border: 1px solid #2d2d2d;
+        border-radius: 14px;
+        background: #1e1e1e;
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.04), 0 4px 8px rgba(0,0,0,0.1);
       }
       .default-theme .mdv-code .mdv-code-header {
-        background: linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.78));
-        border-bottom-color: rgba(148, 163, 184, 0.18);
+        background: #262626;
+        border-bottom-color: rgba(255,255,255,0.08);
       }
       .default-theme .mdv-code .language-badge {
         color: #94a3b8;
@@ -97,11 +97,11 @@ export const themes: Theme[] = [
       .default-theme pre {
         margin: 1.25rem 0;
         padding: 1rem 1.15rem;
-        border: 1px solid #1e293b;
-        border-radius: 0.75rem;
-        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        border: 1px solid #2d2d2d;
+        border-radius: 14px;
+        background: #1e1e1e;
         color: #e2e8f0;
-        box-shadow: 0 10px 20px -16px rgba(2, 6, 23, 0.55);
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.04), 0 4px 8px rgba(0,0,0,0.1);
       }
       .default-theme pre code {
         color: inherit;
@@ -109,34 +109,34 @@ export const themes: Theme[] = [
       }
       .default-theme blockquote {
         margin: 1.2rem 0;
-        border-left: 4px solid #0f766e;
-        border-radius: 0 0.6rem 0.6rem 0;
+        border-left: 4px solid #ff385c;
+        border-radius: 0 14px 14px 0;
         padding: 0.8rem 1rem;
-        background: linear-gradient(90deg, rgba(15, 118, 110, 0.08), rgba(148, 163, 184, 0.06));
-        color: #334155;
+        background: #f7f7f7;
+        color: #3f3f3f;
       }
       .default-theme hr {
         margin: 1.8rem 0;
-        border-color: #cbd5e1;
+        border-color: #dddddd;
       }
       .default-theme table {
         width: 100%;
         border-collapse: separate;
         border-spacing: 0;
         margin: 1.25rem 0;
-        border: 1px solid #dbe3ec;
-        border-radius: 0.75rem;
+        border: 1px solid #dddddd;
+        border-radius: 14px;
         overflow: hidden;
       }
       .default-theme th {
-        background: #f1f5f9;
-        color: #1e293b;
+        background: #f7f7f7;
+        color: #222222;
         font-size: 0.78rem;
         letter-spacing: 0.05em;
         text-transform: uppercase;
       }
       .default-theme :where(th, td) {
-        border-bottom: 1px solid #dbe3ec;
+        border-bottom: 1px solid #dddddd;
         padding: 0.68rem 0.85rem;
         text-align: left;
       }
@@ -144,7 +144,7 @@ export const themes: Theme[] = [
         border-bottom: 0;
       }
       .default-theme tbody tr:nth-child(even) {
-        background: #f8fafc;
+        background: #f7f7f7;
       }
       .default-theme .hljs {
         color: #e2e8f0;

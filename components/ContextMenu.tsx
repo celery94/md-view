@@ -56,7 +56,7 @@ export default function ContextMenu({
   return (
     <div
       ref={menuRef}
-      className="fixed z-50 min-w-[190px] rounded-xl border border-slate-300/65 bg-white/90 shadow-[0_16px_36px_-22px_rgba(15,23,42,0.8)] ring-1 ring-white/70 backdrop-blur"
+      className="fixed z-50 min-w-[190px] rounded-[14px] border border-[#dddddd] bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_2px_6px_rgba(0,0,0,0.04),0_4px_8px_rgba(0,0,0,0.1)]"
       style={{
         left: `${x}px`,
         top: `${y}px`,
@@ -67,17 +67,17 @@ export default function ContextMenu({
           type="button"
           onClick={handleFormatClick}
           disabled={isFormatting}
-          className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-700 transition-colors hover:bg-cyan-50 focus:bg-cyan-50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-sm text-[#222222] transition-colors hover:bg-[#f7f7f7] focus:bg-[#f7f7f7] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
         >
           <div className="flex items-center gap-2">
             {isFormatting ? (
-              <Loader2 className="h-4 w-4 animate-spin text-cyan-700" />
+              <Loader2 className="h-4 w-4 animate-spin text-[#ff385c]" />
             ) : (
-              <FileText className="h-4 w-4 text-cyan-700" />
+              <FileText className="h-4 w-4 text-[#ff385c]" />
             )}
             {isFormatting ? 'Formatting...' : 'Format Document'}
           </div>
-          {!isFormatting && <span className="text-xs text-slate-400">Shift+Alt+F</span>}
+          {!isFormatting && <span className="text-xs text-[#929292]">Shift+Alt+F</span>}
         </button>
       </div>
     </div>
